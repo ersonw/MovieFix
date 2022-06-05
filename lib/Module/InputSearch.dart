@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -5,12 +7,12 @@ import '../AssetsIcon.dart';
 
 class InputSearch extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  final FocusNode? focusNode;
 
   void Function(String value)? callback;
   void Function(String value)? update;
   final String? text;
-  InputSearch({Key? key, this.callback,this.update,this.text}) : super(key: key);
+  InputSearch({Key? key, this.callback,this.update,this.text, this.focusNode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +34,13 @@ class InputSearch extends StatelessWidget {
               Center(child: Image.asset(AssetsIcon.searchTag,height: 15,),),
               Flexible(
                 child: TextField(
-                  focusNode: _focusNode,
+                  focusNode: focusNode,
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   controller: _textEditingController,
                   autofocus: true,
                   // style: TextStyle(color: Colors.white38),
                   onEditingComplete: () {
-                    _focusNode.unfocus();
                     callback!(_textEditingController.text);
                   },
                   onSubmitted: (String text) {

@@ -63,7 +63,7 @@ class VideoPlayerUtils{
   }
 
   // 跳转播放
-  static void seekTo({required Duration position}) async{
+  static Future<void> seekTo({required Duration position}) async{
     if(_instance._controller == null || _instance._url.isEmpty) return;
     _instance._stopPosition = true;
     await _instance._controller!.seekTo(position);
@@ -102,9 +102,10 @@ class VideoPlayerUtils{
   static void removePositionListener(dynamic key){
     _instance._positionPool.removeWhere((element) => element.key == key);
   }
-
   //暂停并且锁住
   static Future<void> lock()async{
+    // seekTo(position: const Duration(seconds: 0));
+    // _instance._position = const Duration(seconds: 0);
     await _instance._controller!.pause();
     _instance._updatePlayerState(VideoPlayerState.paused);
     _stopLock = true;

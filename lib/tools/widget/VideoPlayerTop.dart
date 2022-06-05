@@ -53,7 +53,7 @@ class _VideoPlayerTopState extends State<VideoPlayerTop> {
                   onPressed: () => VideoPlayerUtils.setPortrait(), // 切换竖屏
                   icon: const Icon(Icons.arrow_back_ios,color: Colors.white,),
                 ): const SizedBox(width: 15,),
-                Text(widget.title ?? '', style: const TextStyle(color: Colors.white, fontSize: 15),),
+                Text(widget.title ?? '', style: const TextStyle(color: Colors.white, fontSize: 15),softWrap: false, overflow: TextOverflow.ellipsis,),
                 const Spacer(),
                 IconButton(
                   onPressed: (){

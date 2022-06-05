@@ -54,7 +54,8 @@ class GeneralVideoList extends StatelessWidget {
                               ),
                             ),
                             child: Container(
-                              margin: const EdgeInsets.only(top: 3,bottom: 3,left: 6,right: 6),
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.only(left: 6,right: 6),
                               child: Row(
                                 children: video.pay ? (video.price > 0 ? [
                                   Text('${video.price}'),
@@ -103,7 +104,7 @@ class GeneralVideoList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${Global.getNumbersToChinese(video.plays)}人播放'),
+                      Text('${Global.getNumbersToChinese(video.plays)} 人/次播放',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
                       Row(
                         children: [
                           Image.asset(AssetsIcon.zanIcon),

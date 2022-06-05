@@ -79,6 +79,21 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       });
     }
   }
+  _init()async{
+    Player _player = player;
+    if(_player.seek > 0){
+      await VideoPlayerUtils.seekTo(position: Duration(seconds: _player.seek));
+    }
+    _timer = Timer.periodic(const Duration(seconds: 15), (Timer timer) async {
+      if (VideoPlayerUtils.state == VideoPlayerState.playing) {
+        if (mounted){
+          _heartbeat();
+        }else{
+          _timer.cancel();
+        }
+      }
+    });
+  }
   getPlayer() async {
     Map<String, dynamic> map = await Request.videoPlayer(widget.id);
     setState(() {
@@ -91,6 +106,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       return;
     }
     if (map['player'] != null) {
+      // print(map['player']['seek']);
       setState(() {
         player = Player.formJson(map['player']);
       });
@@ -99,7 +115,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       // 播放新视频，初始化监听
       VideoPlayerUtils.initializedListener(
           key: this,
-          listener: (initialize, widget) {
+          listener: (initialize, widget) async{
             if (initialize) {
               // 初始化成功后，更新UI
               _top ??= VideoPlayerTop(
@@ -113,25 +129,24 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
               );
               _bottom ??= VideoPlayerBottom();
               _playerUI = widget;
+              _timer.cancel();
+              await _init();
               if (!mounted) return;
-              if(player.seek > 0){
-                VideoPlayerUtils.seekTo(position: Duration(seconds: player.seek));
-              }
               setState(() {});
             }
           });
       VideoPlayerUtils.statusListener(key: this, listener: (VideoPlayerState state){
-        if (state == VideoPlayerState.playing) {
-          _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
-            if (state == VideoPlayerState.playing) {
-              _heartbeat();
-            }else{
-              _timer.cancel();
-            }
-          });
-        }else{
-          _timer.cancel();
-        }
+        // if (state == VideoPlayerState.playing) {
+        //   _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+        //     if (state == VideoPlayerState.playing) {
+        //       _heartbeat();
+        //     }else{
+        //       timer.cancel();
+        //     }
+        //   });
+        // }else{
+        //   _timer.cancel();
+        // }
       });
       VideoPlayerUtils.positionListener(key: this, listener: (int second){
         if(player.pay == false && second > player.trial && VideoPlayerUtils.state == VideoPlayerState.playing){
@@ -142,6 +157,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     }
   }
   _heartbeat()async{
+    if (!mounted) return;
     await Request.videoHeartbeat(widget.id, VideoPlayerUtils.position.inSeconds);
   }
   _showPay()async{}
@@ -223,9 +239,11 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         ],
       )
     );
+    widgets.add(const Padding(padding: EdgeInsets.only(top:10)));
     widgets.add(
       cRichText(
         player.vodContent ?? '',
+        // '${player.vodContent}${player.vodContent}${player.vodContent}',
         mIsExpansion: showContent,
         callback: (bool value){
           setState(() {
@@ -311,12 +329,12 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   @override
   void dispose() {
     VideoPlayerUtils.lock();
+    _timer.cancel();
     VideoPlayerUtils.removeInitializedListener(this);
     VideoPlayerUtils.removePositionListener(this);
     VideoPlayerUtils.removeStatusListener(this);
     // VideoPlayerUtils.dispose();
     Wakelock.disable();
-    _timer.cancel();
     super.dispose();
   }
 }

@@ -6,23 +6,26 @@ class cRichText extends StatelessWidget {
   bool mIsExpansion;
   // 最大显示行数
   final int mMaxLine;
+  final int nMaxLines;
+  final double? maxWidth;
+  final double? minWidth;
   final TextStyle? style;
   void Function(bool value)? callback;
   final String text;
-  cRichText(this.text, {Key? key,this.mMaxLine = 9, this.mIsExpansion = false, this.callback, this.style}) : super(key: key);
+  cRichText(this.text, {Key? key,this.mMaxLine = 9,this.nMaxLines = 2,this.minWidth ,this.maxWidth,this.mIsExpansion = false, this.callback, this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _RichText(text);
+    return _RichText(text,context);
   }
   ///[_text ] 传入的字符串
-  Widget _RichText(String _text) {
-    if (IsExpansion(_text)) {
+  Widget _RichText(String _text, BuildContext context) {
+    if (IsExpansion(_text,context)) {
       //是否截断
       if (mIsExpansion) {
         return Column(
           children: <Widget>[
-            new Text(
+            Text(
               _text,
               style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
               textAlign: TextAlign.left,
@@ -33,7 +36,7 @@ class cRichText extends StatelessWidget {
                 onPressed: () {
                   if(callback != null) callback!(false);
                 },
-                child: Text("<< 收起"),
+                child: const Text("<< 收起"),
                 textColor: Colors.deepOrange,
               ),
             ),
@@ -42,12 +45,12 @@ class cRichText extends StatelessWidget {
       } else {
         return Column(
           children: <Widget>[
-            new Text(
+            Text(
               _text,
               style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
-              maxLines: 3,
+              maxLines: nMaxLines,
               textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.fade,
             ),
             Align(
               alignment: Alignment.centerLeft,
@@ -55,7 +58,7 @@ class cRichText extends StatelessWidget {
                 onPressed: () {
                   if(callback != null) callback!(true);
                 },
-                child: Text("展开全文 >>"),
+                child: const Text("展开全文 >>"),
                 textColor: Colors.deepOrange,
               ),
             ),
@@ -65,20 +68,21 @@ class cRichText extends StatelessWidget {
     } else {
       return Text(
         _text,
-        maxLines: 3,
+        style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
+        maxLines: nMaxLines,
         textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
+        // overflow: TextOverflow.fade,
       );
     }
   }
 
-  bool IsExpansion(String text) {
+  bool IsExpansion(String text, BuildContext context) {
     TextPainter _textPainter = TextPainter(
-        maxLines: 3,
+        maxLines: nMaxLines,
         text: TextSpan(
-            text: text, style: TextStyle(fontSize: 16.0, color: Colors.black)),
+            text: text, style: style ?? TextStyle(color: Colors.white.withOpacity(0.5))),
         textDirection: TextDirection.ltr)
-      ..layout(maxWidth: 100, minWidth: 50);
+      ..layout(maxWidth: maxWidth ?? (MediaQuery.of(context).size.width / 1.2), minWidth: minWidth ?? (MediaQuery.of(context).size.width / 2));
     if (_textPainter.didExceedMaxLines) {//判断 文本是否需要截断
       return true;
     } else {

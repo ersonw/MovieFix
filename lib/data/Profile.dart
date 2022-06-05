@@ -15,8 +15,8 @@ class Profile {
   words = (json['words'] as List).map((e) => e.toString()).toList();
 
   Map<String, dynamic> toJson() => {
-    'config': config,
-    'user': user,
+    'config': config.toJson(),
+    'user': user.toJson(),
     'words' : words,
   };
   @override

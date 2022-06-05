@@ -46,6 +46,9 @@ class ListStyle {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Flex(
+        // mainAxisSize: MainAxisSize.min,
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        // mainAxisAlignment: MainAxisAlignment.start,
         direction: Axis.horizontal,
         children: widgets,
       ),

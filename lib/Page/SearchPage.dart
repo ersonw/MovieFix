@@ -35,6 +35,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
   List<Word> _hotMonth = [];
   List<Word> _hotYear = [];
   String text = '';
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -95,6 +96,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
           children: [
             InputSearch(
               text: text,
+              focusNode: focusNode,
               callback: (String value){
                 _search(value);
               },
@@ -115,6 +117,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
   }
    _search(String text)async{
     this.text = text;
+    focusNode.unfocus();
     generalModel.updateWords(text);
     Map<String, dynamic> result = await Request.searchMovie(text);
     if(result != null && result['id'] != null){
