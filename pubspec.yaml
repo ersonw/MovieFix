@@ -58,8 +58,8 @@ dependencies:
 
   openinstall_flutter_plugin:
       path: ./openinstall-flutter-plugin
-  verification_code_custom:
-      path: ./verification_code_custom-0.0.3
+#  verification_code_custom:
+#      path: ./verification_code_custom-0.0.3
   oss_dart:
       path: ./oss_dart
   ncindexlistview:
