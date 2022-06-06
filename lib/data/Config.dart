@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 class Config {
-  String mainDomain = "192.168.254.142:8017";
+  // String mainDomain = "192.168.254.142:8017";
   // String mainDomain = "api2.telebott.com";
+  String mainDomain = "172.21.68.12:8017";
   Config();
   Config.formJson(Map<String, dynamic> json):
       mainDomain = json['mainDomain']

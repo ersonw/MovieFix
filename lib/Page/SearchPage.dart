@@ -116,6 +116,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
         refresh: false);
   }
    _search(String text)async{
+    if(text == null || text.isEmpty) return;
     this.text = text;
     focusNode.unfocus();
     generalModel.updateWords(text);

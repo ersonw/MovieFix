@@ -64,6 +64,8 @@ dependencies:
       path: ./oss_dart
   ncindexlistview:
       git: https://github.com/newcoremobile/ncindexlistview.git
+  nova_utils: ^0.3.5
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:

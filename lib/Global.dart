@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:movie_fix/Page/ShareVideoPage.dart';
 import 'Model/ConfigModel.dart';
 import 'Model/GeneralModel.dart';
 import 'Model/UserModel.dart';
@@ -62,6 +63,7 @@ class Global {
     }
     Request.init();
     if(kIsWeb == false) {
+      await requestPhotosPermission();
       deviceId = await getUUID();
       platform = Platform.operatingSystem;
       // print(platform);
@@ -80,6 +82,9 @@ class Global {
       // }
     }
     runApp(const MyApp());
+  }
+  static Future<void> shareVideo(int id) async {
+    await Navigator.push(mainContext, DialogRouter(ShareVideoPage(id)));
   }
   static Future<void> loginPage()async{
     await Navigator.push(mainContext, SlideRightRoute(page: const LoginPage()));
@@ -182,6 +187,8 @@ class Global {
         //UUID for Android
       } else if (Platform.isIOS) {
         var build = await deviceInfoPlugin.iosInfo;
+        // List<String> name = [build.];
+        print(build.name);
         uid = build.identifierForVendor;
         // uid = await FlutterUdid.udid;
       }else{

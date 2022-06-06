@@ -227,6 +227,22 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoShare(int id)async{
+    String? result = await _get(RequestApi.videoShare.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<bool> videoLike(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.videoLike.replaceAll('{id}', '$id'), {});
+    Loading.dismiss();
+    if(result != null && jsonDecode(result)['like'] != null){
+      return jsonDecode(result)['like'];
+    }
+    return false;
+  }
   static Future<void> videoHeartbeat(int id, int seek)async{
     await _post(RequestApi.videoHeartbeat, {'id': id, 'seek': seek});
   }

@@ -161,6 +161,11 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     await Request.videoHeartbeat(widget.id, VideoPlayerUtils.position.inSeconds);
   }
   _showPay()async{}
+  _like()async{
+    player.like = await Request.videoLike(widget.id);
+    if(!mounted) return;
+    setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return player.id == 0 ? GeneralRefresh.getLoading() : GeneralRefresh(
@@ -243,7 +248,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     widgets.add(
       cRichText(
         player.vodContent ?? '',
-        // '${player.vodContent}${player.vodContent}${player.vodContent}',
+        // '${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}',
         mIsExpansion: showContent,
         callback: (bool value){
           setState(() {
@@ -258,24 +263,31 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         children: [
           InkWell(
             onTap: (){
-              //
+              _like();
             },
             child: Row(
               children: [
                 Image.asset(player.like ? AssetsIcon.zanActiveIcon : AssetsIcon.zanIcon),
-                Text('${Global.getNumbersToChinese(player.likes)}人点赞'),
+                Text(' ${Global.getNumbersToChinese(player.likes)}人点赞'),
               ],
             ),
           ),
-          InkWell(
-            onTap: (){
-              //
-            },
-            child: Row(
-              children: [
-                Image.asset(AssetsIcon.shareIcon),
-              ],
-            ),
+          Row(
+            children: [
+              Row(
+                  children: [
+                    Image.asset(AssetsIcon.playIcon),
+                    Text(' ${Global.getNumbersToChinese(player.plays)}次播放'),
+                  ]
+              ),
+              const Padding(padding: EdgeInsets.only(left:3),),
+              InkWell(
+                onTap: (){
+                  Global.shareVideo(player.id);
+                },
+                child: Image.asset(AssetsIcon.shareIcon),
+              ),
+            ],
           ),
         ],
       )
@@ -328,12 +340,12 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
 
   @override
   void dispose() {
-    VideoPlayerUtils.lock();
+    // VideoPlayerUtils.lock();
     _timer.cancel();
     VideoPlayerUtils.removeInitializedListener(this);
     VideoPlayerUtils.removePositionListener(this);
     VideoPlayerUtils.removeStatusListener(this);
-    // VideoPlayerUtils.dispose();
+    VideoPlayerUtils.dispose();
     Wakelock.disable();
     super.dispose();
   }
