@@ -2,6 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movie_fix/Module/GeneralVideoList.dart';
+import 'package:movie_fix/data/SwiperData.dart';
+import 'package:movie_fix/data/Video.dart';
+import 'package:movie_fix/tools/Tools.dart';
 import '../AssetsIcon.dart';
 import '../AssetsImage.dart';
 import '../Module/GeneralRefresh.dart';
@@ -54,11 +59,14 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   int commentPage = 1;
   int commentTotal = 1;
   Player player = Player();
+  List<Video> videos = [];
+  SwiperData _swiperData = SwiperData();
 
   @override
   void initState() {
     Wakelock.enable();
     getPlayer();
+    getVideos();
     _innerTabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
@@ -156,6 +164,13 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       });
     }
   }
+  getVideos()async{
+    Map<String,dynamic> map = await Request.videoAnytime();
+    if(map['list'] != null) videos = (map['list'] as List).map((e) => Video.fromJson(e)).toList();
+    if(map['swiper'] != null) _swiperData = SwiperData.formJson(map['swiper']);
+    if(!mounted) return;
+    setState(() {});
+  }
   _heartbeat()async{
     if (!mounted) return;
     await Request.videoHeartbeat(widget.id, VideoPlayerUtils.position.inSeconds);
@@ -230,8 +245,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   _buildDetails(){
     List<Widget> widgets = [];
-    widgets.add(
-      Row(
+    widgets.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
@@ -245,8 +259,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       )
     );
     widgets.add(const Padding(padding: EdgeInsets.only(top:10)));
-    widgets.add(
-      cRichText(
+    widgets.add(cRichText(
         player.vodContent ?? '',
         // '${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}',
         mIsExpansion: showContent,
@@ -257,8 +270,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         },
       )
     );
-    widgets.add(
-      Row(
+    widgets.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
@@ -292,9 +304,58 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         ],
       )
     );
+    widgets.add(const Padding(padding: EdgeInsets.only(top:10)));
+    _swiperData.id < 1 ? Container() : widgets.add(InkWell(
+      onTap: (){
+        handlerSwiper(_swiperData);
+      },
+          child: Container(
+            alignment: Alignment.topRight,
+            height: MediaQuery.of(context).size.height / 6,
+            // width: MediaQuery.of(context).size.width / 1,
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              image: DecorationImage(
+                image: NetworkImage(_swiperData.image),
+                fit: BoxFit.fill,
+              ),
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(top: 6,right: 6),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                color: Colors.black.withOpacity(0.5),
+              ),
+              child: Container(
+                margin: const EdgeInsets.only(left: 6,right: 6,),
+                child: const Text('广告'),
+              ),
+            ),
+          ),
+        ));
+    videos.isEmpty ? Container() : widgets.add(
+      Container(
+        alignment: Alignment.centerLeft,
+        child: const Text('猜你喜欢',style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.left,),
+      )
+    );
+    videos.isEmpty ? Container() : widgets.addAll(_buildVideoList());
     return Column(
       children: widgets,
     );
+  }
+  _buildVideoList(){
+    List<Widget> videoList = [];
+    for (int i = 0; i < videos.length; i++) {
+      videoList.add(GeneralVideoList(
+        videos[i],
+        callback: ()async{
+          Navigator.pop(context);
+        },
+      ));
+    }
+    return videoList;
   }
   Widget safeAreaPlayerUI() {
     return SafeArea(

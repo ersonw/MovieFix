@@ -1,21 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/tools/VideoPlayerUtils.dart';
 import '../data/Video.dart';
 
 import '../AssetsIcon.dart';
 import '../Global.dart';
-
+typedef TapCallback = Future<void> Function();
 class GeneralVideoList extends StatelessWidget {
   final Video video;
-  GeneralVideoList({
+  final TapCallback? callback;
+  GeneralVideoList(this.video,{
     Key? key,
-    required this.video,
+    this.callback,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: ()async{
+        if(callback != null){
+          await callback!();
+        }
         Global.playerPage(video.id);
       },
       child: Container(
@@ -96,7 +101,7 @@ class GeneralVideoList extends StatelessWidget {
             ),
             Container(
               height: ((MediaQuery.of(context).size.height) / 7),
-              width: (MediaQuery.of(context).size.width) - ((MediaQuery.of(context).size.width) / 2.2) - 20,
+              width: (MediaQuery.of(context).size.width) - ((MediaQuery.of(context).size.width) / 2) - 20,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

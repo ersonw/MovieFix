@@ -19,4 +19,5 @@ class RequestApi {
   static const videoComments = '/api/video/comment/{page}/{id}';
   static const videoComment = '/api/video/comment';
   static const videoHeartbeat = '/api/video/heartbeat';
+  static const videoAnytime = '/api/video/anytime';
 }

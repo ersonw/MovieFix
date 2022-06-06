@@ -259,19 +259,23 @@ class Global {
     var statusPhotos = await Permission.photos.status;
     var statusCamera = await Permission.camera.status;
     var storageStatus = await Permission.storage.status;
+    print("Android photos Status: " + statusPhotos.toString());
+    if(statusPhotos != PermissionStatus.granted){
+      statusPhotos = await Permission.photos.request();
+    }
+    print("Android camera Status: " + statusCamera.toString());
+    if(statusCamera != PermissionStatus.granted){
+      statusCamera = await Permission.camera.request();
+    }
+    print("Android storage Status: " + storageStatus.toString());
+    if(storageStatus != PermissionStatus.granted){
+      storageStatus = await Permission.storage.request();
+    }
     if (statusPhotos == PermissionStatus.granted && statusCamera == PermissionStatus.granted && storageStatus == PermissionStatus.granted) {
       //已经授权
       return true;
     } else {
-      //未授权则发起一次申请
-      statusPhotos = await Permission.photos.request();
-      statusCamera = await Permission.camera.request();
-      storageStatus = await Permission.storage.request();
-      if (statusPhotos == PermissionStatus.granted && statusCamera == PermissionStatus.granted && storageStatus == PermissionStatus.granted) {
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     }
   }
   static Future<String?> capturePng(GlobalKey repaintKey) async {

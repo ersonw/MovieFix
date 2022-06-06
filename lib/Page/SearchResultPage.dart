@@ -118,7 +118,7 @@ class _SearchResultPage extends State<SearchResultPage>{
   buildList(){
     List<Widget> widgets = [];
     for (int i = 0; i < _list.length; i++) {
-      widgets.add(GeneralVideoList(video: _list[i]));
+      widgets.add(GeneralVideoList(_list[i]));
     }
     return Column(children: widgets,);
   }

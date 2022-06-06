@@ -42,7 +42,7 @@ class LeftTabBarView extends StatelessWidget {
                   Expanded(
                       child: TabBarView(
                         controller: controller,
-                        children: children
+                        children: _buildList(),
                       )),
                 ],
               ),
@@ -50,5 +50,12 @@ class LeftTabBarView extends StatelessWidget {
           ],
         )
     );
+  }
+  _buildList(){
+    List<Widget> list = [];
+    for (int i = 0; i < children.length; i++) {
+      list.add(ListView(children: [children[i]],));
+    }
+    return list;
   }
 }

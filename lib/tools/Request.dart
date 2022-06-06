@@ -234,6 +234,13 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoAnytime()async{
+    String? result = await _get(RequestApi.videoAnytime, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
   static Future<bool> videoLike(int id)async{
     Loading.show();
     String? result = await _get(RequestApi.videoLike.replaceAll('{id}', '$id'), {});

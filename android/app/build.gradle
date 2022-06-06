@@ -43,9 +43,9 @@ android {
                 applicationName: "android.app.Application",
         ]
 //        minSdkVersion flutter.minSdkVersion
-//        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
         minSdkVersion 21
-        targetSdkVersion 31
+//        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

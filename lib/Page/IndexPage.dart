@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../AssetsIcon.dart';
@@ -223,7 +224,7 @@ class _IndexPage extends State<IndexPage>{
     SwiperData _swiper = _swipers[index];
     return InkWell(
       onTap: () {
-        _handlerSwiper(_swiper);
+        handlerSwiper(_swiper);
       },
       child: Container(
         // height: 120,
@@ -239,14 +240,5 @@ class _IndexPage extends State<IndexPage>{
       ),
     );
   }
-  _handlerSwiper(SwiperData data){
-    switch(data.type){
-      case SwiperData.OPEN_WEB_OUTSIDE:
-        launchUrl(Uri.parse(data.url));
-        break;
-      case SwiperData.OPEN_WEB_INSIDE:
-        Global.openWebview(data.url, inline: true);
-        break;
-    }
-  }
+
 }
