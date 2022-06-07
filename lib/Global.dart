@@ -9,7 +9,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:movie_fix/Page/ShareVideoPage.dart';
+import 'Page/ShareVideoPage.dart';
+import 'tools/MessageUtil.dart';
 import 'Model/ConfigModel.dart';
 import 'Model/GeneralModel.dart';
 import 'Model/UserModel.dart';
@@ -67,8 +68,8 @@ class Global {
       deviceId = await getUUID();
       platform = Platform.operatingSystem;
       // print(platform);
-      _openinstallFlutterPlugin.init(wakeupHandler);
-      _openinstallFlutterPlugin.install(installHandler);
+      // _openinstallFlutterPlugin.init(wakeupHandler);
+      // _openinstallFlutterPlugin.install(installHandler);
       packageInfo = await PackageInfo.fromPlatform();
       // print(packageInfo.buildNumber);
       if(userModel.hasToken() == false){
@@ -81,6 +82,7 @@ class Global {
       //   if(queryParameters['channel'] != null) Global.channelCode = queryParameters['channel'];
       // }
     }
+    MessageUtil.init();
     runApp(const MyApp());
   }
   static Future<void> shareVideo(int id) async {

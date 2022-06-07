@@ -226,7 +226,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
       callback: (int index){
         _search(list[index].words);
       },
-    );
+    ); 
   }
   @override
   void dispose() {

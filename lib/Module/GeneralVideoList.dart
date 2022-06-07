@@ -109,7 +109,7 @@ class GeneralVideoList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${Global.getNumbersToChinese(video.plays)} 人/次播放',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
+                      Text('${Global.getNumbersToChinese(video.plays)} 次播放',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
                       Row(
                         children: [
                           Image.asset(AssetsIcon.zanIcon),

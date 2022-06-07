@@ -3,14 +3,15 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:movie_fix/Module/GeneralVideoList.dart';
-import 'package:movie_fix/data/SwiperData.dart';
-import 'package:movie_fix/data/Video.dart';
-import 'package:movie_fix/tools/Tools.dart';
+import 'package:movie_fix/Module/LeftTabBarView.dart';
+import '../Module/GeneralInput.dart';
+import '../Module/GeneralVideoList.dart';
+import '../Module/LeftTabBarViewList.dart';
+import '../data/SwiperData.dart';
+import '../data/Video.dart';
+import '../tools/Tools.dart';
 import '../AssetsIcon.dart';
-import '../AssetsImage.dart';
 import '../Module/GeneralRefresh.dart';
-import '../Module/LeftTabBarView.dart';
 import '../Module/cRichText.dart';
 import '../data/Player.dart';
 import '../data/Comment.dart';
@@ -51,7 +52,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
 
   final ScrollController _controller = ScrollController();
   Timer _timer = Timer(const Duration(seconds: 1), () => {});
-  late TabController _innerTabController;
   bool refresh = true;
   bool showContent = false;
 
@@ -67,7 +67,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     Wakelock.enable();
     getPlayer();
     getVideos();
-    _innerTabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
   getComment()async{
@@ -218,22 +217,14 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                   safeAreaPlayerUI(),
                   const Padding(padding: EdgeInsets.only(top: 10,),),
                   LeftTabBarView(
-                    controller: _innerTabController, 
                     tabs: const [
                       Text('详情'),
                       Text('评论'),
                     ],
                     children: [
-                      Container(
-                        width: (MediaQuery.of(context).size.width),
-                        margin: const EdgeInsets.all(10),
-                        child: _buildDetails(),
-                      ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width),
-                        margin: const EdgeInsets.all(10),
-                        child: _buildComment(),
-                      ),
+                      _buildDetails(),
+                      _buildComment(),
+
                     ],
                   ),
                 ],
@@ -242,6 +233,29 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     );
   }
   _buildComment(){
+    List<Widget> widgets = [];
+    widgets.add(_comments.isEmpty ? Container(
+      margin: const EdgeInsets.all(30),
+      child: Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
+    ) : Container(
+      child: Container(),
+    )
+    );
+    widgets.add(Container(
+      child: GeneralInput(
+        callback: (String value){
+          print(value);
+        },
+      ),
+    ));
+    // return widgets;
+    return Container(
+      width: (MediaQuery.of(context).size.width),
+      margin: const EdgeInsets.all(10),
+      child: ListView(
+        children: widgets,
+      ),
+    );
   }
   _buildDetails(){
     List<Widget> widgets = [];
@@ -341,8 +355,13 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       )
     );
     videos.isEmpty ? Container() : widgets.addAll(_buildVideoList());
-    return Column(
-      children: widgets,
+    // return widgets;
+    return Container(
+      width: (MediaQuery.of(context).size.width),
+      margin: const EdgeInsets.all(10),
+      child: ListView(
+        children: widgets,
+      ),
     );
   }
   _buildVideoList(){

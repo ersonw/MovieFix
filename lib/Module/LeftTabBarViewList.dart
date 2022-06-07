@@ -1,26 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../tools/RoundUnderlineTabIndicator.dart';
-class LeftTabBarView extends StatefulWidget {
-  TabController? controller;
-  List<Widget> children;
+
+class LeftTabBarViewList extends StatelessWidget {
+  TabController controller;
+  ScrollController? controllerList;
+  List<List<Widget>> children;
   List<Widget> tabs;
 
-  LeftTabBarView({Key? key,this.controller,required this.tabs, required this.children}) : super(key: key);
+  LeftTabBarViewList({Key? key, required this.controller, this.controllerList,required this.tabs, required this.children}) : super(key: key);
 
-  @override
-  _LeftTabBarView createState() => _LeftTabBarView();
-}
-
-class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderStateMixin {
-  late TabController controller;
-  @override
-  void initState(){
-    super.initState();
-    if(widget.controller == null){
-      controller = TabController(length: widget.tabs.length, vsync: this, initialIndex: 0);
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +37,7 @@ class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderSta
                             width: 3,
                             color: Colors.deepOrangeAccent,
                           )),
-                      tabs: widget.tabs,
+                      tabs: tabs,
                     ),
                   ),
                   Expanded(
@@ -64,11 +53,13 @@ class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderSta
     );
   }
   _buildList(){
-    // List<Widget> list = [];
-    // for (int i = 0; i < children.length; i++) {
-    //   list.add(ListView(children: [children[i]],));
-    // }
-    // return list;
-    return widget.children;
+    List<Widget> list = [];
+    for (int i = 0; i < children.length; i++) {
+      list.add(ListView(
+        children: children[i],
+        controller: controllerList,
+      ));
+    }
+    return list;
   }
 }
