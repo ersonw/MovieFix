@@ -55,6 +55,9 @@ dependencies:
   flutter_spinkit: ^4.0.0
   auto_orientation: ^2.2.1
   brightness_volume: ^1.0.3
+  web_socket_channel: ^2.2.0
+#  nova_utils: ^0.3.5
+  qr_flutter: ^4.0.0
 
   openinstall_flutter_plugin:
       path: ./openinstall-flutter-plugin
@@ -64,9 +67,7 @@ dependencies:
       path: ./oss_dart
   ncindexlistview:
       git: https://github.com/newcoremobile/ncindexlistview.git
-  nova_utils: ^0.3.5
-  qr_flutter: ^4.0.0
-  web_socket_channel: ^2.2.0
+  slide_item: ^1.0.8
 
 dev_dependencies:
   flutter_test:

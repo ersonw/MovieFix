@@ -52,6 +52,7 @@ class GeneralRefresh extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: ListView(
+          shrinkWrap: true,
           controller: controller,
           children: _buildList(context),
         ),

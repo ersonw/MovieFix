@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nova_utils/generated/i18n.dart';
 
 class GeneralInput extends StatefulWidget {
   final TextEditingController? controller;

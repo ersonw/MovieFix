@@ -30,7 +30,7 @@ class MessageUtil {
     rest();
   }
   static rest() {
-    String uri = config.channelDomain;
+    String uri = config.channelDomain ?? config.mainDomain;
     if (uri.startsWith('ws') != true) {
       if((uri.startsWith('://'))) {
         List<String> parts = uri.split('://');
@@ -68,11 +68,19 @@ class MessageUtil {
     print(channel.closeReason);
     switch(channel.closeCode) {
       case NOT_LOGIN_CODE:
-        Global.loginPage();
+        Global.loginPage().then((value) {
+          if(userModel.hasToken()){
+            rest();
+          }
+        });
         break;
       case OTHER_LOGIN_CODE:
         CustomDialog.message('您的账号已登陆其他设备，强制推出！',).then((value){
-          Global.loginPage();
+          Global.loginPage().then((value) {
+            if(userModel.hasToken()){
+              rest();
+            }
+          });
         });
         break;
       case CLOSE_CODE:

@@ -1,4 +1,7 @@
 
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -25,10 +28,8 @@ class SearchPage extends StatefulWidget {
 
 }
 class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
-  late  TabController _innerTabController;
   bool alive = true;
-  final _tabKey = const ValueKey('tab');
-  int tabIndex = 0;
+  double height = 60;
 
   List<String> _records = generalModel.words;
   List<Word> _words = [];
@@ -49,12 +50,6 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
         });
       }
     });
-    int initialIndex = PageStorage.of(context)?.readState(context, identifier: _tabKey);
-    _innerTabController = TabController(
-        length: 2,
-        vsync: this,
-        initialIndex: initialIndex != null ? initialIndex : tabIndex);
-    _innerTabController.addListener(handleTabChange);
     super.initState();
   }
   init()async{
@@ -84,12 +79,20 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
       });
     }
   }
-  void handleTabChange() {
-    tabIndex = _innerTabController.index;
-    PageStorage.of(context)?.writeState(context, _innerTabController.index, identifier: _tabKey);
-  }
   @override
   Widget build(BuildContext context) {
+    // Timer.periodic(const Duration(milliseconds: 100), (timer) {
+    //   if(context.size != null){
+    //     timer.cancel();
+    //     if(height == 60){
+    //       height = context.size!.height;
+    //       if(!mounted) return;
+    //       setState(() {});
+    //     }
+    //   }
+    //   print(MediaQuery.of(context).size.height);
+    //   print(context.size);
+    // });
     return GeneralRefresh(controller: ScrollController(), onRefresh: (){},
         header: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -125,6 +128,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
       Navigator.push(context, SlideRightRoute(page: SearchResultPage(result['id'])));
     }
   }
+
   _buildList(){
     List<Widget> widgets = [];
     if(_records.isNotEmpty) {
@@ -201,7 +205,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     widgets.add(const Padding(padding: EdgeInsets.only(top: 20)));
     widgets.add(
       LeftTabBarView(
-          controller: _innerTabController,
+        // height: height,
           tabs: [
             Text('当月热搜榜'),
             Text('年度热搜榜'),
@@ -213,6 +217,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
       )
     );
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: widgets,
     );
   }
@@ -231,7 +236,6 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
   @override
   void dispose() {
     alive = false;
-    _innerTabController.dispose();
     super.dispose();
   }
 }
