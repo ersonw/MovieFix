@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/data/User.dart';
 import '../tools/CustomDialog.dart';
 import '../tools/RequestApi.dart';
 import '../Global.dart';
@@ -119,7 +120,8 @@ class Request {
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
       if(map['token'] != null) {
-        userModel.setToken(map['token']);
+        // userModel.setToken(map['token']);
+        userModel.user = User.formJson(map);
       }
     }
   }
@@ -137,7 +139,8 @@ class Request {
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
       if(map['token'] != null) {
-        userModel.setToken(map['token']);
+        // userModel.setToken(map['token']);
+        userModel.user = User.formJson(map);
         return true;
       }
     }
@@ -222,6 +225,7 @@ class Request {
     return Map<String, dynamic>();
   }
   static Future<Map<String, dynamic>> videoComments(int id, {int page = 1})async{
+    // Loading.show();
     String? result = await _get(RequestApi.videoComments.replaceAll('{page}', '$page').replaceAll('{id}', '$id'), {});
     if(result != null){
       return jsonDecode(result);
@@ -231,7 +235,7 @@ class Request {
   static Future<bool> videoComment(int id, String text, {int toId = 0, int seek = 0})async{
     Loading.show();
     String? result = await _post(RequestApi.videoComment, {'id': id, 'text': text, 'toId': toId, 'seek': seek});
-    Loading.dismiss();
+    // Loading.dismiss();
     if(result != null){
       Map<String, dynamic> map = jsonDecode(result);
       if(map['error'] != null && map['error'] == 'login'){

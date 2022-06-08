@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+class cRichText extends StatefulWidget {
 
-class cRichText extends StatelessWidget {
-  // 全文、收起 的状态
-  bool mIsExpansion;
   // 最大显示行数
   final int nMaxLines;
   final bool left;
@@ -12,11 +10,25 @@ class cRichText extends StatelessWidget {
   final TextStyle? style;
   void Function(bool value)? callback;
   final String text;
-  cRichText(this.text, {Key? key,this.left = true,this.nMaxLines = 3,this.minWidth ,this.maxWidth,this.mIsExpansion = false, this.callback, this.style}) : super(key: key);
+  cRichText(this.text, {Key? key,this.left = false,this.nMaxLines = 3,this.minWidth ,this.maxWidth, this.callback, this.style}) : super(key: key);
+  @override
+  _cRichText createState() => _cRichText();
+
+}
+class _cRichText extends State<cRichText> {
+  // 全文、收起 的状态
+  bool mIsExpansion = false;
 
   @override
   Widget build(BuildContext context) {
-    return _RichText(text,context);
+    return Container(
+      alignment: widget.left ? Alignment.centerLeft : Alignment.centerRight,
+      constraints: BoxConstraints(
+        maxWidth: widget.maxWidth ?? MediaQuery.of(context).size.width / 1.2,
+        minWidth: widget.minWidth ?? MediaQuery.of(context).size.width / 2,
+      ),
+      child: _RichText(widget.text,context),
+    );
   }
   ///[_text ] 传入的字符串
   Widget _RichText(String _text, BuildContext context) {
@@ -28,15 +40,18 @@ class cRichText extends StatelessWidget {
           children: <Widget>[
             Text(
               _text,
-              style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
+              style: widget.style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
               textAlign:  TextAlign.left,
               softWrap: true,
             ),
             Align(
-              alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+              alignment: widget.left ? Alignment.centerLeft : Alignment.centerRight,
               child: FlatButton(
                 onPressed: () {
-                  if(callback != null) callback!(false);
+                  setState(() {
+                    mIsExpansion = false;
+                  });
+                  if(widget.callback != null) widget.callback!(false);
                 },
                 child: const Text("<< 收起"),
                 textColor: Colors.deepOrange,
@@ -49,18 +64,21 @@ class cRichText extends StatelessWidget {
           children: <Widget>[
             Text(
               _text,
-              style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
-              maxLines: nMaxLines,
+              style: widget.style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
+              maxLines: widget.nMaxLines,
               textAlign: TextAlign.left,
               overflow: TextOverflow.fade,
             ),
             Align(
-              alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+              alignment: widget.left ? Alignment.centerLeft : Alignment.centerRight,
               child: FlatButton(
                 onPressed: () {
-                  if(callback != null) callback!(true);
+                  setState(() {
+                   mIsExpansion = true;
+                  });
+                  if(widget.callback != null) widget.callback!(true);
                 },
-                child: const Text("展开全文 >>"),
+                child: const Text("展开 >>"),
                 textColor: Colors.deepOrange,
               ),
             ),
@@ -70,8 +88,8 @@ class cRichText extends StatelessWidget {
     } else {
       return Text(
         _text,
-        style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
-        maxLines: nMaxLines,
+        style: widget.style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
+        maxLines: widget.nMaxLines,
         textAlign: TextAlign.left,
         // overflow: TextOverflow.fade,
       );
@@ -80,11 +98,12 @@ class cRichText extends StatelessWidget {
 
   bool IsExpansion(String text, BuildContext context) {
     TextPainter _textPainter = TextPainter(
-        maxLines: nMaxLines,
+        maxLines: widget.nMaxLines,
         text: TextSpan(
-            text: text, style: style ?? TextStyle(color: Colors.white.withOpacity(0.5))),
+            text: text, style: widget.style ?? TextStyle(color: Colors.white.withOpacity(0.5))),
         textDirection: TextDirection.ltr)
-      ..layout(maxWidth: maxWidth ?? (MediaQuery.of(context).size.width / 1.2), minWidth: minWidth ?? (MediaQuery.of(context).size.width / 2));
+      ..layout(maxWidth: widget.maxWidth ?? (MediaQuery.of(context).size.width / 1.2), minWidth: widget.minWidth ?? (MediaQuery.of(context).size.width / 2));
+    // print(_textPainter.didExceedMaxLines);
     if (_textPainter.didExceedMaxLines) {//判断 文本是否需要截断
       return true;
     } else {

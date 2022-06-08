@@ -5,11 +5,19 @@ class GeneralInput extends StatefulWidget {
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
+  final bool sendBnt;
 
   void Function(String value)? callback;
   void Function(String value)? update;
   final String? hintText;
-  GeneralInput({Key? key, this.callback,this.update,this.hintText, this.focusNode,this.textInputAction, this.controller}) : super(key: key);
+  GeneralInput({Key? key,
+    this.sendBnt = false,
+    this.callback,
+    this.update,
+    this.hintText,
+    this.focusNode,
+    this.textInputAction,
+    this.controller}) : super(key: key);
 
   @override
   _GeneralInput createState() => _GeneralInput();
@@ -33,47 +41,71 @@ class _GeneralInput extends State<GeneralInput> {
   }
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // color: Colors.red,
-      // height: 45,
-      width: ((MediaQuery.of(context).size.width) / 1.2),
-      child: Container(
-        margin: const EdgeInsets.all(15),
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: Colors.white10,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          // color: Colors.red,
+          // height: 45,
+          width: ((MediaQuery.of(context).size.width) / 1.2),
+          child: Container(
+            margin: const EdgeInsets.all(15),
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              color: Colors.white10,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: TextField(
+              focusNode: focusNode,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              controller: controller,
+              autofocus: true,
+              // style: TextStyle(color: Colors.white38),
+              onEditingComplete: () {
+                if(widget.callback != null){
+                  widget.callback!(controller.text);
+                }
+              },
+              onSubmitted: (String text) {
+                if(widget.update != null){
+                  widget.update!(text);
+                }
+              },
+              keyboardType: TextInputType.text,
+              textInputAction: widget.textInputAction ?? TextInputAction.done,
+              decoration:  InputDecoration(
+                hintText: widget.hintText ?? '填写内容',
+                hintStyle: const TextStyle(color: Colors.white30,fontSize: 13,fontWeight: FontWeight.bold),
+                border: InputBorder.none,
+                filled: true,
+                fillColor: Colors.transparent,
+                contentPadding: const EdgeInsets.only(top: 10,bottom: 10),
+                isDense: true,
+              ),
+            ),
+          ),
         ),
-        child: TextField(
-          focusNode: focusNode,
-          maxLines: 1,
-          textAlign: TextAlign.center,
-          controller: controller,
-          autofocus: true,
-          // style: TextStyle(color: Colors.white38),
-          onEditingComplete: () {
+        widget.sendBnt ?
+        InkWell(
+          onTap: (){
             if(widget.callback != null){
+              focusNode.unfocus();
               widget.callback!(controller.text);
             }
           },
-          onSubmitted: (String text) {
-            if(widget.update != null){
-              widget.update!(text);
-            }
-          },
-          keyboardType: TextInputType.text,
-          textInputAction: widget.textInputAction ?? TextInputAction.done,
-          decoration:  InputDecoration(
-            hintText: widget.hintText ?? '搜索您喜欢的内容',
-            hintStyle: const TextStyle(color: Colors.white30,fontSize: 13,fontWeight: FontWeight.bold),
-            border: InputBorder.none,
-            filled: true,
-            fillColor: Colors.transparent,
-            contentPadding: const EdgeInsets.only(top: 10,bottom: 10),
-            isDense: true,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.deepOrange,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(left: 12, right: 12, bottom: 6, top: 6),
+              child: Text('发送'),
+            ),
           ),
-        ),
-      ),
+        ) : Container(),
+      ],
     );
   }
   @override

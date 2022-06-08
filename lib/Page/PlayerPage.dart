@@ -226,7 +226,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                   safeAreaPlayerUI(),
                   const Padding(padding: EdgeInsets.only(top: 10,),),
                   LeftTabBarView(
-                    height: MediaQuery.of(context).size.height / 1.7,
+                    height: MediaQuery.of(context).size.height / 1.5,
                     tabs: const [
                       Text('详情'),
                       Text('评论'),
@@ -234,7 +234,17 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                     children: [
                       _buildDetails(),
                       _buildComment(),
-
+                    ],
+                    expand: [
+                      Container(margin: const EdgeInsets.only(top:5),),
+                      GeneralInput(
+                        sendBnt: true,
+                        hintText: '发表自己的看法~',
+                        callback: (String value){
+                          print(value);
+                          _comment(value);
+                        },
+                      ),
                     ],
                   ),
                 ],
@@ -251,14 +261,14 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     if(_comments.isNotEmpty){
       widgets.addAll(buildComment());
     }
-    widgets.add(Container(
-      child: GeneralInput(
-        callback: (String value){
-          print(value);
-          _comment(value);
-        },
-      ),
-    ));
+    // widgets.add(Container(
+    //   child: GeneralInput(
+    //     callback: (String value){
+    //       print(value);
+    //       _comment(value);
+    //     },
+    //   ),
+    // ));
     // return widgets;
     return Container(
       width: (MediaQuery.of(context).size.width),
@@ -271,68 +281,152 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   buildComment(){
     List<Widget> widgets = [];
     for(int i= 0; i<_comments.length; i++){
+      // print('${_comments[i].userId}  ${userModel.user.id}');
       widgets.add(
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              alignment: Alignment.topLeft,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 45,
-                    width: 45,
+            Row(
+              // mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          image: DecorationImage(
+                            image: buildHeaderPicture(avatar: _comments[i].avatar),
+                            fit: BoxFit.fill,
+                          )
+                      ),
+                    ),
+                    const Padding(padding: EdgeInsets.all(3)),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(_comments[i].nickname ?? '', softWrap: false, overflow: TextOverflow.ellipsis,),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(Global.getDateTime(_comments[i].addTime),style: TextStyle(color: Colors.white.withOpacity(0.5)),textAlign: TextAlign.left,),
+                              _buildCommentStatus(_comments[i].status),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                _comments[i].userId == userModel.user.id ?
+                InkWell(
+                  onTap: (){
+                    //
+                  },
+                  child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        image: DecorationImage(
-                          image: buildHeaderPicture(avatar: _comments[i].avatar),
-                          fit: BoxFit.fill,
-                        )
+                      // color: Colors.white.withOpacity(0.3),
+                      // borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 6, right: 6, bottom:3, top:3),
+                      child: Text('删除',style: TextStyle(color: Colors.red),),
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.all(3)),
+                ) :
+                InkWell(
+                  onTap: (){
+                    //
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      // color: Colors.white.withOpacity(0.3),
+                      // borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 6, right: 6, bottom:3, top:3),
+                      child: Text('举报',style: TextStyle(color: Colors.red),),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(top: 10),
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.topRight,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  cRichText(
+                    player.vodContent!,
+                    // _comments[i].text,
+                  ),
                   Container(
-                    alignment: Alignment.bottomLeft,
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Column(
+                    // color: Colors.white,
+                    // height: 100,
+                    alignment: Alignment.topRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(_comments[i].nickname ?? '', softWrap: false, overflow: TextOverflow.ellipsis,),
-                        Text(Global.getDateTime(_comments[i].addTime),style: TextStyle(color: Colors.white.withOpacity(0.5)),textAlign: TextAlign.left,),
+                        Image.asset(AssetsIcon.commentIcon,fit: BoxFit.cover,),
+                        const Padding(padding: EdgeInsets.only(right: 60)),
+                        Row(
+                          children: [
+                            Image.asset(_comments[i].like ? AssetsIcon.zanActiveIcon : AssetsIcon.zanIcon),
+                            const Padding(padding: EdgeInsets.only(right: 3)),
+                            Text(Global.getNumbersToChinese(_comments[i].likes)),
+                            const Padding(padding: EdgeInsets.only(right: 3)),
+                          ],
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 10)),
+                        Container(
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    cRichText(
-                      _comments[i].text,
-                      left: false,
-                      mIsExpansion: showContent,
-                      callback: (bool value){
-                        setState(() {
-                          showContent = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
           ],
         )
       );
     }
+    widgets.add(Container(margin: const EdgeInsets.only(top: 30),child: Center(child: commentPage < commentTotal ? GeneralRefresh.getLoading() : (Text(_comments.isEmpty ? '' : '没有更多了')),),));
     return widgets;
   }
-  buildCommentItem(){
+  _buildCommentStatus(int status){
+    Widget state = Container();
+    switch(status) {
+      case 0:
+        state = Text('正在审核',style: TextStyle(fontSize: 10,color: Colors.orangeAccent),);
+        break;
+      case 2:
+        state = Text('审核失败',style: TextStyle(fontSize: 10,color: Colors.red),);
+        break;
+    }
+    return Container(
+      margin: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          color: Colors.white.withOpacity(0.3)
+      ),
+      child: Center(child: Container(
+        margin: const EdgeInsets.only(left:6,right: 6,bottom:3,top:3),
+        child: state,
+      ),),
+    );
+  }
+  buildCommentItem(List<Comment> comments){
 
   }
   _buildDetails(){
@@ -340,7 +434,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     widgets.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
+          SizedBox(
             width: (MediaQuery.of(context).size.width / 1.4),
             child: Text(player.title??'',style: TextStyle(fontWeight: FontWeight.bold),maxLines: 1,overflow: TextOverflow.ellipsis,),
           ),
@@ -351,16 +445,16 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       )
     );
     widgets.add(const Padding(padding: EdgeInsets.only(top:10)));
-    widgets.add(cRichText(
-        player.vodContent ?? '',
-        // '${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}${player.vodContent}',
-        mIsExpansion: showContent,
-        callback: (bool value){
-          setState(() {
-            showContent = value;
-          });
-        },
-      )
+    widgets.add(Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        cRichText(
+          player.vodContent ?? '',
+          callback: (bool value){
+          },
+        )
+      ],
+    )
     );
     widgets.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -28,3 +28,6 @@ buildHeaderPicture({String? avatar, bool self = false}){
     }
   }
 }
+buildLevel({int level = 0, bool self = false}){
+
+}

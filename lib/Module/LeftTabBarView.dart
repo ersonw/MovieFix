@@ -6,34 +6,46 @@ class LeftTabBarView extends StatefulWidget {
   final double? height;
   List<Widget> children;
   List<Widget> tabs;
+  List<Widget>? expand;
+  void Function(int index)? callback;
 
-  LeftTabBarView({Key? key,this.controller,required this.tabs, this.height,required this.children}) : super(key: key);
+  LeftTabBarView({Key? key,this.controller,required this.tabs, this.height,this.expand,this.callback,required this.children}) : super(key: key);
 
   @override
   _LeftTabBarView createState() => _LeftTabBarView();
 }
 
 class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderStateMixin {
+  final _tabKey = const ValueKey('tab');
   late TabController controller;
+  int? initialIndex;
 
   @override
   void initState(){
     super.initState();
     if(widget.controller == null){
-      controller = TabController(length: widget.tabs.length, vsync: this, initialIndex: 0);
+      initialIndex = PageStorage.of(context)?.readState(context, identifier: _tabKey);
+      controller = TabController(
+          length: widget.tabs.length,
+          vsync: this,
+          initialIndex: initialIndex ?? 0);
+      controller.addListener(handleTabChange);
+    }
+  }
+  void handleTabChange() {
+    setState(() {
+      initialIndex = controller.index;
+    });
+    PageStorage.of(context)?.writeState(context, controller.index, identifier: _tabKey);
+    if(widget.callback != null){
+      widget.callback!(initialIndex!);
     }
   }
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      // constraints: BoxConstraints(
-      //   minHeight: 150,
-      // ),
       height: widget.height ?? MediaQuery.of(context).size.height / 2,
-      // height: MediaQuery.of(context).size.height / 2,
-      // height: double.infinity,
-      // alignment:Alignment.centerLeft,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -62,9 +74,19 @@ class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderSta
                 controller: controller,
                 children: _buildList(),
               )),
+          _buildExpand(),
         ],
       ),
     );
+  }
+  _buildExpand(){
+    if(widget.expand != null && initialIndex != null){
+      int expands = int.parse('${widget.expand?.length}');
+      if(initialIndex! < expands){
+        return widget.expand![initialIndex!];
+      }
+    }
+    return Container(margin: const EdgeInsets.only(top:5),);
   }
   _buildList(){
     // List<Widget> list = [];

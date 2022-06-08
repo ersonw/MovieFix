@@ -27,6 +27,7 @@ class AssetsIcon {
 
   static const String zanActiveIcon = ('assets/icons/zanActiveIcon.png');
   static const String zanIcon = ('assets/icons/zanIcon.png');
+  static const String commentIcon = ('assets/icons/commentIcon.png');
   static const String downloadIcon = ('assets/icons/downloadIcon.png');
   static const String shareIcon = ('assets/icons/shareIcon.png');
   static const String starIcon = ('assets/icons/starIcon.png');
