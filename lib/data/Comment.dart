@@ -8,6 +8,7 @@ class Comment {
   int? userId;
   String? avatar;
   String? nickname;
+  int likes = 0;
   List<Comment> reply = [];
   Comment();
   Comment.formJson(Map<String, dynamic> json):
@@ -17,7 +18,8 @@ class Comment {
   userId = json['userId'],
   avatar = json['avatar'],
   nickname = json['nickname'],
-        reply = json['reply'];
+  likes = json['likes'],
+        reply = (json['reply'] as List).map((e) => Comment.formJson(e)).toList();
   Map<String, dynamic> toJson() => {
     'id': id,
     'text': text,
@@ -25,7 +27,8 @@ class Comment {
     'userId': userId,
     'avatar': avatar,
     'nickname': nickname,
-    'reply': reply,
+    'likes': likes,
+    'reply': reply.map((e) => e.toJson()).toList(),
   };
   @override
   String toString() {

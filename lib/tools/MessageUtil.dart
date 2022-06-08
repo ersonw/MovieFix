@@ -57,8 +57,8 @@ class MessageUtil {
   static void onData(d)async{
     // print(d);
     d = Global.decryptCode(d);
-    print(d);
     if(d == 'H') return;
+    print(d);
     Map<String, dynamic> data = jsonDecode(d);
     print(data);
   }

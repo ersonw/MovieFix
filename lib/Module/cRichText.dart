@@ -6,12 +6,13 @@ class cRichText extends StatelessWidget {
   bool mIsExpansion;
   // 最大显示行数
   final int nMaxLines;
+  final bool left;
   final double? maxWidth;
   final double? minWidth;
   final TextStyle? style;
   void Function(bool value)? callback;
   final String text;
-  cRichText(this.text, {Key? key,this.nMaxLines = 2,this.minWidth ,this.maxWidth,this.mIsExpansion = false, this.callback, this.style}) : super(key: key);
+  cRichText(this.text, {Key? key,this.left = true,this.nMaxLines = 3,this.minWidth ,this.maxWidth,this.mIsExpansion = false, this.callback, this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +23,26 @@ class cRichText extends StatelessWidget {
     if (IsExpansion(_text,context)) {
       //是否截断
       if (mIsExpansion) {
-        return Expanded(
-          child: ListView(
-            children: <Widget>[
-              Text(
-                _text,
-                style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
-                textAlign: TextAlign.left,
-                softWrap: true,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              _text,
+              style: style ?? TextStyle(color: Colors.white.withOpacity(0.5)),
+              textAlign:  TextAlign.left,
+              softWrap: true,
+            ),
+            Align(
+              alignment: left ? Alignment.centerLeft : Alignment.centerRight,
+              child: FlatButton(
+                onPressed: () {
+                  if(callback != null) callback!(false);
+                },
+                child: const Text("<< 收起"),
+                textColor: Colors.deepOrange,
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: FlatButton(
-                  onPressed: () {
-                    if(callback != null) callback!(false);
-                  },
-                  child: const Text("<< 收起"),
-                  textColor: Colors.deepOrange,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       } else {
         return Column(
@@ -55,7 +55,7 @@ class cRichText extends StatelessWidget {
               overflow: TextOverflow.fade,
             ),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: left ? Alignment.centerLeft : Alignment.centerRight,
               child: FlatButton(
                 onPressed: () {
                   if(callback != null) callback!(true);

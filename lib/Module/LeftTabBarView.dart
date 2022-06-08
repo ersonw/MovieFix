@@ -15,7 +15,7 @@ class LeftTabBarView extends StatefulWidget {
 
 class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderStateMixin {
   late TabController controller;
-  late double height;
+
   @override
   void initState(){
     super.initState();
@@ -30,8 +30,8 @@ class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderSta
       // constraints: BoxConstraints(
       //   minHeight: 150,
       // ),
-      // height: height,
-      height: MediaQuery.of(context).size.height / 2,
+      height: widget.height ?? MediaQuery.of(context).size.height / 2,
+      // height: MediaQuery.of(context).size.height / 2,
       // height: double.infinity,
       // alignment:Alignment.centerLeft,
       child: Column(

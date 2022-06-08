@@ -296,6 +296,9 @@ class Global {
     return null;
   }
   static String getDateTime(int date) {
+    if(date > 9999999999){
+      date = date ~/ 1000;
+    }
     int t = ((DateTime.now().millisecondsSinceEpoch ~/ 1000) - date);
     String str = '';
     if (t > 60) {

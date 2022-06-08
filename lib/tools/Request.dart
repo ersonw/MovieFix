@@ -93,6 +93,7 @@ class Request {
       Loading.dismiss();
       if(response.statusCode == 200 && response.data != null){
         Map<String, dynamic> data = response.data;
+        // print(data);
         if(data['message'] != null) CustomDialog.message(data['message']);
         if(data['code'] == 200 && data['data'] != null){
           return Global.decryptCode(data['data']);
@@ -227,6 +228,22 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<bool> videoComment(int id, String text, {int toId = 0, int seek = 0})async{
+    Loading.show();
+    String? result = await _post(RequestApi.videoComment, {'id': id, 'text': text, 'toId': toId, 'seek': seek});
+    Loading.dismiss();
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['error'] != null && map['error'] == 'login'){
+        Global.loginPage();
+      }else{
+        if(map['state'] == 'ok'){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
   static Future<Map<String, dynamic>> videoShare(int id)async{
     String? result = await _get(RequestApi.videoShare.replaceAll('{id}', '$id'), {});
     if(result != null){
@@ -244,7 +261,7 @@ class Request {
   static Future<bool> videoLike(int id)async{
     Loading.show();
     String? result = await _get(RequestApi.videoLike.replaceAll('{id}', '$id'), {});
-    Loading.dismiss();
+    // Loading.dismiss();
     if(result != null && jsonDecode(result)['like'] != null){
       return jsonDecode(result)['like'];
     }

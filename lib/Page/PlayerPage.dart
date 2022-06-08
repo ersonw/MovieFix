@@ -67,7 +67,15 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     Wakelock.enable();
     getPlayer();
     getVideos();
+    getComment();
     super.initState();
+  }
+  _comment(String text,{int toId = 0})async{
+    if(await Request.videoComment(widget.id, text,toId: toId,seek: VideoPlayerUtils.position.inSeconds)){
+      getComment();
+    }else{
+      // Global.showWebColoredToast('评论失败！');
+    }
   }
   getComment()async{
     if(commentPage > commentTotal){
@@ -77,6 +85,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
     if(map['list'] != null){
       List<Comment> list = (map['list'] as List).map((e) => Comment.formJson(e)).toList();
+      print(list);
       setState(() {
         if(commentPage > 1){
           _comments.addAll(list);
@@ -217,6 +226,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                   safeAreaPlayerUI(),
                   const Padding(padding: EdgeInsets.only(top: 10,),),
                   LeftTabBarView(
+                    height: MediaQuery.of(context).size.height / 1.7,
                     tabs: const [
                       Text('详情'),
                       Text('评论'),
@@ -236,15 +246,16 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     List<Widget> widgets = [];
     widgets.add(_comments.isEmpty ? Container(
       margin: const EdgeInsets.all(30),
-      child: Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
-    ) : Container(
-      child: Container(),
-    )
-    );
+      child: const Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
+    ) : Container());
+    if(_comments.isNotEmpty){
+      widgets.addAll(buildComment());
+    }
     widgets.add(Container(
       child: GeneralInput(
         callback: (String value){
           print(value);
+          _comment(value);
         },
       ),
     ));
@@ -256,6 +267,73 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         children: widgets,
       ),
     );
+  }
+  buildComment(){
+    List<Widget> widgets = [];
+    for(int i= 0; i<_comments.length; i++){
+      widgets.add(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              alignment: Alignment.topLeft,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(50)),
+                        image: DecorationImage(
+                          image: buildHeaderPicture(avatar: _comments[i].avatar),
+                          fit: BoxFit.fill,
+                        )
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.all(3)),
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Column(
+                      children: [
+                        Text(_comments[i].nickname ?? '', softWrap: false, overflow: TextOverflow.ellipsis,),
+                        Text(Global.getDateTime(_comments[i].addTime),style: TextStyle(color: Colors.white.withOpacity(0.5)),textAlign: TextAlign.left,),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    cRichText(
+                      _comments[i].text,
+                      left: false,
+                      mIsExpansion: showContent,
+                      callback: (bool value){
+                        setState(() {
+                          showContent = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        )
+      );
+    }
+    return widgets;
+  }
+  buildCommentItem(){
+
   }
   _buildDetails(){
     List<Widget> widgets = [];

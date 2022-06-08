@@ -205,7 +205,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     widgets.add(const Padding(padding: EdgeInsets.only(top: 20)));
     widgets.add(
       LeftTabBarView(
-        // height: height,
+          height: MediaQuery.of(context).size.height / 1.8,
           tabs: [
             Text('当月热搜榜'),
             Text('年度热搜榜'),
