@@ -94,28 +94,31 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     //   print(context.size);
     // });
     return GeneralRefresh(controller: ScrollController(),
-        header: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            InputSearch(
-              text: text,
-              focusNode: focusNode,
-              callback: (String value){
-                _search(value);
-              },
-            ),
-            InkWell(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Container(
-                margin: const EdgeInsets.only(right: 10,),
-                child: Text('取消'),
+        header: Container(
+          margin: const EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              InputSearch(
+                text: text,
+                focusNode: focusNode,
+                callback: (String value){
+                  _search(value);
+                },
               ),
-            ),
-          ],
+              InkWell(
+                onTap: (){
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 10,),
+                  child: Text('取消'),
+                ),
+              ),
+            ],
+          ),
         ),
-        body: _buildList(),
+        children: _buildList(),
     );
   }
    _search(String text)async{
@@ -216,10 +219,12 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
           ]
       )
     );
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: widgets,
-    );
+    // return Expanded(child: ListView(children: widgets,));
+    // return Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: widgets,
+    // );
+    return widgets;
   }
   _buildHotList(List<Word> list){
     List<Widget> widgets = [];

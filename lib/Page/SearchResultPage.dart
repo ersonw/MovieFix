@@ -76,13 +76,13 @@ class _SearchResultPage extends State<SearchResultPage>{
         getResult();
         refresh = value;
       },
-      body: buildList(),
+      children: buildList(),
       header: SizedBox(
         // color: Colors.red,
         // height: 45,
         width: ((MediaQuery.of(context).size.width) / 1),
         child: Container(
-          margin: const EdgeInsets.only(top: 15),
+          margin: const EdgeInsets.only(top: 30),
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             color: Colors.white10,
@@ -118,7 +118,12 @@ class _SearchResultPage extends State<SearchResultPage>{
     for (int i = 0; i < _list.length; i++) {
       widgets.add(GeneralVideoList(_list[i]));
     }
-    return Column(children: widgets,);
+    return widgets;
+    // return Flexible(child: ListView(children: widgets,));
+    // return Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: widgets,
+    // );
   }
   @override
   void deactivate() {

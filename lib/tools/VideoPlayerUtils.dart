@@ -16,6 +16,7 @@ class VideoPlayerUtils{
   ///  ---------------------  public -------------------------
 
   static String get url => _instance._url; // 当前播放的url
+  // static Size get size => _instance._controller.value.size;
   static VideoPlayerState get state => _instance._state; // 当前播放状态
   static bool get isInitialized => _instance._isInitialized; // 视频是否已经完成初始化
   static Duration get duration => _instance._duration; // 视频总时长

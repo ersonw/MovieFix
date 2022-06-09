@@ -8,7 +8,8 @@ import '../AssetsIcon.dart';
 
 class GeneralRefresh extends StatefulWidget {
   final Widget? header;
-  final Widget body;
+  final Widget? body;
+  final List<Widget>? children;
   final Widget? footer;
   final ScrollController? controller;
   void Function(bool value)? onRefresh;
@@ -19,7 +20,8 @@ class GeneralRefresh extends StatefulWidget {
      this.onRefresh,
     this.refresh,
     this.header,
-    required this.body,
+    this.body,
+    this.children,
     this.footer,
   }) : super(key: key);
   static getLoading(){
@@ -61,8 +63,7 @@ class _GeneralRefresh extends State<GeneralRefresh> {
   }
   Future<void> _onRefresh() async {
     refresh = true;
-    widget.onRefresh!(true);
-    if(widget.refresh == null){
+    if(widget.onRefresh == null){
       Timer.periodic(const Duration(seconds: 1), (timer) {
         timer.cancel();
         refresh = false;
@@ -70,7 +71,8 @@ class _GeneralRefresh extends State<GeneralRefresh> {
         setState(() {});
       });
     }else{
-      widget.refresh = true;
+      // widget.refresh = true;
+      widget.onRefresh!(true);
     }
     if(!mounted) return;
     setState(() {});
@@ -80,28 +82,64 @@ class _GeneralRefresh extends State<GeneralRefresh> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff181921),
-      body: RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: ListView(
-          shrinkWrap: true,
-          controller: controller,
-          children: _buildList(context),
-        ),
+      // body: _buildList(context),
+      body: Column(
+        // mainAxisSize: MainAxisSize.min,
+        children: _buildColumn(),
       ),
     );
   }
+  _buildColumn(){
+    List<Widget> widgets = [];
+    // widgets.add(const Padding(padding: EdgeInsets.only(top: 30)));
+    widgets.add(widget.header ?? Container());
+    widgets.add(widget.body ?? Container());
+    widgets.add(Expanded(child: _buildList(context)));
+    return widgets;
+  }
   _buildList(BuildContext context){
     List<Widget> widgets = [];
-    widgets.add(widget.header ?? Container());
+    // widgets.add(widget.header ?? Container());
     // widgets.add(const Padding(padding: EdgeInsets.only(top: 15)));
     widgets.add((widget.refresh ?? refresh) ? Container(
       margin: const EdgeInsets.only(top: 15,bottom: 15),
       child: GeneralRefresh.getLoading(),
     ) : Container());
     // widgets.add(const Padding(padding: EdgeInsets.only(top: 15)));
-    widgets.add(widget.body);
+    // widgets.add(widget.body);
+    if(widget.children != null) widgets.addAll(widget.children!);
     widgets.add(widget.footer ?? Container());
-    return widgets;
+    if(widget.onRefresh != null) {
+
+      return MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        removeLeft: true,
+        removeRight: true,
+        context: context,
+        child: RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView(
+            shrinkWrap: true,
+            controller: controller,
+            children: widgets,
+          ),
+        ),
+      );
+    }else{
+      return MediaQuery.removePadding(
+        removeTop: true,
+        removeBottom: true,
+        removeLeft: true,
+        removeRight: true,
+        context: context,
+        child: ListView(
+          shrinkWrap: true,
+          controller: controller,
+          children: widgets,
+        ),
+      );
+    }
   }
   @override
   void dispose() {

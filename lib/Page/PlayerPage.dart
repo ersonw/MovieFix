@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
 import '../Module/GeneralInput.dart';
@@ -52,7 +53,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
 
   final ScrollController _controller = ScrollController();
   Timer _timer = Timer(const Duration(seconds: 1), () => {});
-  bool refresh = true;
+  bool refresh = false;
   bool showContent = false;
 
   List<Comment> _comments = [];
@@ -63,6 +64,8 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   SwiperData _swiperData = SwiperData();
   int replyId = 0;
   String replyUser = '';
+  GlobalKey _globalKey = GlobalKey();
+  Size? playSize;
 
   @override
   void initState() {
@@ -94,6 +97,9 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       return;
     }
     Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
+    setState(() {
+      refresh = false;
+    });
     // print(map);
     if(map['total'] != null) commentTotal = map['total'];
     if(map['list'] != null){
@@ -125,9 +131,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   getPlayer() async {
     Map<String, dynamic> map = await Request.videoPlayer(widget.id);
-    setState(() {
-      refresh = false;
-    });
     if (map['error'] != null) {
       if (map['error'] == 'login') {
         Global.loginPage().then((value) => getPlayer());
@@ -211,15 +214,24 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   _commentReport(int commentId)async{}
   @override
   Widget build(BuildContext context) {
-    return player.id == 0 ? GeneralRefresh.getLoading() : GeneralRefresh(
-        // controller: _controller,
-        refresh: refresh,
-        onRefresh: (bool value){
-          getPlayer();
-          refresh = value;
-        },
-        header: _isFullScreen ? Container() : Container(
-          margin: const EdgeInsets.all(10),
+
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      timer.cancel();
+      if(playSize == null){
+        playSize = _globalKey.currentContext
+            ?.findRenderObject()
+            ?.paintBounds
+            .size;
+        if(!mounted) return;
+        setState(() {});
+      }
+      print(playSize?.height);
+    });
+    return player.id == 0 ?
+    GeneralRefresh.getLoading() :
+    GeneralRefresh(
+        header: _isFullScreen ? null : Container(
+          margin: const EdgeInsets.only(top: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -238,46 +250,50 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
             ],
           ),
         ),
-        body: _isFullScreen
-            ? safeAreaPlayerUI()
-            : Column(
-                children: [
-                  safeAreaPlayerUI(),
-                  const Padding(padding: EdgeInsets.only(top: 10,),),
-                  LeftTabBarView(
-                    height: MediaQuery.of(context).size.height / 1.7,
-                    tabs: const [
-                      Text('详情'),
-                      Text('评论'),
-                    ],
-                    children: [
-                      _buildDetails(),
-                      _buildComment(),
-                    ],
-                    expand: [
-                      Container(margin: const EdgeInsets.only(top:5),),
-                      GeneralInput(
-                        sendBnt: true,
-                        hintText: replyId == 0 ?'发表自己的看法~' : '回复：$replyUser',
-                        prefixText: replyUser,
-                        callback: (String value){
-                          // print(value);
-                          _comment(value);
-                        },
-                        cancelCallback: (){
-                          replyId = 0;
-                          replyUser = '';
-                          setState(() {});
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+        // body: safeAreaPlayerUI(),
+        children:  _isFullScreen ? [safeAreaPlayerUI(),] : [
+        safeAreaPlayerUI(),
+        const Padding(padding: EdgeInsets.only(top: 10,),),
+        LeftTabBarView(
+          height: MediaQuery.of(context).size.height - 110 - (playSize ?? Size.zero).height,
+          tabs: const [
+            Text('详情'),
+            Text('评论'),
+          ],
+          children: [
+            _buildDetails(),
+            _buildComment(),
+          ],
+          expand: [
+            Container(margin: const EdgeInsets.only(top:5),),
+            GeneralInput(
+              sendBnt: true,
+              hintText: replyId == 0 ?'发表自己的看法~' : '回复：$replyUser',
+              prefixText: replyUser,
+              callback: (String value){
+                // print(value);
+                _comment(value);
+              },
+              cancelCallback: (){
+                replyId = 0;
+                replyUser = '';
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+      ]
     );
+  }
+  Future<void> _onRefresh() async {
+    setState(() {
+      refresh = true;
+    });
+    getComment();
   }
   _buildComment(){
     List<Widget> widgets = [];
+    widgets.add(refresh ? GeneralRefresh.getLoading() : Container());
     widgets.add(_comments.isEmpty ? Container(
       margin: const EdgeInsets.all(30),
       child: const Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
@@ -297,9 +313,12 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     return Container(
       width: (MediaQuery.of(context).size.width),
       margin: const EdgeInsets.all(10),
-      child: ListView(
-        controller: _controller,
-        children: widgets,
+      child: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: ListView(
+          controller: _controller,
+          children: widgets,
+        ),
       ),
     );
   }
@@ -449,18 +468,14 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                       ],
                     ),
                   ),
-                  buildCommentItem(_comments[i].reply),
+                  buildCommentItem(i),
                   Container(
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(top: 10,bottom: 10),
                     child: Container(
                       color: Colors.white.withOpacity(0.6),
                       height: 1,
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width / 2,
-                        maxWidth: MediaQuery.of(context).size.width / 1.5,
-                      ),
-
+                      width: MediaQuery.of(context).size.width / 1.5,
                     ),
                   ),
                 ],
@@ -495,15 +510,103 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       ),),
     );
   }
-  buildCommentItem(List<Comment> comments){
-    if(comments.isEmpty) return Container();
-    bool show = false;
-    if(comments.length > 3){
+  commentCountItemIndex(List<Comment> comments, {TextStyle? style}){
+    int line = 0;
+    for(int i = 0; i < comments.length; i++) {
+      int nLine =  expansionText('${comments[i].nickname}:${comments[i].text}',style: style);
+      if(3 < (line+nLine)){
+        return i;
+      }
     }
+    return comments.length;
+  }
+  commentCountItem(List<Comment> comments, {TextStyle? style}){
+    int line = 0;
+    for(int i = 0; i < comments.length; i++) {
+      line +=  expansionText('${comments[i].nickname}:${comments[i].text}',style: style);
+    }
+    return line;
+  }
+  commentCount(int count){
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+      alignment: Alignment.centerLeft,
+      child: Text('共${Global.getNumbersToChinese(count)}条回复>',style: TextStyle(fontSize: 12,color: Colors.deepOrangeAccent),),
+    );
+  }
+  buildCommentItem(int iIndex){
+    List<Comment> comments = _comments[iIndex].reply;
+    if(comments.isEmpty) return Container();
+    List<Widget> widgets = [];
+    double width = MediaQuery.of(context).size.width / 1.5;
+    TextStyle style = TextStyle(fontSize: 12,color: Colors.white.withOpacity(0.6));
+    List<Widget> list = [];
+    for(int i = 0; i < comments.length; i++) {
+      // print(comments[i]);
+      list.add(
+        Container(
+          alignment: Alignment.topLeft,
+          width: width,
+          child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('${comments[i].nickname}:',style: TextStyle(fontSize:12,color: Colors.deepOrangeAccent),),
+                Text(comments[i].text,style: style,textAlign: TextAlign.left,),
+        ],
+      ),
+        )
+    );
+    }
+    int line = commentCountItem(comments,style: style);
+    int index = commentCountItemIndex(comments,style: style);
+
+    if(line < 3){
+      widgets.addAll(list);
+    }else{
+      if(_comments[iIndex].show){
+        widgets.addAll(list);
+        widgets.add(InkWell(
+          onTap: (){
+            setState(() {
+              _comments[iIndex].show = false;
+            });
+          },
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: Text('<收起',style: TextStyle(fontSize: 12,color: Colors.deepOrangeAccent)),
+          ),
+        ));
+      }else{
+        for(int i= 0; i < index-1; i++){
+          widgets.add(list[i]);
+        }
+        widgets.add(InkWell(
+          onTap: (){
+            setState(() {
+              _comments[iIndex].show = true;
+            });
+          },
+          child: commentCount(comments.length),
+        ));
+      }
+    }
+
+    return Container(
+      alignment: Alignment.centerRight,
+      margin: const EdgeInsets.only(top: 6),
+      child: Container(
+        width: width,
+        alignment: Alignment.topLeft,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+        ),
+        child: Container(
+          margin: const EdgeInsets.all(6),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: widgets,
+          ),
+        ),
       ),
     );
   }
@@ -628,6 +731,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   Widget safeAreaPlayerUI() {
     return SafeArea(
+      key: _globalKey,
       // 全屏的安全区域
       top: !_isFullScreen,
       bottom: !_isFullScreen,

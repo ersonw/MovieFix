@@ -31,6 +31,14 @@ buildHeaderPicture({String? avatar, bool self = false}){
     }
   }
 }
+int expansionText(String text,
+    {TextStyle? style, double? maxWidth, double? minWidth}){
+  int nMaxLines = 1;
+  while(isExpansionText(text, style: style, maxWidth: maxWidth, minWidth: minWidth, nMaxLines: nMaxLines) == true){
+    nMaxLines++;
+  }
+  return nMaxLines;
+}
 bool isExpansionText(String text,{
   int nMaxLines = 1,
   TextStyle? style,

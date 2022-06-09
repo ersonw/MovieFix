@@ -102,8 +102,10 @@ class Top3List extends StatelessWidget {
         );
       }
     }
-    return ListView(
-      children: widgets,
-    );
+    return ListView(children: widgets,);
+    // return Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: widgets,
+    // );
   }
 }

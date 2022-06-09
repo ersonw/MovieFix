@@ -13,6 +13,8 @@ class Comment {
   bool like = false;
   List<Comment> reply = [];
 
+  bool show = false;
+
   Comment();
 
   Comment.formJson(Map<String, dynamic> json)

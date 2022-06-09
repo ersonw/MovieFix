@@ -47,7 +47,7 @@ class _LeftTabBarView extends State<LeftTabBarView> with SingleTickerProviderSta
       color: Colors.transparent,
       height: widget.height ?? MediaQuery.of(context).size.height / 2,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             alignment: Alignment.topLeft,
