@@ -93,7 +93,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     //   print(MediaQuery.of(context).size.height);
     //   print(context.size);
     // });
-    return GeneralRefresh(controller: ScrollController(), onRefresh: (){},
+    return GeneralRefresh(controller: ScrollController(),
         header: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -116,7 +116,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
           ],
         ),
         body: _buildList(),
-        refresh: false);
+    );
   }
    _search(String text)async{
     if(text == null || text.isEmpty) return;

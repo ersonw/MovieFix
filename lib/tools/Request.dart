@@ -7,6 +7,7 @@ import '../tools/CustomDialog.dart';
 import '../tools/RequestApi.dart';
 import '../Global.dart';
 import 'Loading.dart';
+import 'MessageUtil.dart';
 class Request {
   static late Dio _dio;
   static init() {
@@ -122,6 +123,7 @@ class Request {
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);
+        MessageUtil.rest();
       }
     }
   }
@@ -141,6 +143,7 @@ class Request {
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);
+        MessageUtil.rest();
         return true;
       }
     }
@@ -231,6 +234,34 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<bool> videoCommentDelete(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.videoCommentDelete.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['error'] != null){
+        if(map['error'] == 'login'){
+          Global.loginPage();
+        }
+      }
+      if(map['delete'] != null) return map['delete'];
+    }
+    return false;
+  }
+  static Future<bool> videoCommentLike(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.videoCommentLike.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['error'] != null){
+        if(map['error'] == 'login'){
+          Global.loginPage();
+        }
+      }
+      if(map['like'] != null) return map['like'];
+    }
+    return false;
   }
   static Future<bool> videoComment(int id, String text, {int toId = 0, int seek = 0})async{
     Loading.show();

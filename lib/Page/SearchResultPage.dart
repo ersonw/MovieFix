@@ -68,17 +68,15 @@ class _SearchResultPage extends State<SearchResultPage>{
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
-      controller: _controller,
-      onRefresh: (){
-        setState(() {
-          refresh = true;
-        });
+      // controller: _controller,
+      refresh: refresh,
+      onRefresh: (bool value){
         page = 1;
         total = 1;
         getResult();
+        refresh = value;
       },
       body: buildList(),
-      refresh: refresh,
       header: SizedBox(
         // color: Colors.red,
         // height: 45,

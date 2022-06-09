@@ -61,6 +61,8 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   Player player = Player();
   List<Video> videos = [];
   SwiperData _swiperData = SwiperData();
+  int replyId = 0;
+  String replyUser = '';
 
   @override
   void initState() {
@@ -68,10 +70,19 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     getPlayer();
     getVideos();
     getComment();
+    _controller.addListener(() {
+      if(_controller.position.pixels == _controller.position.maxScrollExtent){
+        commentPage = 1;
+        commentTotal = 1;
+        getComment();
+        if(!mounted) return;
+        setState(() {});
+      }
+    });
     super.initState();
   }
-  _comment(String text,{int toId = 0})async{
-    if(await Request.videoComment(widget.id, text,toId: toId,seek: VideoPlayerUtils.position.inSeconds)){
+  _comment(String text)async{
+    if(await Request.videoComment(widget.id, text,toId: replyId,seek: VideoPlayerUtils.position.inSeconds)){
       getComment();
     }else{
       // Global.showWebColoredToast('评论失败！');
@@ -83,9 +94,11 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       return;
     }
     Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
+    // print(map);
+    if(map['total'] != null) commentTotal = map['total'];
     if(map['list'] != null){
       List<Comment> list = (map['list'] as List).map((e) => Comment.formJson(e)).toList();
-      print(list);
+      // print(list);
       setState(() {
         if(commentPage > 1){
           _comments.addAll(list);
@@ -189,15 +202,21 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     if(!mounted) return;
     setState(() {});
   }
+  _commentLike(int commentId)async{
+    return Request.videoCommentLike(commentId);
+  }
+  _commentDelete(int commentId)async{
+    return Request.videoCommentDelete(commentId);
+  }
+  _commentReport(int commentId)async{}
   @override
   Widget build(BuildContext context) {
     return player.id == 0 ? GeneralRefresh.getLoading() : GeneralRefresh(
-        controller: _controller,
-        onRefresh: () {
-          setState(() {
-            refresh = true;
-          });
+        // controller: _controller,
+        refresh: refresh,
+        onRefresh: (bool value){
           getPlayer();
+          refresh = value;
         },
         header: _isFullScreen ? Container() : Container(
           margin: const EdgeInsets.all(10),
@@ -226,7 +245,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                   safeAreaPlayerUI(),
                   const Padding(padding: EdgeInsets.only(top: 10,),),
                   LeftTabBarView(
-                    height: MediaQuery.of(context).size.height / 1.5,
+                    height: MediaQuery.of(context).size.height / 1.7,
                     tabs: const [
                       Text('详情'),
                       Text('评论'),
@@ -239,17 +258,22 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                       Container(margin: const EdgeInsets.only(top:5),),
                       GeneralInput(
                         sendBnt: true,
-                        hintText: '发表自己的看法~',
+                        hintText: replyId == 0 ?'发表自己的看法~' : '回复：$replyUser',
+                        prefixText: replyUser,
                         callback: (String value){
-                          print(value);
+                          // print(value);
                           _comment(value);
+                        },
+                        cancelCallback: (){
+                          replyId = 0;
+                          replyUser = '';
+                          setState(() {});
                         },
                       ),
                     ],
                   ),
                 ],
               ),
-        refresh: refresh,
     );
   }
   _buildComment(){
@@ -274,9 +298,15 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       width: (MediaQuery.of(context).size.width),
       margin: const EdgeInsets.all(10),
       child: ListView(
+        controller: _controller,
         children: widgets,
       ),
     );
+  }
+  _input(int id, String nickname){
+    replyId = id;
+    replyUser = nickname;
+    setState(() {});
   }
   buildComment(){
     List<Widget> widgets = [];
@@ -328,8 +358,13 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                 ),
                 _comments[i].userId == userModel.user.id ?
                 InkWell(
-                  onTap: (){
-                    //
+                  onTap: ()async{
+                    if(await _commentDelete(_comments[i].id)){
+                      setState(() {
+                        _comments.removeAt(i);
+                      });
+                      Global.showWebColoredToast('删除成功！');
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -344,7 +379,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
                 ) :
                 InkWell(
                   onTap: (){
-                    //
+                    _commentReport(_comments[i].id);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -367,31 +402,65 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  cRichText(
-                    player.vodContent!,
-                    // _comments[i].text,
+                  InkWell(
+                    onTap: (){
+                      _input(_comments[i].id, _comments[i].nickname!);
+                    },
+                    child: cRichText(
+                      // player.vodContent!,
+                      _comments[i].text,
+                    ),
                   ),
                   Container(
                     // color: Colors.white,
                     // height: 100,
+                    margin: const EdgeInsets.only(top: 10),
                     alignment: Alignment.topRight,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Image.asset(AssetsIcon.commentIcon,fit: BoxFit.cover,),
+                        InkWell(
+                          onTap: (){
+                            _input(_comments[i].id, _comments[i].nickname!);
+                          },
+                          child: Image.asset(AssetsIcon.commentIcon,fit: BoxFit.cover,),
+                        ),
                         const Padding(padding: EdgeInsets.only(right: 60)),
-                        Row(
-                          children: [
-                            Image.asset(_comments[i].like ? AssetsIcon.zanActiveIcon : AssetsIcon.zanIcon),
-                            const Padding(padding: EdgeInsets.only(right: 3)),
-                            Text(Global.getNumbersToChinese(_comments[i].likes)),
-                            const Padding(padding: EdgeInsets.only(right: 3)),
-                          ],
+                        InkWell(
+                          onTap: ()async{
+                            if(await _commentLike(_comments[i].id)){
+                              _comments[i].like = true;
+                            }else{
+                              _comments[i].like = false;
+                            }
+                            if(!mounted) return;
+                            setState(() {});
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(_comments[i].like ? AssetsIcon.zanActiveIcon : AssetsIcon.zanIcon),
+                              const Padding(padding: EdgeInsets.only(right: 3)),
+                              Text(Global.getNumbersToChinese(_comments[i].likes)),
+                              const Padding(padding: EdgeInsets.only(right: 3)),
+                            ],
+                          ),
                         ),
-                        const Padding(padding: EdgeInsets.only(top: 10)),
-                        Container(
-                        ),
+
                       ],
+                    ),
+                  ),
+                  buildCommentItem(_comments[i].reply),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    margin: const EdgeInsets.only(top: 10,bottom: 10),
+                    child: Container(
+                      color: Colors.white.withOpacity(0.6),
+                      height: 1,
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width / 2,
+                        maxWidth: MediaQuery.of(context).size.width / 1.5,
+                      ),
+
                     ),
                   ),
                 ],
@@ -427,7 +496,16 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     );
   }
   buildCommentItem(List<Comment> comments){
-
+    if(comments.isEmpty) return Container();
+    bool show = false;
+    if(comments.length > 3){
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.3),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+    );
   }
   _buildDetails(){
     List<Widget> widgets = [];

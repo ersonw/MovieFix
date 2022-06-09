@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../AssetsImage.dart';
 
@@ -26,6 +29,24 @@ buildHeaderPicture({String? avatar, bool self = false}){
     }else{
       return NetworkImage(avatar);
     }
+  }
+}
+bool isExpansionText(String text,{
+  int nMaxLines = 1,
+  TextStyle? style,
+  double? maxWidth,
+  double? minWidth}) {
+  TextPainter _textPainter = TextPainter(
+      maxLines: nMaxLines,
+      text: TextSpan(
+          text: text, style: style ?? TextStyle(color: Colors.white.withOpacity(0.5))),
+      textDirection: TextDirection.ltr)
+    ..layout(maxWidth: maxWidth ?? (MediaQuery.of(Global.mainContext).size.width / 1.2), minWidth: minWidth ?? (MediaQuery.of(Global.mainContext).size.width / 2));
+  // print(_textPainter.didExceedMaxLines);
+  if (_textPainter.didExceedMaxLines) {//判断 文本是否需要截断
+    return true;
+  } else {
+    return false;
   }
 }
 buildLevel({int level = 0, bool self = false}){

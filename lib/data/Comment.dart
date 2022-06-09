@@ -25,8 +25,8 @@ class Comment {
         nickname = json['nickname'],
         likes = json['likes'] ?? 0,
         like = json['like'] ?? false,
-        reply =
-            (json['reply'] as List).map((e) => Comment.formJson(e)).toList();
+        reply = json['reply'] != null ?
+            (json['reply'] as List).map((e) => Comment.formJson(e)).toList() : [];
 
   Map<String, dynamic> toJson() => {
         'id': id,
