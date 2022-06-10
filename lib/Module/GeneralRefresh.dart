@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../AssetsIcon.dart';
 
 class GeneralRefresh extends StatefulWidget {
+  final String? title;
   final Widget? header;
   final Widget? body;
   final List<Widget>? children;
@@ -19,6 +20,7 @@ class GeneralRefresh extends StatefulWidget {
      this.controller,
      this.onRefresh,
     this.refresh,
+    this.title,
     this.header,
     this.body,
     this.children,
@@ -91,7 +93,28 @@ class _GeneralRefresh extends State<GeneralRefresh> {
   }
   _buildColumn(){
     List<Widget> widgets = [];
-    // widgets.add(const Padding(padding: EdgeInsets.only(top: 30)));
+    if(widget.title != null) {
+      widgets.add(Container(
+        margin: const EdgeInsets.only(top: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.chevron_left_outlined,size: 36,),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 10),),
+            Container(
+              width: (MediaQuery.of(context).size.width / 1.3),
+              alignment: Alignment.center,
+              child: Text(widget.title!, softWrap: false, overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+            ),
+          ],
+        ),
+      ));
+    }
     widgets.add(widget.header ?? Container());
     widgets.add(widget.body ?? Container());
     widgets.add(Expanded(child: _buildList(context)));

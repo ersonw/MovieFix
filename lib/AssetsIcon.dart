@@ -31,5 +31,6 @@ class AssetsIcon {
   static const String downloadIcon = ('assets/icons/downloadIcon.png');
   static const String shareIcon = ('assets/icons/shareIcon.png');
   static const String starIcon = ('assets/icons/starIcon.png');
+  static const String activeIcon = ('assets/icons/activeIcon.png');
 
 }

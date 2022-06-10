@@ -267,6 +267,7 @@ class Request {
     Loading.show();
     String? result = await _post(RequestApi.videoComment, {'id': id, 'text': text, 'toId': toId, 'seek': seek});
     // Loading.dismiss();
+    // print(result);
     if(result != null){
       Map<String, dynamic> map = jsonDecode(result);
       if(map['error'] != null && map['error'] == 'login'){

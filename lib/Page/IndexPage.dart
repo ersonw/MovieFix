@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Page/CategoryPage.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -37,62 +39,61 @@ class _IndexPage extends State<IndexPage>{
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff181921),
-      body: Stack(
-        children: [
-          ListView(
-            children: _buildList(),
-          ),
-        ],
+    return GeneralRefresh(
+      header: Container(
+        margin: const EdgeInsets.only(top:30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+              InkWell(
+              child: SizedBox(
+                // color: Colors.red,
+                // height: 45,
+                width: ((MediaQuery.of(context).size.width) / 1.2),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 15),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: Colors.white10,
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  child: Row(
+                      children: [
+                        const Padding(padding: EdgeInsets.only(left: 20,)),
+                        Center(child: Image.asset(AssetsIcon.searchTag,height: 15,),),
+                        Container(
+                          width: ((MediaQuery.of(context).size.width) / 1.5),
+                          margin: const EdgeInsets.only(top: 10,bottom: 10),
+                          alignment: Alignment.center,
+                          child: Text('搜索您喜欢的内容',style:  TextStyle(fontSize: 13,color: Colors.grey.withOpacity(0.6)),),
+                        ),
+
+                      ]
+                  ),
+                ),
+              ),
+              onTap: (){
+                Navigator.push(context, FadeRoute(page: const SearchPage()));
+                },
+              ),
+            InkWell(
+              onTap: (){
+                Navigator.push(context, FadeRoute(page: const CategoryPage()));
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 10,),
+                child: Image.asset(AssetsIcon.classIcon,width: 40,),
+              ),
+            ),
+          ],
+        ),
       ),
+      children: _buildList(),
     );
   }
   _buildList(){
     List<Widget> widgets = [];
     widgets.add(const Padding(padding: EdgeInsets.only(top: 10)));
-    widgets.add(Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        SizedBox(
-          // color: Colors.red,
-          // height: 45,
-          width: ((MediaQuery.of(context).size.width) / 1.2),
-          child: Container(
-            margin: const EdgeInsets.only(left: 15),
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: Colors.white10,
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-            child: Row(
-                children: [
-                  const Padding(padding: EdgeInsets.only(left: 20,)),
-                  Center(child: Image.asset(AssetsIcon.searchTag,height: 15,),),
-                  InkWell(
-                    child: Container(
-                      width: ((MediaQuery.of(context).size.width) / 1.5),
-                      margin: const EdgeInsets.only(top: 10,bottom: 10),
-                      alignment: Alignment.center,
-                      child: Text('搜索您喜欢的内容',style:  TextStyle(fontSize: 13,color: Colors.grey.withOpacity(0.6)),),
-                    ),
-                    onTap: (){
-                      Navigator.push(context, FadeRoute(page: SearchPage()));
-                    },
-                  ),
-                ]
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: (){},
-          child: Container(
-            margin: const EdgeInsets.only(right: 10,),
-            child: Image.asset(AssetsIcon.classIcon,width: 40,),
-          ),
-        ),
-      ],
-    ));
     if(_swipers.isNotEmpty) {
       widgets.add(Container(
         // color: Colors.black,

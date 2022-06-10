@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -86,14 +87,18 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   _comment(String text)async{
     if(await Request.videoComment(widget.id, text,toId: replyId,seek: VideoPlayerUtils.position.inSeconds)){
+      refresh = true;
       getComment();
     }else{
       // Global.showWebColoredToast('评论失败！');
     }
   }
   getComment()async{
+    // print('$commentPage === $commentTotal');
     if(commentPage > commentTotal){
-      commentPage--;
+      setState(() {
+        commentPage--;
+      });
       return;
     }
     Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
@@ -225,7 +230,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         if(!mounted) return;
         setState(() {});
       }
-      print(playSize?.height);
+      // print(playSize?.height);
     });
     return player.id == 0 ?
     GeneralRefresh.getLoading() :
@@ -498,7 +503,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
         state = Text('审核失败',style: TextStyle(fontSize: 10,color: Colors.red),);
         break;
     }
-    return Container(
+    return status == 1 ? Container() : Container(
       margin: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -545,14 +550,24 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       list.add(
         Container(
           alignment: Alignment.topLeft,
-          width: width,
-          child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('${comments[i].nickname}:',style: TextStyle(fontSize:12,color: Colors.deepOrangeAccent),),
-                Text(comments[i].text,style: style,textAlign: TextAlign.left,),
-        ],
-      ),
+          margin: const EdgeInsets.only(bottom: 3),
+          child: RichText(
+            textAlign: TextAlign.left,
+            text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: '${comments[i].nickname}:',
+                      style: TextStyle(fontSize:12,color: Colors.deepOrangeAccent),
+                      recognizer: TapGestureRecognizer().. onTap = ()async{
+                        print('sdadas');
+                      }
+                  ),
+                  TextSpan(
+                      text: comments[i].text,style: style
+                  ),
+                ]
+            ),
+          ),
         )
     );
     }

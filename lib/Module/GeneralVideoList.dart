@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_fix/tools/VideoPlayerUtils.dart';
 import '../data/Video.dart';
 
 import '../AssetsIcon.dart';
