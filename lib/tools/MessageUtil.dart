@@ -41,21 +41,28 @@ class MessageUtil {
     uri = '$uri${path.replaceAll('{token}', user.token)}';
     // print(uri);
     channel = WebSocketChannel.connect(Uri.parse(uri));
-    channel.stream.listen(onData,onError: onError,onDone: onDone);
+    channel.stream.listen(onData,onError: onError,onDone: onDone,cancelOnError: false);
   }
   static reconnect(){
     if(_timer != null) _timer!.cancel();
     _timer = Timer.periodic(Duration(seconds: 6),(Timer timer) {
-      timer.cancel();
-      rest();
+      if(channel.closeCode == null ||
+          channel.closeCode == CLOSE_CODE ||
+          channel.closeCode == NOT_LOGIN_CODE) {
+        // print(channel.closeCode);
+        timer.cancel();
+        rest();
+      }
     });
   }
   static void onError(error)async{
-    print(error);
+    // print(error);
     reconnect();
   }
   static void onData(d)async{
     // print(d);
+    // print(channel.closeCode);
+    if(d == null) return;
     d = Global.decryptCode(d);
     if(d == 'H') return;
     print(d);

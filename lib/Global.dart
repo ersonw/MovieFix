@@ -47,7 +47,7 @@ class Global {
 
   static Profile profile = Profile();
   static bool initMain = false;
-  static const String mykey = 'e797e49a5f21d99840c3a07dee2c3c7c';
+  static const String mykey = 'cPdS+pz9B640l/4VxWuhzQ==';
 
   static String? deviceId;
   static String? platform;
@@ -212,7 +212,8 @@ class Global {
     final iv = XYQ.IV.fromSecureRandom(128);
     final encrypter = XYQ.Encrypter(XYQ.AES(key, mode: XYQ.AESMode.ecb));
     final encrypted = encrypter.encrypt(text, iv: iv);
-    return '$mykey#${encrypted.base64}';
+    // return '$mykey#${encrypted.base64}';
+    return encrypted.base64;
   }
   static String decryptCode(String text){
     String? ikey;

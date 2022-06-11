@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -151,6 +152,9 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       setState(() {
         player = Player.formJson(map['player']);
       });
+      // if(kIsWeb == true){
+      //   return false;
+      // }
       VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
       VideoPlayerUtils.unLock();
       // 播放新视频，初始化监听

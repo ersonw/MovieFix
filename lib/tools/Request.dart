@@ -143,7 +143,7 @@ class Request {
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);
-        MessageUtil.rest();
+        MessageUtil.reconnect();
         return true;
       }
     }

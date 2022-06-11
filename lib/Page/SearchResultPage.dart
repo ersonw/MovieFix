@@ -71,10 +71,12 @@ class _SearchResultPage extends State<SearchResultPage>{
       // controller: _controller,
       refresh: refresh,
       onRefresh: (bool value){
-        page = 1;
-        total = 1;
+        setState(() {
+          refresh = true;
+          page = 1;
+          total = 1;
+        });
         getResult();
-        refresh = value;
       },
       children: buildList(),
       header: SizedBox(
