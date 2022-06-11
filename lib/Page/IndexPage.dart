@@ -41,7 +41,7 @@ class _IndexPage extends State<IndexPage>{
   Widget build(BuildContext context) {
     return GeneralRefresh(
       header: Container(
-        margin: const EdgeInsets.only(top:30),
+        margin: const EdgeInsets.only(top:60),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

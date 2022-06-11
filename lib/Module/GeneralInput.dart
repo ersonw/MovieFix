@@ -58,13 +58,14 @@ class _GeneralInput extends State<GeneralInput> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      // crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              // alignment: Alignment.centerLeft,
-              // width: ((MediaQuery.of(context).size.width) / 1.2),
+              margin: const EdgeInsets.only(left: 10),
               child: widget.prefixText != null && widget.prefixText != '' ? Text('回复：${widget.prefixText}',textAlign: TextAlign.left,):null,
             ),
             SizedBox(
@@ -87,6 +88,7 @@ class _GeneralInput extends State<GeneralInput> {
                       if(widget.callback != null){
                         widget.callback!(controller.text);
                       }
+                      controller.text = '';
                     },
                     onSubmitted: (String text) {
                       if(widget.update != null){
@@ -113,6 +115,7 @@ class _GeneralInput extends State<GeneralInput> {
         widget.sendBnt ?
         (cancel ? InkWell(
           onTap: (){
+            controller.text = '';
             if(widget.callback != null){
               focusNode.unfocus();
               widget.cancelCallback!();
@@ -134,6 +137,7 @@ class _GeneralInput extends State<GeneralInput> {
               focusNode.unfocus();
               widget.callback!(controller.text);
             }
+            controller.text = '';
           },
           child: Container(
             decoration: BoxDecoration(

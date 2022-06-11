@@ -82,7 +82,7 @@ class _SearchResultPage extends State<SearchResultPage>{
         // height: 45,
         width: ((MediaQuery.of(context).size.width) / 1),
         child: Container(
-          margin: const EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 60),
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             color: Colors.white10,

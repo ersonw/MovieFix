@@ -87,10 +87,14 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   _comment(String text)async{
     if(await Request.videoComment(widget.id, text,toId: replyId,seek: VideoPlayerUtils.position.inSeconds)){
-      refresh = true;
       getComment();
+      setState(() {
+        refresh = true;
+        replyId = 0;
+        replyUser = '';
+      });
     }else{
-      // Global.showWebColoredToast('评论失败！');
+      Global.showWebColoredToast('评论失败！');
     }
   }
   getComment()async{
@@ -236,7 +240,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     GeneralRefresh.getLoading() :
     GeneralRefresh(
         header: _isFullScreen ? null : Container(
-          margin: const EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 60),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -276,7 +280,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
               hintText: replyId == 0 ?'发表自己的看法~' : '回复：$replyUser',
               prefixText: replyUser,
               callback: (String value){
-                // print(value);
                 _comment(value);
               },
               cancelCallback: (){
@@ -522,6 +525,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       if(3 < (line+nLine)){
         return i;
       }
+      line += nLine;
     }
     return comments.length;
   }
@@ -573,8 +577,8 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     }
     int line = commentCountItem(comments,style: style);
     int index = commentCountItemIndex(comments,style: style);
-
-    if(line < 3){
+    print(index);
+    if(line < 4){
       widgets.addAll(list);
     }else{
       if(_comments[iIndex].show){
@@ -693,7 +697,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
       },
           child: Container(
             alignment: Alignment.topRight,
-            height: MediaQuery.of(context).size.height / 6,
+            height: MediaQuery.of(context).size.height / 8,
             // width: MediaQuery.of(context).size.width / 1,
             margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(

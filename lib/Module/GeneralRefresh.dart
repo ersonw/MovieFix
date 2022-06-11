@@ -95,7 +95,7 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     List<Widget> widgets = [];
     if(widget.title != null) {
       widgets.add(Container(
-        margin: const EdgeInsets.only(top: 30),
+        margin: const EdgeInsets.only(top: 60),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

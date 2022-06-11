@@ -95,7 +95,7 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     // });
     return GeneralRefresh(controller: ScrollController(),
         header: Container(
-          margin: const EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 60),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
