@@ -22,4 +22,6 @@ class RequestApi {
   static const videoComment = '/api/video/comment';
   static const videoHeartbeat = '/api/video/heartbeat';
   static const videoAnytime = '/api/video/anytime';
+
+  static const videoCategoryTags = '/api/video/category/tags';
 }

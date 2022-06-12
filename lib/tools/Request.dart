@@ -189,6 +189,14 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoCategoryTags()async{
+    String? result = await _get(RequestApi.videoCategoryTags, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
   static Future<Map<String, dynamic>> searchLabelHot()async{
     // Loading.show(Global.mainContext);
     String? result = await _get(RequestApi.searchLabelHot, {});

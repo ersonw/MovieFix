@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_fix/Module/CustomDropDownButton.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/GeneralVideoList.dart';
 import 'package:movie_fix/Module/PairVideoList.dart';
+import 'package:movie_fix/Module/cDropDownButton.dart';
 import 'package:movie_fix/data/MenuItem.dart';
 import 'package:movie_fix/data/Video.dart';
 import 'package:movie_fix/data/Word.dart';
@@ -22,11 +22,36 @@ class _CategoryPage extends State<CategoryPage>{
 
   bool isPair = true;
   bool refresh = true;
-  int firstId =0;
+  Word first = Word();
+  Word second = Word();
+  Word last = Word();
+  List<Word> firsts = [];
+  List<Word> seconds = [];
+  List<Word> lasts = [];
   @override
   void initState() {
+    _getTag();
     _getList();
     super.initState();
+  }
+  _getTag()async{
+    firsts = [Word(words: '全部')];
+    firsts.add(Word(id: 1,words: '最新'));
+    firsts.add(Word(id: 2,words: '最热'));
+    firsts.add(Word(id: 3,words: '点赞最多'));
+    firsts.add(Word(id: 4,words: '评论最多'));
+    Map<String,dynamic> map = await Request.videoCategoryTags();
+    if(map['produceds'] != null) {
+      seconds = [Word(words: '全部')];
+      List<Word> list = (map['produceds'] as List).map((e) => Word.fromJson(e)).toList();
+      seconds.addAll(list);
+    }
+    if(map['classes'] != null) {
+      lasts = [Word(words: '全部')];
+      List<Word> list = (map['classes'] as List).map((e) => Word.fromJson(e)).toList();
+      lasts.addAll(list);
+    }
+    if(mounted) setState(() {});
   }
   _getList()async{
     if(page > total){
@@ -51,8 +76,8 @@ class _CategoryPage extends State<CategoryPage>{
   Widget build(BuildContext context) {
     return GeneralRefresh(
       title: '分类',
-      header: _buildBody(),
-      // body: _buildBody(),
+      // header: _buildBody(),
+      body: _buildBody(),
       children: isPair ?_buildPairList(): _buildList(),
       onRefresh: _onRefresh,
       refresh: refresh,
@@ -80,22 +105,41 @@ class _CategoryPage extends State<CategoryPage>{
     _getList();
   }
   _buildBody(){
-    List<Word> words = [];
-    words.add(Word(id:1,words:'最新'));
-    words.add(Word(id:2,words:'最热'));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        CustomDropDownButton(words, callback: (Word word){
-          firstId = word.id;
+        cDropDownButton(firsts, callback: (Word word){
+          first = word;
+          setState(() {
+            refresh = true;
+          });
+          _getList();
         },),
-        CustomDropDownButton(words, callback: (Word word){
-          firstId = word.id;
+        cDropDownButton(seconds, callback: (Word word){
+          second = word;
+          setState(() {
+            refresh = true;
+          });
+          _getList();
         },),
-        CustomDropDownButton(words, callback: (Word word){
-          firstId = word.id;
+        cDropDownButton(lasts, callback: (Word word){
+          last = word;
+          setState(() {
+            refresh = true;
+          });
+          _getList();
         },),
-        _toolsPopupMenuItem(),
+        InkWell(
+          onTap: (){
+            setState(() {
+              isPair = !isPair;
+            });
+          },
+          child: Icon(
+            !isPair? Icons.dashboard_customize : Icons.list,
+            // color: Colors.white,
+          ),
+        ),
       ],
     );
   }
