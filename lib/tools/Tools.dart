@@ -57,6 +57,46 @@ bool isExpansionText(String text,{
     return false;
   }
 }
+/**
+ * 向上弹出
+ */
+_showPopWindow() {
+  showModalBottomSheet<String>(
+      context: Global.mainContext,
+      isDismissible: true, //设置点击弹窗外边是否关闭页面
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          // padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(30)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text("Camera"),
+                    Icon(Icons.done),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Text("Camera"),
+                    Icon(Icons.done),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }).then((value) => print('showModalBottomSheet $value'));
+}
 buildLevel({int level = 0, bool self = false}){
 
 }

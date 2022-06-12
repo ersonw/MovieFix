@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Word {
-  Word();
+  Word({this.id=0,this.words=''});
   int id = 0;
   String words = '';
   Word.fromJson(Map<String, dynamic> json):

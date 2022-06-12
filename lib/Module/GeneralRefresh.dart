@@ -13,11 +13,13 @@ class GeneralRefresh extends StatefulWidget {
   final List<Widget>? children;
   final Widget? footer;
   final ScrollController? controller;
+  final Function()? callback;
   void Function(bool value)? onRefresh;
   bool? refresh;
 
   GeneralRefresh({Key? key,
      this.controller,
+    this.callback,
      this.onRefresh,
     this.refresh,
     this.title,
@@ -61,6 +63,13 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     }else{
       controller = widget.controller!;
     }
+    controller.addListener(() {
+      if(controller.position.pixels == controller.position.maxScrollExtent){
+        if(widget.callback != null){
+          widget.callback!();
+        }
+      }
+    });
     super.initState();
   }
   Future<void> _onRefresh() async {
