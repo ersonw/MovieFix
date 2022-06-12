@@ -58,7 +58,7 @@ class _CategoryPage extends State<CategoryPage>{
       page--;
       return;
     }
-    Map<String,dynamic> map = await Request.videoAnytime();
+    Map<String,dynamic> map = await Request.videoCategoryList(first: first.id,second: second.id,last: last.id);
     refresh = false;
     if(map['total'] != null) total = map['total'];
     if(map['list'] != null){

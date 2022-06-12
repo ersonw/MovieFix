@@ -24,4 +24,5 @@ class RequestApi {
   static const videoAnytime = '/api/video/anytime';
 
   static const videoCategoryTags = '/api/video/category/tags';
+  static const videoCategoryList = '/api/video/category/list/{first}/{second}/{last}';
 }

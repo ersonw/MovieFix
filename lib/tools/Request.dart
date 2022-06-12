@@ -197,6 +197,17 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoCategoryList({int first=0,int second=0, int last=0})async{
+    String? result = await _get(RequestApi.videoCategoryList
+        .replaceAll('{first}', '$first')
+        .replaceAll('{second}', '$second')
+        .replaceAll('{last}', '$last'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
   static Future<Map<String, dynamic>> searchLabelHot()async{
     // Loading.show(Global.mainContext);
     String? result = await _get(RequestApi.searchLabelHot, {});
