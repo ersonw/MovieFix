@@ -163,16 +163,16 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
           listener: (initialize, widget) async{
             if (initialize) {
               // 初始化成功后，更新UI
-              _top ??= VideoPlayerTop(
+              _top = VideoPlayerTop(
                 title: player.title,
               );
-              _lockIcon ??= LockIcon(
+              _lockIcon = LockIcon(
                 lockCallback: () {
                   _top!.opacityCallback(!TempValue.isLocked);
                   _bottom!.opacityCallback(!TempValue.isLocked);
                 },
               );
-              _bottom ??= VideoPlayerBottom();
+              _bottom = VideoPlayerBottom();
               _playerUI = widget;
               _timer.cancel();
               await _init();

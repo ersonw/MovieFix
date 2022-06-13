@@ -197,11 +197,12 @@ class Request {
     }
     return Map<String, dynamic>();
   }
-  static Future<Map<String, dynamic>> videoCategoryList({int first=0,int second=0, int last=0})async{
+  static Future<Map<String, dynamic>> videoCategoryList({int first=0,int second=0, int last=0,int page=1})async{
     String? result = await _get(RequestApi.videoCategoryList
         .replaceAll('{first}', '$first')
         .replaceAll('{second}', '$second')
-        .replaceAll('{last}', '$last'), {});
+        .replaceAll('{last}', '$last')
+        .replaceAll('{page}', '$page'), {});
     // print(result);
     if(result != null){
       return jsonDecode(result);

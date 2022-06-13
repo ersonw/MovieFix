@@ -139,7 +139,7 @@ class VideoPlayerUtils{
 
   // 设置播放速度
   static Future<void> setSpeed(double speed) async{
-    return _instance._controller!.setPlaybackSpeed(speed);
+    // return _instance._controller!.setPlaybackSpeed(speed);
   }
 
   // 设置是否循环播放
@@ -248,6 +248,7 @@ class VideoPlayerUtils{
   // 因为播放进度可能在1秒内更新几次，取个巧，进度更新超过1秒再同步更新进度状态
   void _positionListener(){
     if (_stopPosition) return;
+    if(_controller == null) return;
     _position = _controller!.value.position;
     int second = _controller!.value.position.inSeconds;
     if(_controller!.value.position == _duration){ // 播放结束

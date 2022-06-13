@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Module/LeftTabBarView.dart';
+import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/Page/CategoryPage.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +27,8 @@ class IndexPage extends StatefulWidget {
 }
 class _IndexPage extends State<IndexPage>{
   final TextEditingController _textEditingController = TextEditingController();
+  GlobalKey _globalKey = GlobalKey();
+  Size? displaySize;
   List<SwiperData> _swipers = [];
 
   @override
@@ -34,13 +40,26 @@ class _IndexPage extends State<IndexPage>{
     data = SwiperData();
     data.image = 'https://23porn.oss-cn-hangzhou.aliyuncs.com/d95661e1-b1d2-4363-b263-ef60b965612d.png';
     data.url = data.image;
-    // _swipers.add(data);
+    _swipers.add(data);
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return GeneralRefresh(
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      timer.cancel();
+      if(displaySize == null){
+        displaySize = _globalKey.currentContext
+            ?.findRenderObject()
+            ?.paintBounds
+            .size;
+        if(!mounted) return;
+        setState(() {});
+      }
+      // print(playSize?.height);
+    });
+    return cTabBarView(
       header: Container(
+        key: _globalKey,
         margin: const EdgeInsets.only(top:60),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -88,10 +107,37 @@ class _IndexPage extends State<IndexPage>{
           ],
         ),
       ),
-      children: _buildList(),
+      tabs: _buildTabBar(),
+      children: _buildTabView(),
+      callback: (int index){
+        print(index);
+      },
     );
   }
-  _buildList(){
+  List<Widget> _buildTabBar(){
+    List<Widget> list = [];
+    list.add(Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: Text('首页'),
+    ));
+    list.add(Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: Text('会员'),
+    ));
+    list.add(Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: Text('钻石'),
+    ));
+    return list;
+  }
+  _buildTabView(){
+    List<Widget> list = [];
+    list.add(_buildIndexList());
+    list.add(Container());
+    list.add(Container());
+    return list;
+  }
+  _buildIndexList(){
     List<Widget> widgets = [];
     widgets.add(const Padding(padding: EdgeInsets.only(top: 10)));
     if(_swipers.isNotEmpty) {
@@ -219,7 +265,7 @@ class _IndexPage extends State<IndexPage>{
           ),
         )
     );
-    return widgets;
+    return ListView(children: widgets,);
   }
   Widget _buildSwiper(BuildContext context, int index) {
     SwiperData _swiper = _swipers[index];

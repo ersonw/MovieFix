@@ -38,8 +38,8 @@ class _CategoryPage extends State<CategoryPage>{
     firsts = [Word(words: '全部')];
     firsts.add(Word(id: 1,words: '最新'));
     firsts.add(Word(id: 2,words: '最热'));
-    firsts.add(Word(id: 3,words: '点赞最多'));
-    firsts.add(Word(id: 4,words: '评论最多'));
+    // firsts.add(Word(id: 3,words: '点赞最多'));
+    // firsts.add(Word(id: 4,words: '评论最多'));
     Map<String,dynamic> map = await Request.videoCategoryTags();
     if(map['produceds'] != null) {
       seconds = [Word(words: '全部')];
@@ -58,7 +58,7 @@ class _CategoryPage extends State<CategoryPage>{
       page--;
       return;
     }
-    Map<String,dynamic> map = await Request.videoCategoryList(first: first.id,second: second.id,last: last.id);
+    Map<String,dynamic> map = await Request.videoCategoryList(first: first.id,second: second.id,last: last.id,page: page);
     refresh = false;
     if(map['total'] != null) total = map['total'];
     if(map['list'] != null){
@@ -68,6 +68,8 @@ class _CategoryPage extends State<CategoryPage>{
       }else{
         _list.addAll(list);
       }
+    }else if(page ==1) {
+      _list = [];
     }
     if(!mounted) return;
     setState(() {});
@@ -108,24 +110,27 @@ class _CategoryPage extends State<CategoryPage>{
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        cDropDownButton(firsts, callback: (Word word){
+        firsts.isEmpty ? Container() : cDropDownButton(firsts, callback: (Word word){
           first = word;
           setState(() {
             refresh = true;
+            page=1;
           });
           _getList();
         },),
-        cDropDownButton(seconds, callback: (Word word){
+        seconds.isEmpty ? Container() : cDropDownButton(seconds, callback: (Word word){
           second = word;
           setState(() {
             refresh = true;
+            page=1;
           });
           _getList();
         },),
-        cDropDownButton(lasts, callback: (Word word){
+        lasts.isEmpty ? Container() : cDropDownButton(lasts, callback: (Word word){
           last = word;
           setState(() {
             refresh = true;
+            page=1;
           });
           _getList();
         },),
@@ -141,54 +146,6 @@ class _CategoryPage extends State<CategoryPage>{
           ),
         ),
       ],
-    );
-  }
-  Widget _toolsPopupMenuItem() {
-    List<MenuItem> list = [
-      MenuItem(id: 1,icon: Icons.dashboard_customize, title: "双排"),
-      MenuItem(id: 2,icon: Icons.map, title: "单排"),
-    ];
-    return PopupMenuButton<int>(
-      itemBuilder: (BuildContext _context){
-        // PopupMenuEntry<String> entry =
-        return list.map<PopupMenuEntry<int>>((model) {
-          return PopupMenuItem<int>(
-            // padding: const EdgeInsets.only(
-            //   left: 8,
-            //   right: 8,
-            // ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Icon(model.icon),
-                // const SizedBox(
-                //   width: 4,
-                // ),
-                Text(
-                  model.title,
-                )
-              ],
-            ),
-            value: model.id,
-          );
-        }).toList();
-      },
-      onSelected: (int value) {
-        // print(value);
-        if(value == 1){
-          isPair = true;
-        }else{
-          isPair = false;
-        }
-        if(!mounted) return;
-        setState(() {});
-      },
-      // initialValue: 'dsadsad',
-      // tooltip: 'wdsad',
-      icon: Icon(
-        !isPair? Icons.dashboard_customize : Icons.list,
-        // color: Colors.white,
-      ),
     );
   }
   _buildList(){
