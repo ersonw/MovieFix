@@ -9,9 +9,9 @@ class Top3List extends StatelessWidget {
   Top3List({Key? key,this.callback, this.textStyle, required this.children}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return _buildHotList(children);
+    return _buildHotList(children,context);
   }
-  _buildHotList(List<Widget> list){
+  _buildHotList(List<Widget> list, BuildContext context){
     List<Widget> widgets = [];
     for(int i=0;i< list.length;i++){
       if(i==0){
@@ -102,10 +102,12 @@ class Top3List extends StatelessWidget {
         );
       }
     }
-    return ListView(children: widgets,);
-    // return Column(
-    //   mainAxisSize: MainAxisSize.min,
-    //   children: widgets,
-    // );
+    return MediaQuery.removePadding(
+      removeTop: true,
+      removeBottom: true,
+      removeLeft: true,
+      removeRight: true,
+      context: context,
+      child:ListView(children: widgets,),);
   }
 }

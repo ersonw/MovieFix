@@ -326,4 +326,21 @@ class Request {
   static Future<void> videoHeartbeat(int id, int seek)async{
     await _post(RequestApi.videoHeartbeat, {'id': id, 'seek': seek});
   }
+
+  static Future<Map<String, dynamic>> videoConcentrations()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoConcentrations, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> videoConcentrationsAnytime(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.videoConcentrationsAnytime.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

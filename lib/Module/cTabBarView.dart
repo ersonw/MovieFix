@@ -6,6 +6,8 @@ class cTabBarView extends StatefulWidget {
   List<Widget> children;
   List<Widget> tabs;
   Widget? header;
+  Widget? footer;
+  String? title;
   void Function(int index)? callback;
 
   cTabBarView({Key? key,
@@ -13,7 +15,10 @@ class cTabBarView extends StatefulWidget {
     required this.tabs,
     this.callback,
     this.header,
-    required this.children}) : super(key: key);
+    this.footer,
+    this.title,
+    required this.children,
+  }) : super(key: key);
 
   @override
   _cTabBarView createState() => _cTabBarView();
@@ -52,8 +57,30 @@ class _cTabBarView extends State<cTabBarView> with SingleTickerProviderStateMixi
       body: Column(
         // mainAxisSize: MainAxisSize.min,
         children: [
+          widget.title == null ? Container():Container(
+            margin: const EdgeInsets.only(top: 60),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(Icons.chevron_left_outlined,size: 36,),
+                ),
+                const Padding(padding: EdgeInsets.only(left: 10),),
+                Container(
+                  width: (MediaQuery.of(context).size.width / 1.3),
+                  alignment: Alignment.center,
+                  child: Text(widget.title!, softWrap: false, overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
+                ),
+              ],
+            ),
+          ),
+          // widget.title == null ? Container():const Padding(padding: EdgeInsets.only(top: 10),),
           widget.header == null ? Container() : widget.header!,
-          Container(
+          // widget.header == null ? Container():const Padding(padding: EdgeInsets.only(top: 10),),
+          widget.tabs.isEmpty?Container(): Container(
             alignment: Alignment.topLeft,
             child: TabBar(
               controller: controller,
@@ -73,11 +100,12 @@ class _cTabBarView extends State<cTabBarView> with SingleTickerProviderStateMixi
               tabs: widget.tabs,
             ),
           ),
-          Expanded(
+          widget.children.isEmpty?Container(): Expanded(
               child: TabBarView(
                 controller: controller,
                 children: widget.children,
               )),
+          widget.footer ?? Container(),
         ],
       ),
     );

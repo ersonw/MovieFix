@@ -14,7 +14,8 @@ import '../Global.dart';
 
 class SearchResultPage extends StatefulWidget {
   String id;
-  SearchResultPage(this.id ,{Key? key}) : super(key: key);
+  String? text;
+  SearchResultPage(this.id ,{Key? key,this.text}) : super(key: key);
   @override
   _SearchResultPage createState() => _SearchResultPage();
 }
@@ -28,15 +29,6 @@ class _SearchResultPage extends State<SearchResultPage>{
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      if (_controller.position.pixels ==
-          _controller.position.maxScrollExtent) {
-        setState(() {
-          page++;
-        });
-        getResult();
-      }
-    });
     getResult();
   }
   getResult()async{
@@ -45,6 +37,7 @@ class _SearchResultPage extends State<SearchResultPage>{
       return;
     }
     Map<String, dynamic> result = await Request.searchResult(widget.id,page: page);
+    print(result);
     setState(() {
       refresh = false;
     });
@@ -68,7 +61,12 @@ class _SearchResultPage extends State<SearchResultPage>{
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
-      // controller: _controller,
+      callback: (){
+        setState(() {
+          page++;
+        });
+        getResult();
+      },
       refresh: refresh,
       onRefresh: (bool value){
         setState(() {
@@ -99,7 +97,7 @@ class _SearchResultPage extends State<SearchResultPage>{
                     width: ((MediaQuery.of(context).size.width) / 1.2),
                     margin: const EdgeInsets.only(top: 10,bottom: 10),
                     alignment: Alignment.center,
-                    child: Text(text,style:  TextStyle(fontSize: 13,color: Colors.grey.withOpacity(0.6)),),
+                    child: Text(widget.text ?? text,style:  TextStyle(fontSize: 13,color: Colors.grey.withOpacity(0.6)),),
                   ),
                   onTap: (){
                     Navigator.pop(context);

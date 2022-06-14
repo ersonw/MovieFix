@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
+import 'package:movie_fix/Module/cTabBarView.dart';
 import '../Module/GeneralInput.dart';
 import '../Module/GeneralVideoList.dart';
 import '../Module/LeftTabBarViewList.dart';
@@ -38,7 +39,7 @@ class PlayerPage extends StatefulWidget {
   _PlayerPage createState() => _PlayerPage();
 }
 
-class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
+class _PlayerPage extends State<PlayerPage>{
   // 是否全屏
   bool get _isFullScreen =>
       MediaQuery.of(context).orientation == Orientation.landscape;
@@ -66,8 +67,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   SwiperData _swiperData = SwiperData();
   int replyId = 0;
   String replyUser = '';
-  GlobalKey _globalKey = GlobalKey();
-  Size? playSize;
+  bool isReply = false;
 
   @override
   void initState() {
@@ -227,74 +227,48 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   _commentReport(int commentId)async{}
   @override
   Widget build(BuildContext context) {
-
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      timer.cancel();
-      if(playSize == null){
-        playSize = _globalKey.currentContext
-            ?.findRenderObject()
-            ?.paintBounds
-            .size;
-        if(!mounted) return;
-        setState(() {});
-      }
-      // print(playSize?.height);
-    });
     return player.id == 0 ?
     GeneralRefresh.getLoading() :
-    GeneralRefresh(
-        header: _isFullScreen ? null : Container(
-          margin: const EdgeInsets.only(top: 60),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: (){
-                  Navigator.pop(context);
-                },
-                child: const Icon(Icons.chevron_left_outlined,size: 36,),
-              ),
-              const Padding(padding: EdgeInsets.only(left: 10),),
-              Container(
-                width: (MediaQuery.of(context).size.width / 1.3),
-                alignment: Alignment.center,
-                child: Text(player.title!, softWrap: false, overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,),
-              ),
-            ],
-          ),
-        ),
-        // body: safeAreaPlayerUI(),
-        children:  _isFullScreen ? [safeAreaPlayerUI(),] : [
-        safeAreaPlayerUI(),
-        const Padding(padding: EdgeInsets.only(top: 10,),),
-        LeftTabBarView(
-          height: MediaQuery.of(context).size.height - 110 - (playSize ?? Size.zero).height,
-          tabs: const [
-            Text('详情'),
-            Text('评论'),
-          ],
-          children: [
-            _buildDetails(),
-            _buildComment(),
-          ],
-          expand: [
-            Container(margin: const EdgeInsets.only(top:5),),
-            GeneralInput(
-              sendBnt: true,
-              hintText: replyId == 0 ?'发表自己的看法~' : '回复：$replyUser',
-              prefixText: replyUser,
-              callback: (String value){
-                _comment(value);
-              },
-              cancelCallback: (){
-                replyId = 0;
-                replyUser = '';
-                setState(() {});
-              },
-            ),
-          ],
-        ),
-      ]
+    cTabBarView(
+        title: _isFullScreen ? null : player.title,
+        header: safeAreaPlayerUI(),
+        tabs: _isFullScreen ? [] : [
+          Text('详情'),
+          Text('评论'),
+        ],
+        children: _isFullScreen ? [] : [
+          _buildDetails(),
+          _buildComment(),
+        ],
+      callback: (int index){
+          print(index);
+      },
+      footer: _isFullScreen ? null :(isReply ? GeneralInput(
+        sendBnt: true,
+        hintText: '回复：$replyUser',
+        prefixText: replyUser,
+        callback: (String value){
+          setState(() {
+            isReply = false;
+          });
+          _comment(value);
+        },
+        cancelCallback: (){
+          replyId = 0;
+          replyUser = '';
+          isReply = false;
+          setState(() {});
+        },
+      ) :
+      GeneralInput(
+        sendBnt: true,
+        hintText: '发表自己的看法~' ,
+        callback: (String value){
+          _comment(value);
+        },
+        cancelCallback: (){
+        },
+      )),
     );
   }
   Future<void> _onRefresh() async {
@@ -313,15 +287,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     if(_comments.isNotEmpty){
       widgets.addAll(buildComment());
     }
-    // widgets.add(Container(
-    //   child: GeneralInput(
-    //     callback: (String value){
-    //       print(value);
-    //       _comment(value);
-    //     },
-    //   ),
-    // ));
-    // return widgets;
     return Container(
       width: (MediaQuery.of(context).size.width),
       margin: const EdgeInsets.all(10),
@@ -337,6 +302,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   _input(int id, String nickname){
     replyId = id;
     replyUser = nickname;
+    isReply = true;
     setState(() {});
   }
   buildComment(){
@@ -581,7 +547,7 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
     }
     int line = commentCountItem(comments,style: style);
     int index = commentCountItemIndex(comments,style: style);
-    print(index);
+    // print(index);
     if(line < 4){
       widgets.addAll(list);
     }else{
@@ -754,7 +720,6 @@ class _PlayerPage extends State<PlayerPage> with SingleTickerProviderStateMixin{
   }
   Widget safeAreaPlayerUI() {
     return SafeArea(
-      key: _globalKey,
       // 全屏的安全区域
       top: !_isFullScreen,
       bottom: !_isFullScreen,

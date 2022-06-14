@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:movie_fix/Module/cTabBarView.dart';
 import '../AssetsIcon.dart';
 import '../Global.dart';
 import '../Module/GeneralRefresh.dart';
@@ -81,44 +82,107 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
   }
   @override
   Widget build(BuildContext context) {
-    // Timer.periodic(const Duration(milliseconds: 100), (timer) {
-    //   if(context.size != null){
-    //     timer.cancel();
-    //     if(height == 60){
-    //       height = context.size!.height;
-    //       if(!mounted) return;
-    //       setState(() {});
-    //     }
-    //   }
-    //   print(MediaQuery.of(context).size.height);
-    //   print(context.size);
-    // });
-    return GeneralRefresh(controller: ScrollController(),
-        header: Container(
-          margin: const EdgeInsets.only(top: 60),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InputSearch(
-                text: text,
-                focusNode: focusNode,
-                callback: (String value){
-                  _search(value);
-                },
+    return cTabBarView(
+        header: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 60),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InputSearch(
+                    text: text,
+                    focusNode: focusNode,
+                    callback: (String value){
+                      _search(value);
+                    },
+                  ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10,),
+                      child: Text('取消'),
+                    ),
+                  ),
+                ],
               ),
-              InkWell(
-                onTap: (){
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 10,),
-                  child: Text('取消'),
+            ),
+            _records.isEmpty ? Container(): Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  // color: Colors.black,
+                  margin: const EdgeInsets.all(20),
+                  alignment: Alignment.centerLeft,
+                  // height: 180,
+                  child: Text('历史记录'),
                 ),
-              ),
-            ],
-          ),
+                InkWell(
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Center(child: Image.asset(AssetsIcon.clearIcon),),
+                  ),
+                  onTap: (){
+                    CustomDialog.message('确定要清除所有搜索记录吗？', callback: (bool value){
+                      if(value){
+                        generalModel.clearWords();
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
+            _records.isEmpty ? Container(): ListStyle.buildHorizontalList(_records, callback: (int index){
+              if(index < _records.length){
+                _search(_records[index]);
+              }
+            }),
+            _words.isEmpty ? Container(): Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  // color: Colors.black,
+                  margin: const EdgeInsets.all(20),
+                  alignment: Alignment.centerLeft,
+                  // height: 180,
+                  child: Text('热门标签'),
+                ),
+                InkWell(
+                  child: Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        Center(child: Image.asset(AssetsIcon.refreshIcon),),
+                        const Padding(padding: EdgeInsets.only(left: 10)),
+                        Text('换一换'),
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    change();
+                  },
+                ),
+              ],
+            ),
+            _words.isEmpty ? Container(): ListStyle.buildPhalanxList(_words, MediaQuery.of(context).size.width, callback: (int index){
+              // widgets.add(ListStyle.buildPhalanxList(_words, callback: (int index){
+              if(index < _words.length){
+                _search(_words[index].words);
+              }
+            })
+          ],
         ),
-        children: _buildList(),
+        tabs: [
+          Text('当月热搜榜'),
+          Text('年度热搜榜'),
+        ],
+        children: [
+          _buildHotList(_hotMonth),
+          _buildHotList(_hotYear),
+        ]
     );
   }
    _search(String text)async{
@@ -128,103 +192,8 @@ class _SearchPage extends State<SearchPage> with SingleTickerProviderStateMixin{
     generalModel.updateWords(text);
     Map<String, dynamic> result = await Request.searchMovie(text);
     if(result != null && result['id'] != null){
-      Navigator.push(context, SlideRightRoute(page: SearchResultPage(result['id'])));
+      Navigator.push(context, SlideRightRoute(page: SearchResultPage(result['id'],text: text,)));
     }
-  }
-
-  _buildList(){
-    List<Widget> widgets = [];
-    if(_records.isNotEmpty) {
-      widgets.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              // color: Colors.black,
-              margin: const EdgeInsets.all(20),
-              alignment: Alignment.centerLeft,
-              // height: 180,
-              child: Text('历史记录'),
-            ),
-            InkWell(
-              child: Container(
-                margin: const EdgeInsets.all(20),
-                child: Center(child: Image.asset(AssetsIcon.clearIcon),),
-              ),
-              onTap: (){
-                CustomDialog.message('确定要清除所有搜索记录吗？', callback: (bool value){
-                  if(value){
-                    generalModel.clearWords();
-                  }
-                });
-              },
-            ),
-          ],
-        )
-      );
-      widgets.add(ListStyle.buildHorizontalList(_records, callback: (int index){
-        if(index < _records.length){
-          _search(_records[index]);
-        }
-      }));
-    }
-    if(_words.isNotEmpty) {
-      widgets.add(
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              // color: Colors.black,
-              margin: const EdgeInsets.all(20),
-              alignment: Alignment.centerLeft,
-              // height: 180,
-              child: Text('热门标签'),
-            ),
-            InkWell(
-              child: Container(
-                  margin: const EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Center(child: Image.asset(AssetsIcon.refreshIcon),),
-                      const Padding(padding: EdgeInsets.only(left: 10)),
-                      Text('换一换'),
-                    ],
-                  ),
-              ),
-              onTap: (){
-                change();
-              },
-            ),
-          ],
-        )
-      );
-      widgets.add(ListStyle.buildPhalanxList(_words, MediaQuery.of(context).size.width, callback: (int index){
-      // widgets.add(ListStyle.buildPhalanxList(_words, callback: (int index){
-        if(index < _words.length){
-          _search(_words[index].words);
-        }
-      }));
-    }
-    widgets.add(const Padding(padding: EdgeInsets.only(top: 20)));
-    widgets.add(
-      LeftTabBarView(
-          height: MediaQuery.of(context).size.height / 1.8,
-          tabs: [
-            Text('当月热搜榜'),
-            Text('年度热搜榜'),
-          ],
-          children: [
-            _buildHotList(_hotMonth),
-            _buildHotList(_hotYear),
-          ]
-      )
-    );
-    // return Expanded(child: ListView(children: widgets,));
-    // return Column(
-    //   mainAxisSize: MainAxisSize.min,
-    //   children: widgets,
-    // );
-    return widgets;
   }
   _buildHotList(List<Word> list){
     List<Widget> widgets = [];
