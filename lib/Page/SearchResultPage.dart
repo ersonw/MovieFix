@@ -37,7 +37,7 @@ class _SearchResultPage extends State<SearchResultPage>{
       return;
     }
     Map<String, dynamic> result = await Request.searchResult(widget.id,page: page);
-    print(result);
+    // print(result);
     setState(() {
       refresh = false;
     });

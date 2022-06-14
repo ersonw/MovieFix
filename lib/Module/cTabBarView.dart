@@ -81,6 +81,7 @@ class _cTabBarView extends State<cTabBarView> with SingleTickerProviderStateMixi
           widget.header == null ? Container() : widget.header!,
           // widget.header == null ? Container():const Padding(padding: EdgeInsets.only(top: 10),),
           widget.tabs.isEmpty?Container(): Container(
+            margin: const EdgeInsets.only(top: 10),
             alignment: Alignment.topLeft,
             child: TabBar(
               controller: controller,

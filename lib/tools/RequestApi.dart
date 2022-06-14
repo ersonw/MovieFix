@@ -26,4 +26,7 @@ class RequestApi {
   static const videoCategoryList = '/api/video/category/list/{first}/{second}/{last}/{page}';
   static const videoConcentrations = '/api/video/concentrations';
   static const videoConcentrationsAnytime = '/api/video/concentrations/anytime/{id}';
+  static const videoConcentration = '/api/video/concentrations/{id}/{page}';
+  static const videoMembership = '/api/video/membership/{page}';
+  static const videoDiamond = '/api/video/diamond/{page}';
 }

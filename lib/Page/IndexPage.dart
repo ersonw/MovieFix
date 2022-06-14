@@ -8,6 +8,8 @@ import 'package:movie_fix/Module/LeftTabBarView.dart';
 import 'package:movie_fix/Module/PairVideoList.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/Page/CategoryPage.dart';
+import 'package:movie_fix/Page/ConcentrationVideo.dart';
+import 'package:movie_fix/Page/MembershipVideo.dart';
 import 'package:movie_fix/data/Concentration.dart';
 import 'package:movie_fix/data/Video.dart';
 import 'package:movie_fix/data/Word.dart';
@@ -16,6 +18,7 @@ import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../AssetsIcon.dart';
+import 'DiamondVideo.dart';
 import 'SearchPage.dart';
 import '../tools/CustomRoute.dart';
 
@@ -38,7 +41,7 @@ class _IndexPage extends State<IndexPage>{
 
   List<SwiperData> _swipers = [];
   List<Concentration> _list = [];
-  bool refresh = false;
+  bool refresh = true;
   @override
   void initState() {
     SwiperData data = SwiperData();
@@ -49,6 +52,7 @@ class _IndexPage extends State<IndexPage>{
     data.image = 'https://23porn.oss-cn-hangzhou.aliyuncs.com/d95661e1-b1d2-4363-b263-ef60b965612d.png';
     data.url = data.image;
     _swipers.add(data);
+    _getList();
     super.initState();
   }
   Future<void> _onRefresh() async {
@@ -170,15 +174,15 @@ class _IndexPage extends State<IndexPage>{
     // ));
     list.add(Container(
       margin: const EdgeInsets.only(left: 10),
-      child: Text('排行榜'),
+      child: Text('热播'),
     ));
     return list;
   }
   _buildTabView(){
     List<Widget> list = [];
     list.add(_buildIndexList());
-    list.add(Container());
-    list.add(Container());
+    list.add(const MembershipVideo());
+    list.add(const DiamondVideo());
     list.add(Container());
     return list;
   }
@@ -222,7 +226,7 @@ class _IndexPage extends State<IndexPage>{
       width: MediaQuery.of(context).size.width / 1.1,
       alignment: Alignment.centerLeft,
       // margin: const EdgeInsets.only(left: 10),
-      child: Text(concentration.name,style: TextStyle(fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,softWrap: false,),
+      child: Text(concentration.name,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),overflow: TextOverflow.ellipsis,softWrap: false,),
     ));
     if(concentration.videos.isNotEmpty){
       for(int i= 0; i <(concentration.videos.length / 2)+1;i++){
@@ -244,7 +248,9 @@ class _IndexPage extends State<IndexPage>{
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            onTap: (){},
+            onTap: (){
+              _concentration(concentration.id,concentration.name);
+            },
             child: Container(
               width: MediaQuery.of(context).size.width / 2.5,
               alignment: Alignment.center,
@@ -288,6 +294,9 @@ class _IndexPage extends State<IndexPage>{
       mainAxisSize: MainAxisSize.min,
       children: widgets,
     );
+  }
+  _concentration(int id, String name)async{
+    Navigator.push(context, SlideRightRoute(page:  ConcentrationVideo(id,name: name,)));
   }
   Widget _buildSwiper(BuildContext context, int index) {
     SwiperData _swiper = _swipers[index];

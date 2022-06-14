@@ -68,6 +68,7 @@ class _PlayerPage extends State<PlayerPage>{
   int replyId = 0;
   String replyUser = '';
   bool isReply = false;
+  bool showPay = false;
 
   @override
   void initState() {
@@ -212,7 +213,12 @@ class _PlayerPage extends State<PlayerPage>{
     if (!mounted) return;
     await Request.videoHeartbeat(widget.id, VideoPlayerUtils.position.inSeconds);
   }
-  _showPay()async{}
+  _showPay()async{
+    VideoPlayerUtils.setPortrait();
+    showPay = true;
+    if(!mounted) return;
+    setState(() {});
+  }
   _like()async{
     player.like = await Request.videoLike(widget.id);
     if(!mounted) return;
@@ -231,7 +237,22 @@ class _PlayerPage extends State<PlayerPage>{
     GeneralRefresh.getLoading() :
     cTabBarView(
         title: _isFullScreen ? null : player.title,
-        header: safeAreaPlayerUI(),
+        header: Stack(
+          alignment: Alignment.center,
+          children: [
+            safeAreaPlayerUI(),
+            !showPay ? Container() : Container(
+              color: Colors.black.withOpacity(0.9),
+              width: MediaQuery.of(context).size.width,
+              height: _height,
+              child: Column(
+                children: [
+                  Text('试看时间已结束！'),
+                ],
+              ),
+            ),
+          ],
+        ),
         tabs: _isFullScreen ? [] : [
           Text('详情'),
           Text('评论'),
@@ -243,7 +264,7 @@ class _PlayerPage extends State<PlayerPage>{
       callback: (int index){
           print(index);
       },
-      footer: _isFullScreen ? null :(isReply ? GeneralInput(
+      footer: showPay ? Container() : (_isFullScreen ? null :(isReply ? GeneralInput(
         sendBnt: true,
         hintText: '回复：$replyUser',
         prefixText: replyUser,
@@ -268,7 +289,7 @@ class _PlayerPage extends State<PlayerPage>{
         },
         cancelCallback: (){
         },
-      )),
+      ))),
     );
   }
   Future<void> _onRefresh() async {

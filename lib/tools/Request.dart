@@ -343,4 +343,28 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoConcentration(int id,{int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoConcentration.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> videoMembership(int page)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoMembership.replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> videoDiamond(int page)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoDiamond.replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }
