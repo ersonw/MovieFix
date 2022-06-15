@@ -238,16 +238,36 @@ class _PlayerPage extends State<PlayerPage>{
     cTabBarView(
         title: _isFullScreen ? null : player.title,
         header: Stack(
-          alignment: Alignment.center,
+          alignment: Alignment.bottomCenter,
           children: [
             safeAreaPlayerUI(),
             !showPay ? Container() : Container(
-              color: Colors.black.withOpacity(0.9),
+              color: Colors.black.withOpacity(0.6),
               width: MediaQuery.of(context).size.width,
               height: _height,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('试看时间已结束！'),
+                  Text('试看时间已结束！',style: TextStyle(fontWeight: FontWeight.bold),),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  player.price == 0 ? Container(
+                    child: Text('开通会员继续观看哟!',style: TextStyle(color: Colors.orangeAccent),),
+                  ):
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('普通用户:${player.price}',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
+                      Image.asset(AssetsIcon.diamondTag),
+                    ],
+                  ),
+                  player.price == 0 ? Container(): Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('会员优惠:${player.total}',style: TextStyle(color: Colors.orangeAccent),),
+                      Image.asset(AssetsIcon.diamondTag),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -264,7 +284,73 @@ class _PlayerPage extends State<PlayerPage>{
       callback: (int index){
           print(index);
       },
-      footer: showPay ? Container() : (_isFullScreen ? null :(isReply ? GeneralInput(
+      footer: showPay ? Container(
+        color: Colors.white.withOpacity(0.2),
+        height: 45,
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      child: player.price > 0 ?
+                      Row(
+                        children: [
+                          Text('原价:${player.price}',style: TextStyle(decoration: !player.member ?null:TextDecoration.lineThrough),),
+                          Image.asset(AssetsIcon.diamondTag),
+                        ],
+                      ):
+                      Text('开通会员继续观看',style: TextStyle(color: Colors.orangeAccent,fontWeight: FontWeight.bold),)
+                  ),
+                  !player.member ?Container():Row(
+                    children: [
+                      Text('现价:${player.total}',style: TextStyle(color: Colors.orangeAccent)),
+                      Image.asset(AssetsIcon.diamondTag),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            player.price > 0 ?
+            InkWell(
+              onTap: (){
+                //
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 6, bottom: 6),
+                  child: Text('去支付'),
+                ),
+              ),
+            ):
+            InkWell(
+              onTap: (){
+                //
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 6, bottom: 6),
+                  child: Text('去开通'),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ) : (_isFullScreen ? null :(isReply ? GeneralInput(
         sendBnt: true,
         hintText: '回复：$replyUser',
         prefixText: replyUser,

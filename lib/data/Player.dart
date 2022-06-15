@@ -3,6 +3,8 @@ import 'dart:convert';
 class Player {
   bool pay = false;
   int price = 0;
+  int total = 0;
+  bool member = false;
   int id = 0;
   String? picThumb;
   String? vodPlayUrl;
@@ -18,6 +20,8 @@ class Player {
   Player.formJson(Map<String, dynamic> json):
       pay = json['pay'],
     price = json['price'],
+        total = json['total'],
+        member = json['member'],
     id = json['id'],
     picThumb = json['picThumb'],
     vodPlayUrl = json['vodPlayUrl'],
@@ -32,6 +36,8 @@ class Player {
   Map<String, dynamic> toJson() => {
     'pay': pay,
     'price': price,
+    'total': total,
+    'member': member,
     'id': id,
     'picThumb': picThumb,
     'vodPlayUrl': vodPlayUrl,
