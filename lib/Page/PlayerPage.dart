@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:video_player/video_player.dart';
 import '../Module/GeneralInput.dart';
 import '../Module/GeneralVideoList.dart';
 import '../Module/LeftTabBarViewList.dart';
@@ -55,6 +56,7 @@ class _PlayerPage extends State<PlayerPage>{
   LockIcon? _lockIcon; // 控制是否沉浸式的widget
 
   final ScrollController _controller = ScrollController();
+  VideoPlayerController? _videoPlayerController;
   Timer _timer = Timer(const Duration(seconds: 1), () => {});
   bool refresh = false;
   bool showContent = false;
@@ -149,13 +151,14 @@ class _PlayerPage extends State<PlayerPage>{
       return;
     }
     if (map['player'] != null) {
-      // print(map['player']['seek']);
+      // print(map['player']);
       setState(() {
         player = Player.formJson(map['player']);
       });
-      // if(kIsWeb == true){
-      //   return false;
-      // }
+      if(kIsWeb == true){
+        _videoPlayerController = VideoPlayerController.network(player.vodPlayUrl);
+        return;
+      }
       VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
       VideoPlayerUtils.unLock();
       // 播放新视频，初始化监听
@@ -233,19 +236,28 @@ class _PlayerPage extends State<PlayerPage>{
   _commentReport(int commentId)async{}
   @override
   Widget build(BuildContext context) {
+    VideoPlayerController videoPlayerController = VideoPlayerController.network('');
+    if(_videoPlayerController != null){
+      videoPlayerController = _videoPlayerController!;
+    }
     return player.id == 0 ?
     GeneralRefresh.getLoading() :
     cTabBarView(
         title: _isFullScreen ? null : player.title,
         header: Stack(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.center,
           children: [
-            safeAreaPlayerUI(),
+            _videoPlayerController != null?
+            AspectRatio(
+              aspectRatio: videoPlayerController.value.aspectRatio,
+              child: VideoPlayer(_videoPlayerController),
+            )
+                : safeAreaPlayerUI(),
             !showPay ? Container() : Container(
               color: Colors.black.withOpacity(0.6),
-              width: MediaQuery.of(context).size.width,
-              height: _height,
-              child: Column(
+              // width: MediaQuery.of(context).size.width,
+              height: _height+20,
+              child: Center(child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -269,7 +281,7 @@ class _PlayerPage extends State<PlayerPage>{
                     ],
                   ),
                 ],
-              ),
+              ),),
             ),
           ],
         ),
@@ -288,11 +300,12 @@ class _PlayerPage extends State<PlayerPage>{
         color: Colors.white.withOpacity(0.2),
         height: 45,
         alignment: Alignment.center,
+        margin: const EdgeInsets.only(bottom: 24),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              margin: const EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left:30),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -321,7 +334,7 @@ class _PlayerPage extends State<PlayerPage>{
                 //
               },
               child: Container(
-                margin: const EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 30),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -337,7 +350,7 @@ class _PlayerPage extends State<PlayerPage>{
                 //
               },
               child: Container(
-                margin: const EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 30),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.all(Radius.circular(10)),

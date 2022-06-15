@@ -138,6 +138,7 @@ class _ShareVideoPage extends State<ShareVideoPage> {
                       if (await Global.requestPhotosPermission() == true || Platform.isIOS){
                         await Global.capturePng(repaintKey);
                         Global.showWebColoredToast('保存成功！');
+                        Navigator.pop(context);
                       }
                     }else{
                       Global.showWebColoredToast('同时按下音量键与电源键截图哟！');
@@ -171,6 +172,7 @@ class _ShareVideoPage extends State<ShareVideoPage> {
                     // if(kIsWeb == false){
                     await Clipboard.setData(ClipboardData(text: video.shareUrl));
                     Global.showWebColoredToast('复制成功！');
+                    Navigator.pop(context);
                     // }
                   },
                   child: Container(

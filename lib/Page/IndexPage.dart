@@ -51,7 +51,7 @@ class _IndexPage extends State<IndexPage>{
     data = SwiperData();
     data.image = 'https://23porn.oss-cn-hangzhou.aliyuncs.com/d95661e1-b1d2-4363-b263-ef60b965612d.png';
     data.url = data.image;
-    _swipers.add(data);
+    // _swipers.add(data);
     _getList();
     super.initState();
   }
