@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/tools/VideoPickerPage.dart';
 
 import 'AssetsIcon.dart';
 import 'Page/IndexPage.dart';
@@ -24,7 +25,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   void initState() {
     super.initState();
     _eachView.add(const IndexPage());
-    _eachView.add(Container());
+    _eachView.add(VideoPickerPage());
     _eachView.add(Container());
     _eachView.add(Container());
     _eachView.add(Container());

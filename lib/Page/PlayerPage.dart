@@ -155,10 +155,10 @@ class _PlayerPage extends State<PlayerPage>{
       setState(() {
         player = Player.formJson(map['player']);
       });
-      if(kIsWeb == true){
-        _videoPlayerController = VideoPlayerController.network(player.vodPlayUrl);
-        return;
-      }
+      // if(kIsWeb == true){
+        // _videoPlayerController = VideoPlayerController.network(player.vodPlayUrl);
+        // return;
+      // }
       VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
       VideoPlayerUtils.unLock();
       // 播放新视频，初始化监听
@@ -236,10 +236,10 @@ class _PlayerPage extends State<PlayerPage>{
   _commentReport(int commentId)async{}
   @override
   Widget build(BuildContext context) {
-    VideoPlayerController videoPlayerController = VideoPlayerController.network('');
-    if(_videoPlayerController != null){
-      videoPlayerController = _videoPlayerController!;
-    }
+    // VideoPlayerController videoPlayerController = VideoPlayerController.network('');
+    // if(_videoPlayerController != null){
+    //   videoPlayerController = _videoPlayerController!;
+    // }
     return player.id == 0 ?
     GeneralRefresh.getLoading() :
     cTabBarView(
@@ -247,12 +247,12 @@ class _PlayerPage extends State<PlayerPage>{
         header: Stack(
           alignment: Alignment.center,
           children: [
-            _videoPlayerController != null?
-            AspectRatio(
-              aspectRatio: videoPlayerController.value.aspectRatio,
-              child: VideoPlayer(_videoPlayerController),
-            )
-                : safeAreaPlayerUI(),
+            // _videoPlayerController != null?
+            // AspectRatio(
+            //   aspectRatio: videoPlayerController.value.aspectRatio,
+            //   child: VideoPlayer(_videoPlayerController),
+            // ) :
+            safeAreaPlayerUI(),
             !showPay ? Container() : Container(
               color: Colors.black.withOpacity(0.6),
               // width: MediaQuery.of(context).size.width,
@@ -363,7 +363,9 @@ class _PlayerPage extends State<PlayerPage>{
             ),
           ],
         ),
-      ) : (_isFullScreen ? null :(isReply ? GeneralInput(
+      ) : Container(
+          // margin: const EdgeInsets.only(bottom: 24),
+          child: _isFullScreen ? null :(isReply ? GeneralInput(
         sendBnt: true,
         hintText: '回复：$replyUser',
         prefixText: replyUser,

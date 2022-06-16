@@ -52,7 +52,7 @@ class Request {
         },
         responseType: ResponseType.json,
         receiveDataWhenStatusError: false,
-        receiveTimeout: 3000,
+        receiveTimeout: 30000,
       ));
       Loading.dismiss();
       if(response.statusCode == 200 && response.data != null){
@@ -66,6 +66,7 @@ class Request {
     } on DioError catch(e) {
       Loading.dismiss();
       print(e.message);
+      print(e);
       // if(e.response == null) {
       //   CustomDialog.message(e.message);
       // } else if(e.response.statusCode == 105){
@@ -90,7 +91,7 @@ class Request {
         },
         responseType: ResponseType.json,
         receiveDataWhenStatusError: false,
-        receiveTimeout: 3000,
+        receiveTimeout: 30000,
       ));
       Loading.dismiss();
       if(response.statusCode == 200 && response.data != null){
