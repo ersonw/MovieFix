@@ -118,7 +118,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   child: Column(
                     children: [
                       Image.asset(_index == 1 ? AssetsIcon.videoActiveIcon : AssetsIcon.videoIcon,width: _index == 1 ? 30 : 25,),
-                      const Text("抖阴",style: TextStyle()),
+                      const Text("短视频",style: TextStyle()),
                     ],
                   ),
                 ),
@@ -134,8 +134,8 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   height: 60,
                   child: Column(
                     children: [
-                      Image.asset(_index == 2 ? AssetsIcon.gameActiveIcon : AssetsIcon.gameIcon,width: _index == 2 ? 30 : 25,),
-                      const Text("游戏",style: TextStyle()),
+                      Image.asset(_index == 2 ? AssetsIcon.likeActiveIcon : AssetsIcon.likeIcon,width: _index == 2 ? 30 : 25,),
+                      const Text("心动",style: TextStyle()),
                     ],
                   ),
                 ),
@@ -150,8 +150,8 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   height: 60,
                   child: Column(
                     children: [
-                      Image.asset(_index == 3 ? AssetsIcon.likeActiveIcon : AssetsIcon.likeIcon,width: _index == 3 ? 30 : 25,),
-                      const Text("喜欢",style: TextStyle()),
+                      Image.asset(_index == 3 ? AssetsIcon.gameActiveIcon : AssetsIcon.gameIcon,width: _index == 3 ? 30 : 25,),
+                      const Text("游戏",style: TextStyle()),
                     ],
                   ),
                 ),
@@ -161,6 +161,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   });
                 }
             ),
+
             InkWell(
                 child: SizedBox(
                   height: 60,

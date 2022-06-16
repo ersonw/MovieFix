@@ -29,4 +29,5 @@ class RequestApi {
   static const videoConcentration = '/api/video/concentrations/{id}/{page}';
   static const videoMembership = '/api/video/membership/{page}';
   static const videoDiamond = '/api/video/diamond/{page}';
+  static const videoRank = '/api/video/rank/{first}/{second}';
 }

@@ -19,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../AssetsIcon.dart';
 import 'DiamondVideo.dart';
+import 'RankVideo.dart';
 import 'SearchPage.dart';
 import '../tools/CustomRoute.dart';
 
@@ -174,7 +175,7 @@ class _IndexPage extends State<IndexPage>{
     // ));
     list.add(Container(
       margin: const EdgeInsets.only(left: 10),
-      child: Text('热播'),
+      child: Text('热门榜单'),
     ));
     return list;
   }
@@ -183,7 +184,7 @@ class _IndexPage extends State<IndexPage>{
     list.add(_buildIndexList());
     list.add(const MembershipVideo());
     list.add(const DiamondVideo());
-    list.add(Container());
+    list.add(const RankVideo());
     return list;
   }
   _buildIndexList(){

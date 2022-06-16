@@ -367,4 +367,12 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> videoRank({int first=0,int second=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoRank.replaceAll('{first}', '$first').replaceAll('{second}', '$second'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }
