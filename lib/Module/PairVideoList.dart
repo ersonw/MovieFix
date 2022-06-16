@@ -82,9 +82,10 @@ class PairVideoList extends StatelessWidget {
                         children: [
                           Container(
                             height: ((MediaQuery.of(context).size.height) / 7) / 5,
+                            // width: MediaQuery.of(context).size.width / 6,
                             margin: const EdgeInsets.only(bottom: 3),
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.3),
+                              color: Colors.black.withOpacity(0.5),
                               borderRadius: const BorderRadius.all(Radius.circular(5)),
                             ),
                             child: Container(
@@ -93,7 +94,7 @@ class PairVideoList extends StatelessWidget {
                                 // mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Image.asset(AssetsIcon.playIcon),
-                                  Text('${Global.getNumbersToChinese(video.plays)}人播放')
+                                  Text(' ${Global.getNumbersToChinese(video.plays)}播放')
                                 ],
                               ),
                             ),

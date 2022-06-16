@@ -176,7 +176,7 @@ buildSortVideoList(List<Video> videos){
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('${Global.getNumbersToChinese(videos[i].plays)} 次播放',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
+                      Text('${Global.getNumbersToChinese(videos[i].plays)} 播放',style: TextStyle(color: Colors.white.withOpacity(0.5)),),
                       Row(
                         children: [
                           Image.asset(AssetsIcon.zanIcon),
