@@ -68,8 +68,6 @@ dependencies:
       git: https://github.com/newcoremobile/ncindexlistview.git
   slide_item: ^1.0.8
   video_player_web: ^2.0.10
-#  video_player:
-#    path: ./video_player
   helpers: ^1.1.4
   image_picker: ^0.8.5
   dio: ^4.0.5-beta1
