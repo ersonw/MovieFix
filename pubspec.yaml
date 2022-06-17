@@ -47,7 +47,7 @@ dependencies:
   permission_handler: ^9.2.0
   image_gallery_saver: ^1.7.1
   fluttertoast: ^8.0.8
-  xml2json: ^4.4.0
+#  xml2json: ^4.4.0
   encrypt: ^5.0.0
   flutter_swiper: ^1.1.6
   webview_flutter: ^3.0.0
@@ -72,6 +72,11 @@ dependencies:
   video_player: ^2.3.0
   video_editor:
     path: ./video_editor-1.4.1
+  flutter_webrtc: ^0.8.9
+  flutter_background: ^1.0.0
+#  minio: ^3.5.0
+  minio:
+    path: ./minio-3.5.0
 
 dev_dependencies:
   flutter_test:

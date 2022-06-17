@@ -11,7 +11,9 @@ import 'package:video_editor/ui/trim/trim_slider.dart';
 import 'package:video_editor/ui/trim/trim_timeline.dart';
 import 'package:video_player/video_player.dart';
 
+import '../Global.dart';
 import 'CropScreen.dart';
+import 'MinioUtil.dart';
 class VideoEditor extends StatefulWidget {
   const VideoEditor({Key? key, required this.file}) : super(key: key);
 
@@ -60,11 +62,17 @@ class _VideoEditorState extends State<VideoEditor> {
       // preset: VideoExportPreset.medium,
       // customInstruction: "-crf 17",
       onProgress: (stats, value) => _exportingProgress.value = value,
-      onCompleted: (file) {
+      onCompleted: (file) async{
         _isExporting.value = false;
         if (!mounted) return;
         if (file != null) {
           print(file.path);
+          if(await MinioUtil.put('test.mp4', file.path)){
+            Global.showWebColoredToast('上传成功！');
+            Navigator.pop(context);
+          }else{
+            Global.showWebColoredToast('上传失败!');
+          }
           return;
           final VideoPlayerController _videoController =
           VideoPlayerController.file(file);

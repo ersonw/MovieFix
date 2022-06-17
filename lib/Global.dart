@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:movie_fix/tools/MinioUtil.dart';
 import 'Page/ShareVideoPage.dart';
 import 'tools/MessageUtil.dart';
 import 'Model/ConfigModel.dart';
@@ -83,6 +84,7 @@ class Global {
       // }
     }
     MessageUtil.init();
+    MinioUtil.init();
     runApp(const MyApp());
   }
   static Future<void> shareVideo(int id) async {
