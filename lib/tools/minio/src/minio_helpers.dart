@@ -1,9 +1,9 @@
 import 'package:convert/convert.dart';
 import 'package:http/http.dart';
 import 'package:mime/mime.dart' show lookupMimeType;
-import 'package:minio/src/minio_client.dart';
-import 'package:minio/src/minio_errors.dart';
-import 'package:minio/src/minio_models_generated.dart';
+import 'minio_client.dart';
+import 'minio_errors.dart';
+import 'minio_models_generated.dart';
 import 'package:xml/xml.dart' as xml;
 
 bool isValidBucketName(String bucket) {

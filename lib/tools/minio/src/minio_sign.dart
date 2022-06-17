@@ -1,9 +1,9 @@
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
-import 'package:minio/minio.dart';
-import 'package:minio/src/minio_client.dart';
-import 'package:minio/src/minio_helpers.dart';
-import 'package:minio/src/utils.dart';
+import '../minio.dart';
+import 'minio_client.dart';
+import 'minio_helpers.dart';
+import 'utils.dart';
 
 const signV4Algorithm = 'AWS4-HMAC-SHA256';
 
@@ -53,7 +53,7 @@ String getCanonicalRequest(
   final requestQuery = queryKeys.map((key) {
     final value = request.url.queryParameters[key];
     final hasValue = value != null;
-    final valuePart = hasValue ? encodeCanonicalQuery(value!) : '';
+    final valuePart = hasValue ? encodeCanonicalQuery(value) : '';
     return encodeCanonicalQuery(key) + '=' + valuePart;
   }).join('&');
 

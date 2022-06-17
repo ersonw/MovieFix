@@ -2,20 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:minio/models.dart';
-import 'package:minio/src/minio_client.dart';
-import 'package:minio/src/minio_errors.dart';
-import 'package:minio/src/minio_helpers.dart';
-import 'package:minio/src/minio_poller.dart';
-import 'package:minio/src/minio_sign.dart';
-import 'package:minio/src/minio_stream.dart';
-import 'package:minio/src/minio_uploader.dart';
-import 'package:minio/src/utils.dart';
+import '../models.dart';
+import 'minio_client.dart';
+import 'minio_errors.dart';
+import 'minio_helpers.dart';
+import 'minio_poller.dart';
+import 'minio_sign.dart';
+import 'minio_stream.dart';
+import 'minio_uploader.dart';
+import 'utils.dart';
 import 'package:xml/xml.dart' as xml;
 import 'package:xml/xml.dart' show XmlElement;
 
-import '../models.dart';
-import 'minio_helpers.dart';
 
 class Minio {
   /// Initializes a new client object.
@@ -1103,7 +1101,7 @@ class Minio {
       bucket: bucket,
       object: object,
     );
-
+    // print(resp.statusCode);
     validate(resp, expect: 200);
 
     var etag = resp.headers['etag'];

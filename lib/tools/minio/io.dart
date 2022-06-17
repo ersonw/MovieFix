@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:minio/src/minio.dart';
-import 'package:minio/src/minio_errors.dart';
-import 'package:minio/src/minio_helpers.dart';
+import 'src/minio.dart';
+import 'src/minio_errors.dart';
+import 'src/minio_helpers.dart';
 import 'package:path/path.dart' show dirname;
 
 extension MinioX on Minio {

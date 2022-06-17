@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart';
-import 'package:minio/minio.dart';
-import 'package:minio/src/minio_helpers.dart';
-import 'package:minio/src/minio_s3.dart';
-import 'package:minio/src/minio_sign.dart';
-import 'package:minio/src/utils.dart';
+import '../minio.dart';
+import 'minio_helpers.dart';
+import 'minio_s3.dart';
+import 'minio_sign.dart';
+import 'utils.dart';
 
 class MinioRequest extends BaseRequest {
   MinioRequest(String method, Uri url, {this.onProgress}) : super(method, url);
@@ -154,7 +154,7 @@ class MinioClient {
 
     final authorization = signV4(minio, request, date, region);
     request.headers['authorization'] = authorization;
-
+    // print(request.headers);
     logRequest(request);
     final response = await request.send();
     return response;
