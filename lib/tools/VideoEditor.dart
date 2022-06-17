@@ -33,7 +33,7 @@ class _VideoEditorState extends State<VideoEditor> {
   @override
   void initState() {
     _controller = VideoEditorController.file(widget.file,
-        maxDuration: const Duration(seconds: 30))
+        maxDuration: const Duration(minutes: 5))
       ..initialize().then((_) => setState(() {}));
     super.initState();
   }
@@ -64,6 +64,8 @@ class _VideoEditorState extends State<VideoEditor> {
         _isExporting.value = false;
         if (!mounted) return;
         if (file != null) {
+          print(file.path);
+          return;
           final VideoPlayerController _videoController =
           VideoPlayerController.file(file);
           _videoController.initialize().then((value) async {

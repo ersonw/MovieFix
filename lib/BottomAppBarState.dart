@@ -6,6 +6,7 @@ import 'AssetsIcon.dart';
 import 'Page/IndexPage.dart';
 
 import 'Global.dart';
+import 'Page/ShortVideoPage.dart';
 
 
 ///自定义不规则底部导航栏
@@ -25,7 +26,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   void initState() {
     super.initState();
     _eachView.add(const IndexPage());
-    _eachView.add(VideoPickerPage());
+    _eachView.add(const ShortVideoPage());
     _eachView.add(Container());
     _eachView.add(Container());
     _eachView.add(Container());
