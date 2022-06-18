@@ -85,6 +85,7 @@ class Global {
       //   if(queryParameters['channel'] != null) Global.channelCode = queryParameters['channel'];
       // }
     }
+    print('$path');
     MessageUtil.init();
     MinioUtil.init();
     runApp(const MyApp());

@@ -8,6 +8,7 @@ import '../tools/RequestApi.dart';
 import '../Global.dart';
 import 'Loading.dart';
 import 'MessageUtil.dart';
+import 'MinioUtil.dart';
 class Request {
   static late Dio _dio;
   static init() {
@@ -375,5 +376,37 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<bool> shortVideoUpload(String filePath, String imagePath,
+      {int duration=0, String text=''})async{
+    String? fp;
+    String? ip;
+    if(!filePath.startsWith('http')){
+      fp = filePath;
+    }
+    if(!imagePath.startsWith('http')){
+      ip = imagePath;
+    }
+    Loading.show();
+    Map<String, dynamic> data = {
+      "filePath": filePath,
+      "imagePath": imagePath,
+      "text": text,
+      "duration": duration,
+      "files": jsonEncode({
+        "filePath": fp?? filePath,
+        "imagePath": ip?? imagePath,
+        'ossConfig': MinioUtil.config
+      }),
+    };
+    String? result = await _post(RequestApi.shortVideoUpload, data);
+    // print(result);
+    if(result != null) {
+      Map<String,dynamic> map = jsonDecode(result);
+      // print(map['upload'] == true);
+      // print(map['upload']);
+      if(map['upload'] != null) return map['upload'];
+    }
+    return false;
   }
 }

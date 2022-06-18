@@ -1,20 +1,30 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:movie_fix/data/OssConfig.dart';
+
 import 'Loading.dart';
 import 'minio/minio.dart';
 import 'minio/io.dart';
 // import 'minio/src/minio.dart';
 class MinioUtil {
   static late final minio;
-  static const String bucket = 'upload';
+  static final OssConfig config = OssConfig(bucket: 'upload',
+      endPoint: 'minio.telebott.com',accessKey: 'LTAI935qVCSkHsdW',
+    secretKey: 'xgEAayhKS3FYYmpJFUWg85PkbZVJSr',
+    useSSL: false,
+  );
   static void init(){
+
     minio = Minio(
-      endPoint: 'minio.telebott.com',
-      // port: 9000,
-      accessKey: 'LTAI935qVCSkHsdW',
-      secretKey: 'xgEAayhKS3FYYmpJFUWg85PkbZVJSr',
-      useSSL: false,
+      endPoint: config.endPoint,
+      port: config.port,
+      accessKey: config.accessKey,
+      secretKey: config.secretKey,
+      useSSL: config.useSSL,
+      sessionToken: config.sessionToken,
+      region: config.region,
+      enableTrace: config.enableTrace,
     );
   }
   static Future<List<String>> _getDirFiles(String path) async{
@@ -39,6 +49,9 @@ class MinioUtil {
     }
     return keys;
 }
+  // static Future<String?> putPicThumb(String key,String filePath,{void Function(double value)? callback})async{
+  //
+  // }
   static Future<String?> putM3u8(String filePath,{void Function(double value)? callback})async{
     File file = File(filePath);
     if(!file.existsSync()) return null;
@@ -64,7 +77,7 @@ class MinioUtil {
   static Future<void> _put(String key, String path)async{
     // Loading.show();
     await minio.putObject(
-      bucket,
+      config.bucket,
       key,
       Stream<Uint8List>.value(File(path).readAsBytesSync()),
       onProgress: (bytes) {

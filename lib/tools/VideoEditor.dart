@@ -61,16 +61,18 @@ class _VideoEditorState extends State<VideoEditor> {
               CropScreen(controller: _controller)));
 
   void _pushed()async{
+    bool _value = false;
     if(output == null){
-      await _exportVideo(callback: (){
+      await _exportVideo(callback: ()async{
         if(output == null){
           return  _pushed();
         }
-        Navigator.push(context, SlideRightRoute(page: VideoPush(_controller,output!,callback: (bool value){
-          if(value) {
-            Navigator.pop(context);
-          }
+        await Navigator.push(Global.mainContext, SlideRightRoute(page: VideoPush(_controller,output!,callback: (bool value){
+          _value = value;
         },)));
+        if(_value){
+          Navigator.pop(context);
+        }
       });
     }else{
       File file = output!;
@@ -80,17 +82,18 @@ class _VideoEditorState extends State<VideoEditor> {
       }
       await CustomDialog.message('视频已生成，是否重新生成？',callback: (bool value)async{
         if(value){
-          await _exportVideo(callback: (){
+          await _exportVideo(callback: ()async{
             if(output == null){
               return  _pushed();
             }
           });
         }
-        Navigator.push(context, SlideRightRoute(page: VideoPush(_controller,output!,callback: (bool value){
-          if(value) {
-            Navigator.pop(context);
-          }
+        await Navigator.push(Global.mainContext, SlideRightRoute(page: VideoPush(_controller,output!,callback: (bool value){
+          _value = value;
         },)));
+        if(_value){
+          Navigator.pop(context);
+        }
       });
     }
     // print('${output?.path}');
