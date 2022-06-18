@@ -54,6 +54,7 @@ class Global {
   static String? platform;
   static String? codeInvite;
   static String? channelCode;
+  static String? path;
 
   static Future init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -63,6 +64,7 @@ class Global {
     if (_profile != null) {
       profile = Profile.fromJson(jsonDecode(_profile));
     }
+    path = await Global.getPhoneLocalPath();
     Request.init();
     if(kIsWeb == false) {
       await requestPhotosPermission();
@@ -233,10 +235,17 @@ class Global {
     return encrypter.decrypt(encrypted, iv: iv);
   }
   static Future<String?> getPhoneLocalPath() async {
-    final directory = Theme.of(mainContext).platform == TargetPlatform.android
-        ? await getExternalStorageDirectory()
-        : await getApplicationDocumentsDirectory();
-    return directory?.path;
+    // final directory = Theme.of(mainContext).platform == TargetPlatform.android
+    //     ? await getExternalStorageDirectory()
+    //     : await getApplicationDocumentsDirectory();
+    if(Platform.isAndroid){
+      final directory=await getExternalStorageDirectory();
+      return directory?.path;
+    }else if(Platform.isIOS){
+      final directory=await getApplicationDocumentsDirectory();
+      return directory.path;
+    }
+    return null;
   }
   static void exportToDoc(String path) async{
     File file = File(await getVideoPath(path));

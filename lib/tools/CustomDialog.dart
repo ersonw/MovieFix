@@ -6,7 +6,7 @@ import '../Global.dart';
 typedef ClickCallbackBool = void Function(bool action);
 class CustomDialog {
   static Future<void> message(String text,{String title = '提示信息', String cancel = '取消', String sure = '确认', ClickCallbackBool? callback, bool left = false})async{
-    showCupertinoDialog<void>(
+    await showCupertinoDialog<void>(
         context: Global.mainContext,
         builder: (_context) {
           return CupertinoAlertDialog(
