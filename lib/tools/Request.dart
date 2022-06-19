@@ -67,7 +67,7 @@ class Request {
     } on DioError catch(e) {
       Loading.dismiss();
       print(e.message);
-      print(e);
+      // print(e);
       // if(e.response == null) {
       //   CustomDialog.message(e.message);
       // } else if(e.response.statusCode == 105){

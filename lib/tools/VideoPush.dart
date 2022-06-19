@@ -89,10 +89,13 @@ class _VideoPush extends State<VideoPush>{
       String picThumb = '${File(url).parent.path}/${cover?.path.split('/').last}';
       // print(picThumb);
       if(await Request.shortVideoUpload(url, picThumb,text: _controller.text,duration: widget.controller.video.value.duration.inSeconds) == true){
-        _isUpload.value = false;
+        if(mounted){
+          setState(() {
+            _isUpload.value = false;
+          });
+        }
         if(widget.callback != null) widget.callback!(true);
-        if(!mounted) return;
-        setState(() {});
+        Navigator.pop(context);
         return;
       }
     }
