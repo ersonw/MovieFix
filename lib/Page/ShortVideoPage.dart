@@ -29,7 +29,7 @@ class _ShortVideoPage extends State<ShortVideoPage> {
     barLeft.add(Word(id: 2, words: '我的二维码', icon: Icons.qr_code));
     super.initState();
     _videoController = VideoPlayerController.file(
-      File('/storage/emulated/0/Android/data/com.telebott.movie_fix/files/video/1655587944281/1655587944286.m3u8'),
+      File('/storage/emulated/0/Android/data/com.telebott.movie_fix/files/video/1655624517477/1655624517518.m3u8'),
     );
     _videoController.setLooping(true);
     // print(_videoController.value.duration.inSeconds);
@@ -83,16 +83,16 @@ class _ShortVideoPage extends State<ShortVideoPage> {
             //   _videoController.value.isPlaying ?_videoController.pause():_videoController.play();
             // });
           },
-          child: Center(
-            // width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height - MediaQuery.of(context).size.height/10,
-            child: AspectRatio(
-              aspectRatio: _videoController.value.aspectRatio,
-              child: VideoPlayer(_videoController),
+          child: Container(
+            // margin: const EdgeInsets.only(top: 45),
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: _videoController.value.aspectRatio,
+                child: VideoPlayer(_videoController),
+              ),
             ),
           ),
         ),
-        // Center(child: _videoController.value.isPlaying ? Container():Icon(Icons.play_arrow,size: 30,),),
       ],
     );
   }
@@ -164,7 +164,7 @@ class _ShortVideoPage extends State<ShortVideoPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _videoController.dispose();
     super.dispose();
   }
 }
