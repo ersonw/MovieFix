@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Module/FindVideoItemPage.dart';
 import 'package:movie_fix/Module/cRefresh.dart';
-import 'package:movie_fix/Module/cVideoPlay.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/Word.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';

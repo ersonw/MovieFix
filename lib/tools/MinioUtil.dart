@@ -75,17 +75,18 @@ class MinioUtil {
     return '$pathName/$fileName';
   }
   static Future<void> _put(String key, String path)async{
-    // Loading.show();
+    File file = File(path);
+    if(!file.existsSync()) return  ;
     await minio.putObject(
       config.bucket,
       key,
-      Stream<Uint8List>.value(File(path).readAsBytesSync()),
+      Stream<Uint8List>.value(file.readAsBytesSync()),
       onProgress: (bytes) {
-        // uploaded += int.parse('$bytes');
+        // uploaded += int.parse('$bytes   ');
         // print('$uploaded bytes uploaded');
       },
     );
-    // Loading.dismiss();
+    file.deleteSync();
   }
 }
 class FilePath {

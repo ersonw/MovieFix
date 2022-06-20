@@ -21,6 +21,7 @@ class OssConfig {
   this.useSSL=true,this.enableTrace=false});
   OssConfig.fromJson(Map<String, dynamic> json)
       : type = json['type'] ?? TYPE_UPLOAD_OSS_MINIO,
+        bucket = json['bucket'],
         endPoint = json['endPoint'] ?? '',
         accessKey = json['accessKey'] ?? '',
         secretKey = json['secretKey'] ?? '',
@@ -32,6 +33,7 @@ class OssConfig {
 
   Map<String, dynamic> toJson() => {
         'type': type,
+        'bucket': bucket,
         'endPoint': endPoint,
         'accessKey': accessKey,
         'secretKey': secretKey,
