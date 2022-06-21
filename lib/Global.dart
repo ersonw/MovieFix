@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:movie_fix/tools/MinioUtil.dart';
 import 'Page/ShareVideoPage.dart';
@@ -260,13 +260,14 @@ class Global {
     return '$savePath$path';
   }
   static void showWebColoredToast(String msg) {
-    Fluttertoast.showToast(
-      msg: msg,
-      toastLength: Toast.LENGTH_SHORT,
-      // webBgColor: '#FFFFFF',
-      // textColor: Colors.black,
-      timeInSecForIosWeb: 5,
-    );
+    print('Toast:$msg}');
+    // Fluttertoast.showToast(
+    //   msg: msg,
+    //   toastLength: Toast.LENGTH_SHORT,
+    //   // webBgColor: '#FFFFFF',
+    //   // textColor: Colors.black,
+    //   timeInSecForIosWeb: 5,
+    // );
   }
   static Future<bool> requestPhotosPermission() async {
     //获取当前的权限
