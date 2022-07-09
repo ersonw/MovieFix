@@ -69,6 +69,7 @@ class MinioUtil {
         callback(double.parse((i / length).toStringAsFixed(2)));
       }
     }
+    file.deleteSync(recursive: true);
     if(callback != null){
       callback(1);
     }
@@ -86,7 +87,7 @@ class MinioUtil {
         // print('$uploaded bytes uploaded');
       },
     );
-    file.deleteSync();
+    // file.deleteSync();
   }
 }
 class FilePath {
