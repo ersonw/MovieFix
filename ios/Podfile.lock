@@ -5,21 +5,17 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
-  - ffmpeg-kit-ios-min-gpl (4.5.1)
-  - ffmpeg_kit_flutter_min_gpl (4.5.1):
-    - ffmpeg_kit_flutter_min_gpl/min-gpl (= 4.5.1)
+  - ffmpeg-kit-ios-https (4.5.1.LTS)
+  - ffmpeg_kit_flutter (4.5.1.LTS):
+    - ffmpeg_kit_flutter/https-lts (= 4.5.1.LTS)
     - Flutter
-  - ffmpeg_kit_flutter_min_gpl/min-gpl (4.5.1):
-    - ffmpeg-kit-ios-min-gpl (= 4.5.1)
+  - ffmpeg_kit_flutter/https-lts (4.5.1.LTS):
+    - ffmpeg-kit-ios-https (= 4.5.1.LTS)
     - Flutter
   - Flutter (1.0.0)
   - flutter_webrtc (0.7.1):
     - Flutter
-    - Libyuv (= 1703)
-    - WebRTC-SDK (= 97.4692.02)
-  - fluttertoast (0.0.2):
-    - Flutter
-    - Toast
+    - WebRTC-SDK (= 97.4692.05)
   - image_gallery_saver (1.5.0):
     - Flutter
   - image_picker_ios (0.0.1):
@@ -33,7 +29,6 @@ PODS:
   - libwebp/mux (1.2.1):
     - libwebp/demux
   - libwebp/webp (1.2.1)
-  - Libyuv (1703)
   - openinstall_flutter_plugin (0.0.1):
     - Flutter
   - package_info (0.0.1):
@@ -44,7 +39,6 @@ PODS:
     - Flutter
   - shared_preferences_ios (0.0.1):
     - Flutter
-  - Toast (4.0.0)
   - url_launcher_ios (0.0.1):
     - Flutter
   - video_player_avfoundation (0.0.1):
@@ -54,7 +48,7 @@ PODS:
     - libwebp
   - wakelock (0.0.1):
     - Flutter
-  - WebRTC-SDK (97.4692.02)
+  - WebRTC-SDK (97.4692.05)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -62,10 +56,9 @@ DEPENDENCIES:
   - auto_orientation (from `.symlinks/plugins/auto_orientation/ios`)
   - brightness_volume (from `.symlinks/plugins/brightness_volume/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
-  - ffmpeg_kit_flutter_min_gpl (from `.symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios`)
+  - ffmpeg_kit_flutter (from `.symlinks/plugins/ffmpeg_kit_flutter/ios`)
   - Flutter (from `Flutter`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
-  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - openinstall_flutter_plugin (from `.symlinks/plugins/openinstall_flutter_plugin/ios`)
@@ -81,10 +74,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ffmpeg-kit-ios-min-gpl
+    - ffmpeg-kit-ios-https
     - libwebp
-    - Libyuv
-    - Toast
     - WebRTC-SDK
 
 EXTERNAL SOURCES:
@@ -94,14 +85,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/brightness_volume/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
-  ffmpeg_kit_flutter_min_gpl:
-    :path: ".symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios"
+  ffmpeg_kit_flutter:
+    :path: ".symlinks/plugins/ffmpeg_kit_flutter/ios"
   Flutter:
     :path: Flutter
   flutter_webrtc:
     :path: ".symlinks/plugins/flutter_webrtc/ios"
-  fluttertoast:
-    :path: ".symlinks/plugins/fluttertoast/ios"
   image_gallery_saver:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   image_picker_ios:
@@ -131,28 +120,25 @@ SPEC CHECKSUMS:
   auto_orientation: 2941c44ebe5c3d41016001597ab03e81a92a26ce
   brightness_volume: e63139ebe38e642937d5cd286b58c9a9890f1725
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  ffmpeg-kit-ios-min-gpl: da951b00628916702be2a90918181ebdcdd569ff
-  ffmpeg_kit_flutter_min_gpl: 3c3266c6284c29340ac8bea41613efcdd7aea3e4
+  ffmpeg-kit-ios-https: c95f1d49599efd796a7cfb433f4500a7c953cc9c
+  ffmpeg_kit_flutter: 7429364786c032a7825e7882819cca6c65449a81
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_webrtc: 3d0eeac1d8dba88caaf9218b13b2b43a0d5ba6fd
-  fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  flutter_webrtc: c4d09b864e7a8e93ad931bb84eed0ceb1ed51444
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
-  Libyuv: 5f79ced0ee66e60a612ca97de1e6ccacd187a437
   openinstall_flutter_plugin: 8003300ae67d05a1a5ccff69032e178ee4e8eee8
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
-  WebRTC-SDK: dda4e50186f9eed672dc6bcf4faafb30c6ce48e3
+  WebRTC-SDK: a6ee40bda0e3f7dba057907c3897374005c5715b
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
-PODFILE CHECKSUM: 8631b584729e41cd13300228c864739c63717072
+PODFILE CHECKSUM: 0732cff4bd82aa77d6288ab38e40d1c998e26216
 
 COCOAPODS: 1.11.2
