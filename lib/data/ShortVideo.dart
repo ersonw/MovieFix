@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'Comment.dart';
+import 'ShortComment.dart';
 
 class ShortVideo {
   ShortVideo();
@@ -11,7 +11,7 @@ class ShortVideo {
   String? title;
   int addTime = 0;
   int likes = 0;
-  List<Comment> comments = [];
+  List<ShortComment> comments = [];
   int collects = 0;
   bool forward = false;
 
@@ -28,7 +28,7 @@ class ShortVideo {
         addTime = json['addTime'],
         likes = json['likes'],
         comments =
-            (json['comments'] as List).map((e) => Comment.formJson(e)).toList(),
+            (json['comments'] as List).map((e) => ShortComment.formJson(e)).toList(),
         collects = json['collects'],
         forward = json['forward'],
         follow = json['follow'],

@@ -12,7 +12,7 @@ class MinioUtil {
   static final OssConfig config = OssConfig(bucket: 'upload',
       endPoint: 'yyzz.io',accessKey: 'rxHm7z0t1c2Fd3zC',
     secretKey: 'E2dcqb8VizhLjPXD2agheXeo5aXKYgkE',
-    useSSL: false,
+    // useSSL: false,
   );
   static void init(){
 
@@ -76,6 +76,8 @@ class MinioUtil {
     return '$pathName/$fileName';
   }
   static Future<void> _put(String key, String path)async{
+    // print('key:$key');
+    // print('path:$path');
     File file = File(path);
     if(!file.existsSync()) return  ;
     await minio.putObject(

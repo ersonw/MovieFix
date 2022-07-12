@@ -32,4 +32,5 @@ class RequestApi {
   static const videoRank = '/api/video/rank/{first}/{second}';
 
   static const shortVideoUpload = '/api/shortVideo/upload';
+  static const shortVideoFriend = '/api/shortVideo/friend/{id}/{page}';
 }

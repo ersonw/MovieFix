@@ -7,6 +7,7 @@ import 'package:movie_fix/Module/FindVideoItemPage.dart';
 import 'package:movie_fix/Module/cRefresh.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/Word.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/VideoEditor.dart';
 import 'package:video_player/video_player.dart';
@@ -24,6 +25,10 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   int? initialIndex;
   List<ShortVideo> forwards =[];
   List<ShortVideo> _list =[];
+  int fPage = 1;
+  int lPage = 1;
+  int fTotal = 1;
+  int lTotal = 1;
 
   final ImagePicker _picker = ImagePicker();
   List<Word> barLeft = [];
@@ -42,6 +47,24 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         vsync: this,
         initialIndex: initialIndex ?? 1);
     controller.addListener(handleTabChange);
+    _init();
+  }
+  _init(){
+    _getForwards();
+  }
+  _getForwards()async{
+    Map<String, dynamic> result = await Request.shortVideoFriend(page: fPage);
+    // print(result);
+    if(result['total'] != null) fTotal = result['total'];
+    if(result['list'] != null) {
+      List<ShortVideo> list = (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
+      if(fPage > 1){
+        forwards.addAll(list);
+      }else{
+        forwards = list;
+      }
+    }
+    if(mounted) setState(() {});
   }
   void handleTabChange() {
     setState(() {

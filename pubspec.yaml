@@ -82,7 +82,8 @@ dependencies:
   buffer: ^1.1.0
   intl: ^0.17.0
   mime: ^1.0.0
-  ffmpeg_kit_flutter: 4.5.1-LTS
+#  ffmpeg_kit_flutter: 4.5.1-LTS
+  ffmpeg_kit_flutter_min_gpl: 4.5.1-LTS
 
 dev_dependencies:
   flutter_test:

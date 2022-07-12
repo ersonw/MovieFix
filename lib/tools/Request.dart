@@ -409,4 +409,12 @@ class Request {
     }
     return false;
   }
+  static Future<Map<String, dynamic>> shortVideoFriend({int id=0,int page=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoFriend.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

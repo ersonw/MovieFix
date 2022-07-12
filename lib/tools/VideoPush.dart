@@ -84,6 +84,8 @@ class _VideoPush extends State<VideoPush>{
     String? url = await MinioUtil.putM3u8(widget.output.path, callback: (double value){
       _exportingProgress.value = value;
     });
+    // print("url: " + url!);
+    // return;
     // if(url != null)print(File(url).parent.path);
     if(url != null){
       String picThumb = '${File(url).parent.path}/${cover?.path.split('/').last}';
@@ -99,7 +101,7 @@ class _VideoPush extends State<VideoPush>{
         return;
       }
     }
-    Global.showWebColoredToast('上传失败！');
+    print('上传失败！');
     await Future.delayed(const Duration(seconds: 1),() {});
     _isUpload.value = false;
     if(!mounted) return;

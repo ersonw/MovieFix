@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
-// import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
-// import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit_config.dart';
-// import 'package:ffmpeg_kit_flutter_min_gpl/ffprobe_kit.dart';
-// import 'package:ffmpeg_kit_flutter_min_gpl/statistics.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
-import 'package:ffmpeg_kit_flutter/ffprobe_kit.dart';
-import 'package:ffmpeg_kit_flutter/statistics.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/ffmpeg_kit_config.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/ffprobe_kit.dart';
+import 'package:ffmpeg_kit_flutter_min_gpl/statistics.dart';
+// import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
+// import 'package:ffmpeg_kit_flutter/ffprobe_kit.dart';
+// import 'package:ffmpeg_kit_flutter/statistics.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -461,7 +461,7 @@ class VideoEditorController extends ChangeNotifier {
     name ??= path.basenameWithoutExtension(videoPath);
     final int epoch = DateTime.now().millisecondsSinceEpoch;
     // final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/$epoch.$format";
-    final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/$name.$format";
+    final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/index.m3u8";
 
     // CALCULATE FILTERS
     final String gif = format != "gif" ? "" : "fps=10 -loop 0";
@@ -484,7 +484,7 @@ class VideoEditorController extends ChangeNotifier {
     final String execute =
         // ignore: unnecessary_string_escapes
         " -i \'$videoPath\' ${customInstruction ?? ""} $filter ${_getPreset(preset)} $trim -y $outputPath";
-
+    // print(execute);
     // PROGRESS CALLBACKS
     await FFmpegKit.executeAsync(
       execute,

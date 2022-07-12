@@ -5,12 +5,12 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
-  - ffmpeg-kit-ios-https (4.5.1.LTS)
-  - ffmpeg_kit_flutter (4.5.1.LTS):
-    - ffmpeg_kit_flutter/https-lts (= 4.5.1.LTS)
+  - ffmpeg-kit-ios-min-gpl (4.5.1.LTS)
+  - ffmpeg_kit_flutter_min_gpl (4.5.1.LTS):
+    - ffmpeg_kit_flutter_min_gpl/min-gpl-lts (= 4.5.1.LTS)
     - Flutter
-  - ffmpeg_kit_flutter/https-lts (4.5.1.LTS):
-    - ffmpeg-kit-ios-https (= 4.5.1.LTS)
+  - ffmpeg_kit_flutter_min_gpl/min-gpl-lts (4.5.1.LTS):
+    - ffmpeg-kit-ios-min-gpl (= 4.5.1.LTS)
     - Flutter
   - Flutter (1.0.0)
   - flutter_webrtc (0.7.1):
@@ -56,7 +56,7 @@ DEPENDENCIES:
   - auto_orientation (from `.symlinks/plugins/auto_orientation/ios`)
   - brightness_volume (from `.symlinks/plugins/brightness_volume/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
-  - ffmpeg_kit_flutter (from `.symlinks/plugins/ffmpeg_kit_flutter/ios`)
+  - ffmpeg_kit_flutter_min_gpl (from `.symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios`)
   - Flutter (from `Flutter`)
   - flutter_webrtc (from `.symlinks/plugins/flutter_webrtc/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
@@ -74,7 +74,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ffmpeg-kit-ios-https
+    - ffmpeg-kit-ios-min-gpl
     - libwebp
     - WebRTC-SDK
 
@@ -85,8 +85,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/brightness_volume/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
-  ffmpeg_kit_flutter:
-    :path: ".symlinks/plugins/ffmpeg_kit_flutter/ios"
+  ffmpeg_kit_flutter_min_gpl:
+    :path: ".symlinks/plugins/ffmpeg_kit_flutter_min_gpl/ios"
   Flutter:
     :path: Flutter
   flutter_webrtc:
@@ -120,8 +120,8 @@ SPEC CHECKSUMS:
   auto_orientation: 2941c44ebe5c3d41016001597ab03e81a92a26ce
   brightness_volume: e63139ebe38e642937d5cd286b58c9a9890f1725
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
-  ffmpeg-kit-ios-https: c95f1d49599efd796a7cfb433f4500a7c953cc9c
-  ffmpeg_kit_flutter: 7429364786c032a7825e7882819cca6c65449a81
+  ffmpeg-kit-ios-min-gpl: 074814f41eeb3d4980a3051c46f05b18b1d5b2e3
+  ffmpeg_kit_flutter_min_gpl: 1507ed8e57a2a9f09a8c96834a115c8301f0d468
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_webrtc: c4d09b864e7a8e93ad931bb84eed0ceb1ed51444
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
