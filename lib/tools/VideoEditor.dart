@@ -118,6 +118,7 @@ class _VideoEditorState extends State<VideoEditor> {
       // preset: VideoExportPreset.medium,
       // customInstruction: "-crf 17",
       // customInstruction: "-c:v libx265 -c:a copy -hls_time 2 -hls_list_size 0",
+      name: 'index',
       format: 'm3u8',
       outDir: file.parent.path,
       onProgress: (stats, value) => _exportingProgress.value = value,

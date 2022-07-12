@@ -460,7 +460,8 @@ class VideoEditorController extends ChangeNotifier {
     final String videoPath = file.path;
     name ??= path.basenameWithoutExtension(videoPath);
     final int epoch = DateTime.now().millisecondsSinceEpoch;
-    final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/$epoch.$format";
+    // final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/$epoch.$format";
+    final String outputPath = format != "m3u8" ? "$tempPath/${name}_$epoch.$format" : "$tempPath/$name.$format";
 
     // CALCULATE FILTERS
     final String gif = format != "gif" ? "" : "fps=10 -loop 0";
