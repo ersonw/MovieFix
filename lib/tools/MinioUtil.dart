@@ -10,8 +10,8 @@ import 'minio/io.dart';
 class MinioUtil {
   static late final minio;
   static final OssConfig config = OssConfig(bucket: 'upload',
-      endPoint: 'minio.telebott.com',accessKey: 'LTAI935qVCSkHsdW',
-    secretKey: 'xgEAayhKS3FYYmpJFUWg85PkbZVJSr',
+      endPoint: 'yyzz.io',accessKey: 'rxHm7z0t1c2Fd3zC',
+    secretKey: 'E2dcqb8VizhLjPXD2agheXeo5aXKYgkE',
     useSSL: false,
   );
   static void init(){
