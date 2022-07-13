@@ -12,10 +12,13 @@ class ShortVideo {
   int addTime = 0;
   int likes = 0;
   List<ShortComment> comments = [];
+  int comment = 0;
   int collects = 0;
   bool forward = false;
+  int forwards = 0;
 
   bool follow = false;
+  bool like = false;
   String? avatar;
   String nickname = '';
   int userId = 0;
@@ -29,9 +32,12 @@ class ShortVideo {
         likes = json['likes'],
         comments =
             (json['comments'] as List).map((e) => ShortComment.formJson(e)).toList(),
+        comment =json['comment'],
         collects = json['collects'],
         forward = json['forward'],
+        forwards = json['forwards'],
         follow = json['follow'],
+        like = json['like'],
         avatar = json['avatar'],
         nickname = json['nickname'],
         userId = json['userId'];
@@ -44,8 +50,11 @@ class ShortVideo {
         'addTime': addTime,
         'likes': likes,
         'comments': comments,
+        'comment': comment,
         'collects': collects,
         'forward': forward,
+        'forwards': forwards,
+        'like': like,
         'avatar': avatar,
         'nickname': nickname,
         'userId': userId,

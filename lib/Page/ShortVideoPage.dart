@@ -21,6 +21,9 @@ class ShortVideoPage extends StatefulWidget {
 }
 
 class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderStateMixin {
+  // 是否全屏
+  bool get _isFullScreen =>
+      MediaQuery.of(context).orientation == Orientation.landscape;
   final _tabKey = const ValueKey('tab');
   late TabController controller;
   int? initialIndex;
@@ -109,7 +112,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
               buildTableViewItemWidget(_list,'推荐'),
             ],
           ),
-          Container(
+          if(!_isFullScreen) Container(
             width: (MediaQuery.of(context).size.width),
             margin: EdgeInsets.only(top: 40),
             // alignment: Alignment.topLeft,

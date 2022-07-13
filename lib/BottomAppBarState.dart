@@ -18,6 +18,9 @@ class BottomAppBarState extends StatefulWidget {
 }
 
 class _BottomAppBarState extends State<BottomAppBarState> {
+  // 是否全屏
+  bool get _isFullScreen =>
+      MediaQuery.of(context).orientation == Orientation.landscape;
   final List<Widget> _eachView = [];
   int _index = 0;
   // SystemMessage systemMessage = SystemMessage();
@@ -91,7 +94,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
       //   // tooltip: "狗哥最帅",
       //   // child: Image.asset(ImageIcons.game),
       // ),
-      bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: _isFullScreen?null:BottomAppBar(
         color: const Color(0xff201e2b),
         shape: const CircularNotchedRectangle(),
         child: Row(
@@ -197,5 +200,117 @@ class _BottomAppBarState extends State<BottomAppBarState> {
       ///将FloatActionButton 与 BottomAppBar 融合到一起
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+    // return Scaffold(
+    //   body: Stack(
+    //     alignment: Alignment.bottomCenter,
+    //     children: [
+    //       GestureDetector(),
+    //       _eachView[_index],
+    //       Container(
+    //         color: const Color(0xff201e2b),
+    //         // margin: const EdgeInsets.only(bottom:9),
+    //         height: 90,
+    //         child: Row(
+    //           mainAxisSize: MainAxisSize.max,
+    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //           children: <Widget>[
+    //             InkWell(
+    //                 child: SizedBox(
+    //                   height: 60,
+    //                   child: Column(
+    //                     children: [
+    //                       // Image.asset(_index == 0 ? AssetsIcon.indexActiveIcon : AssetsIcon.indexIcon,width: _index == 0 ? 30 : 25,),
+    //                       Text("首页",style: TextStyle(color: _index == 0 ? Colors.white : Colors.white.withOpacity(0.5),fontSize: _index == 0 ? 18:16)),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 onTap: (){
+    //                   setState(() {
+    //                     _index = 0;
+    //                   });
+    //                 }
+    //             ),
+    //             InkWell(
+    //                 child: SizedBox(
+    //                   height: 60,
+    //                   child: Column(
+    //                     children: [
+    //                       // Image.asset(_index == 1 ? AssetsIcon.videoActiveIcon : AssetsIcon.videoIcon,width: _index == 1 ? 30 : 25,),
+    //                        Text("短视频",style: TextStyle(color: _index == 1 ? Colors.white : Colors.white.withOpacity(0.5),fontSize: _index == 1 ? 18:16)),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 onTap: (){
+    //                   setState(() {
+    //                     _index = 1;
+    //                   });
+    //                 }
+    //             ),
+    //             // const Padding(padding: EdgeInsets.only(left: 10)),
+    //             InkWell(
+    //                 child: SizedBox(
+    //                   height: 60,
+    //                   child: Column(
+    //                     children: [
+    //                       // Image.asset(_index == 2 ? AssetsIcon.likeActiveIcon : AssetsIcon.likeIcon,width: _index == 2 ? 30 : 25,),
+    //                        Text("心动",style: TextStyle(color: _index == 2 ? Colors.white : Colors.white.withOpacity(0.5),fontSize: _index == 2 ? 18:16)),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 onTap: (){
+    //                   setState(() {
+    //                     _index = 2;
+    //                   });
+    //                 }
+    //             ),
+    //             InkWell(
+    //                 child: SizedBox(
+    //                   height: 60,
+    //                   child: Column(
+    //                     children: [
+    //                       // Image.asset(_index == 3 ? AssetsIcon.gameActiveIcon : AssetsIcon.gameIcon,width: _index == 3 ? 30 : 25,),
+    //                        Text("游戏",style: TextStyle(color: _index == 3 ? Colors.white : Colors.white.withOpacity(0.5),fontSize: _index == 3 ? 18:16)),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 onTap: (){
+    //                   setState(() {
+    //                     _index = 3;
+    //                   });
+    //                 }
+    //             ),
+    //
+    //             InkWell(
+    //                 child: SizedBox(
+    //                   height: 60,
+    //                   child: Column(
+    //                     children: [
+    //                       // Image.asset(_index == 4 ? AssetsIcon.myActiveIcon : AssetsIcon.myIcon,width: _index == 4 ? 30 : 25,),
+    //                        Text("我的",style: TextStyle(color: _index == 4 ? Colors.white : Colors.white.withOpacity(0.5),fontSize: _index == 4 ? 18:16)),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 onTap: (){
+    //                   if(userModel.hasToken()){
+    //                     setState(() {
+    //                       _index = 4;
+    //                     });
+    //                   }else{
+    //                     Global.loginPage().then((v) {
+    //                       if(userModel.hasToken()){
+    //                         setState(() {
+    //                           _index = 4;
+    //                         });
+    //                       }
+    //                     });
+    //                   }
+    //                 }
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }
