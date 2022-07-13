@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Module/FindVideoItemPage.dart';
@@ -87,15 +88,13 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
     return PageView.builder(
       /// pageview中 子条目的个数
         itemCount:list.length ,
+        // dragStartBehavior: DragStartBehavior.down,
         /// 上下滑动
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context,int index){
           ShortVideo video = list[index];
-          return buildPageViewItemWidget(value,video);
+          return FindVideoItemPage(value,video);
         });
-  }
-  buildPageViewItemWidget(String value, ShortVideo video) {
-    return FindVideoItemPage(value,video);
   }
   @override
   Widget build(BuildContext context) {
@@ -153,29 +152,6 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
           ),
         ],
       ),
-    );
-  }
-
-  _buildVideo() {
-    return Stack(
-      children: [
-        InkWell(
-          onTap: (){
-            // setState(() {
-            //   _videoController.value.isPlaying ?_videoController.pause():_videoController.play();
-            // });
-          },
-          child: Container(
-            // margin: const EdgeInsets.only(top: 45),
-            child: Center(
-              child: AspectRatio(
-                aspectRatio: _videoController.value.aspectRatio,
-                child: VideoPlayer(_videoController),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
