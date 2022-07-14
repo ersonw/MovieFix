@@ -46,15 +46,15 @@ class _cRichText extends State<cRichText> {
             ),
             Align(
               alignment: widget.left ? Alignment.centerLeft : Alignment.centerRight,
-              child: FlatButton(
-                onPressed: () {
+              child: InkWell(
+                onTap: () {
                   setState(() {
                     mIsExpansion = false;
                   });
                   if(widget.callback != null) widget.callback!(false);
                 },
-                child: const Text("<< 收起"),
-                textColor: Colors.deepOrange,
+                child:  Text("收起",style: TextStyle(color:Colors.black.withOpacity(0.9)),),
+                // textColor: Colors.deepOrange,
               ),
             ),
           ],
@@ -71,15 +71,15 @@ class _cRichText extends State<cRichText> {
             ),
             Align(
               alignment: widget.left ? Alignment.centerLeft : Alignment.centerRight,
-              child: FlatButton(
-                onPressed: () {
+              child: InkWell(
+                onTap: () {
                   setState(() {
                    mIsExpansion = true;
                   });
                   if(widget.callback != null) widget.callback!(true);
                 },
-                child: const Text("展开 >>"),
-                textColor: Colors.deepOrange,
+                child:  Text("展开更多",style: TextStyle(color:  Colors.deepOrange.withOpacity(0.9)),),
+                // textColor: Colors.deepOrange,
               ),
             ),
           ],

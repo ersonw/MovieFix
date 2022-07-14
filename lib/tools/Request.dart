@@ -59,7 +59,7 @@ class Request {
       if(response.statusCode == 200 && response.data != null){
         // print(response.data);
         Map<String, dynamic> data = response.data;
-        if(data['message'] != null) CustomDialog.message(data['message']);
+        if(data['message'] != null && data['message'] !='') CustomDialog.message(data['message']);
         if(data['code'] == 200 && data['data'] != null){
           return Global.decryptCode(data['data']);
         }
@@ -98,7 +98,7 @@ class Request {
       if(response.statusCode == 200 && response.data != null){
         Map<String, dynamic> data = response.data;
         // print(data);
-        if(data['message'] != null) CustomDialog.message(data['message']);
+        if(data['message'] != null && data['message'] !='') CustomDialog.message(data['message']);
         if(data['code'] == 200 && data['data'] != null){
           return Global.decryptCode(data['data']);
         }
@@ -412,6 +412,17 @@ class Request {
   static Future<Map<String, dynamic>> shortVideoFriend({int id=0,int page=0})async{
     // Loading.show();
     String? result = await _get(RequestApi.shortVideoFriend.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<void> shortVideoHeartbeat(int id, int seek)async{
+    await _post(RequestApi.shortVideoHeartbeat, {'id': id, 'seek': seek});
+  }
+  static Future<Map<String, dynamic>> shortVideoConcentration({int page=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoConcentration.replaceAll('{page}', '$page'), {});
     if(result != null){
       return jsonDecode(result);
     }

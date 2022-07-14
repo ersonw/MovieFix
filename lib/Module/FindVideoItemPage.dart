@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
@@ -10,6 +13,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import '../Global.dart';
+import 'cRichText.dart';
 
 ///播放视频的页面
 class FindVideoItemPage extends StatefulWidget {
@@ -25,6 +29,7 @@ class FindVideoItemPage extends StatefulWidget {
 }
 
 class FindVideoItemPageState extends State<FindVideoItemPage> {
+  late Timer _timer;
   // 是否全屏
   bool get _isFullScreen =>
       MediaQuery.of(context).orientation == Orientation.landscape;
@@ -41,6 +46,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
   @override
   void initState() {
     super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), callback);
     Wakelock.enable();
     videoPlayerController = VideoPlayerController.network(widget.video.playUrl);
     videoPlayerController.addListener(() {
@@ -58,7 +64,13 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
       setState(() {});
     });
   }
-
+  callback(Timer timer) async{
+    timer.cancel();
+    if(initialized && videoPlayerController.value.isPlaying){
+      await Request.shortVideoHeartbeat(widget.video.id, videoPlayerController.value.position.inSeconds);
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), callback);
+  }
 // 设置横屏
   static setLandscape() {
     AutoOrientation.landscapeAutoMode();
@@ -95,7 +107,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           // ),
           ///播放视频
           buildVideoWidget(),
-
+          Container(color: Colors.black.withOpacity(0.15),),
           ///控制播放视频按钮
           buildControllWidget(),
           //
@@ -119,38 +131,56 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Container(
-                  alignment: Alignment.topCenter,
-                  height: 80,
-                  width: 60,
-                  child: Center(
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: buildHeaderPicture(avatar: widget.video.avatar),
+                InkWell(
+                  onTap: (){
+                    print('点击头像');
+                  },
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: 60,
+                    width: 42,
+                    child: Center(
+                      child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: buildHeaderPicture(avatar: widget.video.avatar),
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
+
                 widget.video.follow ?
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(120)),
+                InkWell(
+                  onTap: (){
+                    print('点击取消关注按钮');
+                    widget.video.follow = false;
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.all(Radius.circular(120)),
+                    ),
+                    child: Icon(Icons.done,color: Colors.deepOrange,size: 15,),
                   ),
-                  child: Icon(Icons.beenhere,color: Colors.white.withOpacity(0.6),),
-                ):
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
+                ) :
+                InkWell(
+                  onTap: (){
+                    print('点击加关注按钮');
+                    widget.video.follow = true;
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                    ),
+                    child: Icon(Icons.add_circle,color: Colors.red,size: 15,),
                   ),
-                  child: Icon(Icons.add_circle,color: Colors.red,),
                 ),
               ],
             )
@@ -158,9 +188,12 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           Container(
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
+              onTap: (){
+                print('点击点赞按钮');
+              },
               child: Column(
                 children: [
-                  Icon(Icons.favorite, size: 45, color: widget.video.like ? Colors.red:Colors.white,),
+                  Icon(Icons.favorite, size: 36, color: widget.video.like ? Colors.red:Colors.white,),
                   Text(Global.getNumbersToChinese(widget.video.likes)),
                 ],
               ),
@@ -169,53 +202,75 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           Container(
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
+              onTap: (){
+                //16/9 缩放 其他直接覆盖
+                print('点击评论按钮');
+              },
               child: Column(
                 children: [
-                  Icon(Icons.textsms_sharp, size: 42,),
+                  Icon(Icons.textsms_sharp, size: 36,),
                   Text(Global.getNumbersToChinese(widget.video.comment)),
                 ],
               ),
             ),
           ),
-          // if(widget.video.follow)
+          widget.video.follow?
             Container(
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
+              onTap: (){
+                print('点击分享按钮');
+              },
               child: Column(
                 children: [
                   Transform(
                     alignment: Alignment.center,
                     transform: Matrix4.rotationY(math.pi),
-                    child: Icon(Icons.reply_outlined, size: 51,),
+                    child: Icon(Icons.reply_outlined, size: 45,),
                   ),
                   Text(Global.getNumbersToChinese(widget.video.forwards)),
                 ],
               ),
             ),
-          ),
-          const Padding(padding: EdgeInsets.only(bottom: 3)),
+          ):const Padding(padding: EdgeInsets.all( 15)),
+          const Padding(padding: EdgeInsets.only(bottom: 12)),
         ],
       ),
     );
   }
   buildBottmFlagWidget(){
     return Container(
-      margin: const EdgeInsets.only(left: 15),
+      // margin: const EdgeInsets.only(left: 15),
       alignment: Alignment.bottomLeft,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 1.2,
-            child: Text('@${widget.video.nickname}',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18),softWrap: false,overflow: TextOverflow.ellipsis,),
-          ),
-          const Padding(padding: EdgeInsets.only(bottom: 12)),
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 1.2,
-            child: Text(widget.video.title ?? '',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 15,fontWeight: FontWeight.w300),softWrap: true,maxLines: 3,overflow: TextOverflow.fade,),
-          ),
-          const Padding(padding: EdgeInsets.only(bottom: 18)),
-        ],
+      child: Container(
+        // width: MediaQuery.of(context).size.width,
+        // alignment: Alignment.topLeft,
+        // alignment: Alignment.bottomLeft,
+        // decoration: BoxDecoration(
+        //   color: Colors.black.withOpacity(0.15),
+        // ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: (){
+                print('点击昵称！');
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 15),
+                width: MediaQuery.of(context).size.width / 1.2,
+                child: Text('@${widget.video.nickname}',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18),softWrap: false,overflow: TextOverflow.ellipsis,),
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(bottom: 6)),
+            Container(
+              // margin: const EdgeInsets.only(left: 12),
+              // width: MediaQuery.of(context).size.width / 1.3,
+              child: cRichText(widget.video.title ?? '',maxWidth: MediaQuery.of(context).size.width / 1.3,left: true,style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 15,fontWeight: FontWeight.w300),),
+            ),
+            const Padding(padding: EdgeInsets.only(bottom: 18)),
+          ],
+        ),
       ),
     );
   }
@@ -229,7 +284,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
         child: InkWell(
           onTap: () => _init(),
           child: Icon(
-            Icons.play_arrow_sharp,
+            Icons.smart_display_sharp,
             size: 90,
             color: Colors.white.withOpacity(0.8),
           ),
@@ -294,6 +349,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                       _init();
                     }else{
                       // setLandscape();
+                      // print(videoPlayerController.value.aspectRatio);
                     }
                   },
                   child: Column(
@@ -307,7 +363,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                         ///播放视频的组件
                         child: VideoPlayer(videoPlayerController),
                       )),
-                      if (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.55)
+                      if (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 1.7)
                         InkWell(
                           child: Container(
                             margin: const EdgeInsets.only(top: 15),
@@ -352,7 +408,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                   ),
                 ),
               if (initialized && !showBottom  && !_isFullScreen &&
-                  videoPlayerController.value.duration.inMinutes > 5)
+                  videoPlayerController.value.duration.inMinutes > 1)
                 LinearProgressIndicator(
                   color: Colors.white.withOpacity(0.9),
                   value: progress,
@@ -385,6 +441,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
   @override
   void dispose() {
     super.dispose();
+    _timer.cancel();
     setPortrait();
     Wakelock.disable();
     videoPlayerController.dispose();

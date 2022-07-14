@@ -54,6 +54,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
     _init();
   }
   _init(){
+    _getList();
     _getForwards();
   }
   _getForwards()async{
@@ -66,6 +67,20 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         forwards.addAll(list);
       }else{
         forwards = list;
+      }
+    }
+    if(mounted) setState(() {});
+  }
+  _getList()async{
+    Map<String, dynamic> result = await Request.shortVideoConcentration(page: lPage);
+    print(result);
+    if(result['total'] != null) lTotal = result['total'];
+    if(result['list'] != null) {
+      List<ShortVideo> list = (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
+      if(lPage > 1){
+        _list.addAll(list);
+      }else{
+        _list = list;
       }
     }
     if(mounted) setState(() {});

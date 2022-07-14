@@ -102,7 +102,7 @@ class _VideoCover extends State<VideoCover>{
         child: CoverSelection(
           controller: widget.controller,
           height: widget.height,
-          quantity: 8,
+          quantity: 18,
         ));
   }
 }
