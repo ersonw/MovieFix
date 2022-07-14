@@ -37,7 +37,6 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   final ImagePicker _picker = ImagePicker();
   List<Word> barLeft = [];
   List<Word> barRight = [];
-  late VideoPlayerController _videoController;
   @override
   void initState() {
     barLeft.add(Word(words: '发日常', icon: Icons.camera_alt_outlined));
@@ -58,6 +57,10 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
     _getForwards();
   }
   _getForwards()async{
+    // if(fPage > fTotal){
+    //   fPage--;
+    //   return;
+    // }
     Map<String, dynamic> result = await Request.shortVideoFriend(page: fPage);
     // print(result);
     if(result['total'] != null) fTotal = result['total'];
@@ -72,8 +75,13 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
     if(mounted) setState(() {});
   }
   _getList()async{
+    // if(lPage > lTotal){
+    //   lPage--;
+    //   return;
+    // }
     Map<String, dynamic> result = await Request.shortVideoConcentration(page: lPage);
-    print(result);
+    // print(lPage);
+    // print(result);
     if(result['total'] != null) lTotal = result['total'];
     if(result['list'] != null) {
       List<ShortVideo> list = (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
@@ -103,10 +111,35 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   }
   /// 用来创建上下滑动的页面
   Widget buildTableViewItemWidget(List<ShortVideo> list, String value) {
+    if(list.length == 1){
+      if(initialIndex == 0){
+        fPage++;
+        _getForwards();
+      }else{
+        lPage++;
+        _getList();
+      }
+    }
     return PageView.builder(
       /// pageview中 子条目的个数
         itemCount:list.length ,
         // dragStartBehavior: DragStartBehavior.down,
+        // allowImplicitScrolling: true,
+        onPageChanged: (int? index){
+          // print(index);
+          // print(initialIndex);
+          if(index == null) return;
+          // print(list.length - index < 2);
+          if(list.length - index < 2){
+            if(initialIndex == 0){
+              fPage++;
+              _getForwards();
+            }else{
+              lPage++;
+              _getList();
+            }
+          }
+        },
         /// 上下滑动
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context,int index){
@@ -146,10 +179,10 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
                   // padding: const EdgeInsets.only(left: 10),
                   // indicatorPadding: const EdgeInsets.only(left: 10),
                   // labelPadding: const EdgeInsets.only(left: 30),
-                  // labelStyle:  TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
-                  labelStyle:  TextStyle(fontWeight: FontWeight.bold),
-                  // unselectedLabelStyle: const TextStyle(fontSize: 15),
-                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                  labelStyle:  const TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                  // labelStyle:  TextStyle(fontWeight: FontWeight.bold),
+                  unselectedLabelStyle: const TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+                  // unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.grey,
                   indicator: const RoundUnderlineTabIndicator(
@@ -240,7 +273,6 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
 
   @override
   void dispose() {
-    _videoController.dispose();
     super.dispose();
   }
 }

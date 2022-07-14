@@ -33,6 +33,10 @@ class RequestApi {
 
   static const shortVideoHeartbeat = '/api/shortVideo/heartbeat';
   static const shortVideoUpload = '/api/shortVideo/upload';
+  static const shortVideoFollow = '/api/shortVideo/follow/{id}';
+  static const shortVideoUnfollow = '/api/shortVideo/unfollow/{id}';
+  static const shortVideoLike = '/api/shortVideo/like/{id}';
+  static const shortVideoUnlike = '/api/shortVideo/unlike/{id}';
   static const shortVideoFriend = '/api/shortVideo/friend/{id}/{page}';
   static const shortVideoConcentration = '/api/shortVideo/concentration/{page}';
 }

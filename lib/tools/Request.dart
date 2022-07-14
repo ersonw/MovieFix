@@ -428,4 +428,39 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<bool> shortVideoLike(int id)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoLike.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoUnlike(int id)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoUnlike.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoFollow(int id)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoFollow.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoUnfollow(int id)async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoUnfollow.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
 }
