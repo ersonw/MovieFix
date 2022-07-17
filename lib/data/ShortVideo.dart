@@ -11,8 +11,8 @@ class ShortVideo {
   String? title;
   int addTime = 0;
   int likes = 0;
-  List<ShortComment> comments = [];
-  int comment = 0;
+  // List<ShortComment> comments = [];
+  int comments = 0;
   int collects = 0;
   bool forward = false;
   int forwards = 0;
@@ -30,9 +30,9 @@ class ShortVideo {
         title = json['title'],
         addTime = json['addTime'],
         likes = json['likes'],
-        comments =
-            (json['comments'] as List).map((e) => ShortComment.formJson(e)).toList(),
-        comment =json['comment'],
+        // comments =
+        //     (json['comments'] as List).map((e) => ShortComment.formJson(e)).toList(),
+        comments =json['comments'],
         collects = json['collects'],
         forward = json['forward'],
         forwards = json['forwards'],
@@ -49,8 +49,8 @@ class ShortVideo {
         'title': title,
         'addTime': addTime,
         'likes': likes,
+        // 'comments': comments,
         'comments': comments,
-        'comment': comment,
         'collects': collects,
         'forward': forward,
         'forwards': forwards,

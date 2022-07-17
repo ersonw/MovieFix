@@ -5,6 +5,42 @@
     <title>Title</title>
 </head>
 <body>
+<script type="text/javascript">
+    function test() {
+        var Username = document.getElementById('txt_Username');
+        var Password = document.getElementById('txt_Password');
+        var cnt;
 
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: '/asp/GetRandCount.asp',
+            success: function (data) {
+                cnt = data;
+            }
+        });
+
+        var Form = new webSubmitForm();
+        if ('DT' == CfgMode.toUpperCase()) {
+            var cookie2 = "Cookie=" + "rid=" + RndSecurityFormat("" + cnt) + RndSecurityFormat(Username.value + cnt) + RndSecurityFormat(RndSecurityFormat(MD5(Password.value)) + cnt) + ":" + "Language:" + Language + ":" + "id=-1;path=/";
+        } else {
+            var cookie2 = "Cookie=body:" + "Language:" + Language + ":" + "id=-1;path=/";
+            Form.addParameter('UserName', Username.value);
+            Form.addParameter('PassWord', base64encode(Password.value));
+            Form.addParameter('Language', Language);
+        }
+
+        document.cookie = cookie2;
+        Username.disabled = true;
+        Password.disabled = true;
+
+        Form.setAction('/login.cgi');
+        Form.addParameter('x.X_HW_Token', cnt);
+        Form.submit();
+        return true;
+    }
+
+</script>
 </body>
 </html>

@@ -33,6 +33,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   int lPage = 1;
   int fTotal = 1;
   int lTotal = 1;
+  bool commentShow = false;
 
   final ImagePicker _picker = ImagePicker();
   List<Word> barLeft = [];
@@ -126,10 +127,8 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         // dragStartBehavior: DragStartBehavior.down,
         // allowImplicitScrolling: true,
         onPageChanged: (int? index){
-          // print(index);
-          // print(initialIndex);
           if(index == null) return;
-          // print(list.length - index < 2);
+          commentShow = false;
           if(list.length - index < 2){
             if(initialIndex == 0){
               fPage++;
@@ -144,7 +143,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context,int index){
           ShortVideo video = list[index];
-          return FindVideoItemPage(value,video);
+          return FindVideoItemPage(value,video,callback: (value)=>setState((){commentShow = value;}),);
         });
   }
   @override
@@ -160,7 +159,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
               buildTableViewItemWidget(_list,'推荐'),
             ],
           ),
-          if(!_isFullScreen) Container(
+          if(!_isFullScreen && !commentShow) Container(
             width: (MediaQuery.of(context).size.width),
             margin: EdgeInsets.only(top: 40),
             // alignment: Alignment.topLeft,

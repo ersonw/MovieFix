@@ -4,7 +4,9 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_fix/Page/CommentPage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'package:video_player/video_player.dart';
@@ -19,8 +21,9 @@ import 'cRichText.dart';
 class FindVideoItemPage extends StatefulWidget {
   String tabValue;
   ShortVideo video;
+  void Function(bool value)? callback;
 
-  FindVideoItemPage(this.tabValue, this.video);
+  FindVideoItemPage(this.tabValue, this.video,{this.callback});
 
   @override
   State<StatefulWidget> createState() {
@@ -44,6 +47,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
   bool showBottom = false;
   bool alive = true;
   double likeSize = 36;
+  bool commentShow =false;
 
   @override
   void initState() {
@@ -98,7 +102,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: _isFullScreen?null: const EdgeInsets.only(top: 30),
+      margin: _isFullScreen||commentShow?null: const EdgeInsets.only(top: 30),
       // height: MediaQuery.of(context).size.height,
       // alignment: Alignment.center,
       child: Stack(
@@ -112,13 +116,21 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           ///播放视频
           buildVideoWidget(),
           ///控制播放视频按钮
-          buildControllWidget(),
+          // if(!commentShow) buildControllWidget(),
           //
           // ///底部区域的视频介绍
-          if(!_isFullScreen)buildBottmFlagWidget(),
+          if(!_isFullScreen && !commentShow)buildBottmFlagWidget(),
           //
           // ///右侧的用户信息按钮区域
-          if(!_isFullScreen)buildRightUserWidget(),
+          if(!_isFullScreen && !commentShow)buildRightUserWidget(),
+
+          if(commentShow
+              && initialized
+              && !_isFullScreen
+              && videoPlayerController.value.aspectRatio < 1.7)
+            CommentPage(widget.video.id,callback: ()=> setState(() {
+              commentShow = false;
+            }),),
         ],
       ),
     );
@@ -226,14 +238,14 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           Container(
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
-              onTap: (){
-                //16/9 缩放 其他直接覆盖
-                print('点击评论按钮');
-              },
+              onTap: ()=>setState(() {
+                commentShow = true;
+                if(widget.callback != null) widget.callback!(commentShow);
+              }),
               child: Column(
                 children: [
                   Icon(Icons.textsms_sharp, size: 36,),
-                  Text(Global.getNumbersToChinese(widget.video.comment)),
+                  Text(Global.getNumbersToChinese(widget.video.comments)),
                 ],
               ),
             ),
@@ -324,7 +336,16 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
     if (initialized && !videoPlayerController.value.isPlaying) {
       return Center(
         child: InkWell(
-          onTap: () => _init(),
+          onTap: () {
+            if(!commentShow){
+              _init();
+            }else{
+              setState(() {
+                commentShow = false;
+                if(widget.callback != null) widget.callback!(commentShow);
+              });
+            }
+          },
           child: Icon(
             Icons.play_arrow_sharp,
             size: 90,
@@ -378,40 +399,61 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
               // Container(),
               InkWell(
                 onTap: () {
-                  if(_isFullScreen){
-                    showBottom = !showBottom;
+                  if(commentShow){
+                    setState(() {
+                      commentShow = false;
+                      if(widget.callback != null) widget.callback!(commentShow);
+                    });
                   }else{
-                    _init();
+                    if(_isFullScreen){
+                      setState(() {
+                        showBottom = !showBottom;
+                      });
+                    }else{
+                      setState(() {
+                        _init();
+                      });
+                    }
                   }
                 },
                 //双击点赞
                 onDoubleTap: () {
                   // print(videoPlayerController.value.aspectRatio);
                   if(_isFullScreen){
-                    _init();
+                    setState(() {
+                      _init();
+                    });
                   }else{
                     _like();
                   }
                 },
                 child: Column(
-                  mainAxisAlignment: (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
+                  mainAxisAlignment: (!commentShow && initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
                   children: [
                     Flexible(
-                      child: AspectRatio(
-                        ///设置视频的大小 宽高比。长宽比表示为宽高比。例如，16:9宽高比的值为16.0/9.0
-                        aspectRatio: videoPlayerController.value.aspectRatio,
-                        ///播放视频的组件
-                        child: Stack(
-                          // alignment: (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?Alignment.center:Alignment.bottomCenter,
-                          // alignment: Alignment.center,
-                          children: [
-                            VideoPlayer(videoPlayerController),
-                            Container(color: Colors.black.withOpacity(0.15),),
-                          ],
+                      // flex:2,
+                      child: Container(
+                        margin: !commentShow?null:const EdgeInsets.all(12),
+                        child: AspectRatio(
+                          ///设置视频的大小 宽高比。长宽比表示为宽高比。例如，16:9宽高比的值为16.0/9.0
+                          aspectRatio: videoPlayerController.value.aspectRatio,
+                          ///播放视频的组件
+                          child: Stack(
+                            // alignment: (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?Alignment.center:Alignment.bottomCenter,
+                            // alignment: Alignment.center,
+                            children: [
+                              VideoPlayer(videoPlayerController),
+                              Container(color: Colors.black.withOpacity(0.15),),
+                              buildControllWidget(),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    if (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 1.7)
+                    if (!commentShow
+                        && initialized
+                        && !_isFullScreen
+                        && videoPlayerController.value.aspectRatio > 1.7)
                       InkWell(
                         child: Container(
                           margin: const EdgeInsets.only(top: 15),
@@ -428,6 +470,11 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                         ),
                         onTap: () => setLandscape(),
                       ),
+                    if(commentShow
+                        && initialized
+                        && !_isFullScreen
+                        && videoPlayerController.value.aspectRatio > 1.7)
+                      Expanded(flex: 2,child: CommentPage(widget.video.id)),
                   ],
                 ),
               ),
