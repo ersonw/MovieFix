@@ -463,4 +463,35 @@ class Request {
     }
     return false;
   }
+
+  static Future<Map<String, dynamic>> shortVideoComments(int id,{int page=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoComments.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> getShortVideoComments(int id,{int page=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.shortVideoComment+'/$id/$page', {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> shortVideoComment(int videoId,String text, {int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': videoId,
+      'text': text,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.shortVideoComment, data);
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return {};
+  }
 }

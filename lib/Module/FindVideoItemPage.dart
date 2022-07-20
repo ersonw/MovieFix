@@ -124,16 +124,20 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           // ///右侧的用户信息按钮区域
           if(!_isFullScreen && !commentShow)buildRightUserWidget(),
 
-          if(commentShow
-              && initialized
-              && !_isFullScreen
-              && videoPlayerController.value.aspectRatio < 1.7)
-            CommentPage(widget.video.id,callback: ()=> setState(() {
-              commentShow = false;
-            }),),
+          // if(commentShow
+          //     && initialized
+          //     && !_isFullScreen
+          //     && videoPlayerController.value.aspectRatio < 1.7)
+          //   CommentPage(widget.video.id,callback: _callback,),
         ],
       ),
     );
+  }
+  _callback(){
+    setState(() {
+      commentShow = false;
+    });
+    if(widget.callback != null) widget.callback!(commentShow);
   }
   _likeAnimated(){
     if(likeSize == 36){
@@ -400,10 +404,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
               InkWell(
                 onTap: () {
                   if(commentShow){
-                    setState(() {
-                      commentShow = false;
-                      if(widget.callback != null) widget.callback!(commentShow);
-                    });
+                    _callback();
                   }else{
                     if(_isFullScreen){
                       setState(() {
@@ -473,8 +474,9 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                     if(commentShow
                         && initialized
                         && !_isFullScreen
-                        && videoPlayerController.value.aspectRatio > 1.7)
-                      Expanded(flex: 2,child: CommentPage(widget.video.id)),
+                        // && videoPlayerController.value.aspectRatio > 1.7
+                    )
+                      Expanded(flex: 2,child: CommentPage(widget.video.id,callback: _callback,)),
                   ],
                 ),
               ),

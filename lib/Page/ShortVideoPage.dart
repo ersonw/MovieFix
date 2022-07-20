@@ -24,7 +24,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   // 是否全屏
   bool get _isFullScreen =>
       MediaQuery.of(context).orientation == Orientation.landscape;
-  final _tabKey = const ValueKey('tab');
+  final _tabKey = const ValueKey('tabShortVideo');
   late TabController controller;
   int? initialIndex;
   List<ShortVideo> forwards =[];
