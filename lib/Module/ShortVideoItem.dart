@@ -4,6 +4,7 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_fix/Module/ShortVideoFullScreen.dart';
 import 'package:movie_fix/Page/CommentPage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
@@ -18,20 +19,19 @@ import '../Global.dart';
 import 'cRichText.dart';
 
 ///播放视频的页面
-class FindVideoItemPage extends StatefulWidget {
+class ShortVideoItem extends StatefulWidget {
   String tabValue;
   ShortVideo video;
-  void Function(bool value)? callback;
 
-  FindVideoItemPage(this.tabValue, this.video,{this.callback});
+  ShortVideoItem(this.tabValue, this.video);
 
   @override
   State<StatefulWidget> createState() {
-    return FindVideoItemPageState();
+    return ShortVideoItemState();
   }
 }
 
-class FindVideoItemPageState extends State<FindVideoItemPage> {
+class ShortVideoItemState extends State<ShortVideoItem> {
   late Timer _timer;
   // 是否全屏
   bool get _isFullScreen =>
@@ -79,25 +79,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
       _timer = Timer.periodic(const Duration(seconds: 1), callback);
     }
   }
-// 设置横屏
-  static setLandscape() {
-    AutoOrientation.landscapeAutoMode();
-    // iOS13+横屏时，状态栏自动隐藏，可自定义：https://juejin.cn/post/7054063406579449863
-    if (Platform.isAndroid) {
-      ///关闭状态栏，与底部虚拟操作按钮
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    }
-  }
 
-  // 设置竖屏
-  static setPortrait() {
-    AutoOrientation.portraitAutoMode();
-    if (Platform.isAndroid) {
-      ///显示状态栏，与底部虚拟操作按钮
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,10 +101,10 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           // if(!commentShow) buildControllWidget(),
           //
           // ///底部区域的视频介绍
-          if(!_isFullScreen && !commentShow)buildBottmFlagWidget(),
+          buildBottmFlagWidget(),
           //
           // ///右侧的用户信息按钮区域
-          if(!_isFullScreen && !commentShow)buildRightUserWidget(),
+          buildRightUserWidget(),
 
           // if(commentShow
           //     && initialized
@@ -137,7 +119,6 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
     setState(() {
       commentShow = false;
     });
-    if(widget.callback != null) widget.callback!(commentShow);
   }
   _likeAnimated(){
     if(likeSize == 36){
@@ -242,10 +223,9 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           Container(
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
-              onTap: ()=>setState(() {
-                commentShow = true;
-                if(widget.callback != null) widget.callback!(commentShow);
-              }),
+              onTap: (){
+                Navigator.push(context, FadeRoute(page: CommentPage(widget.video.id,videoPlayerController)));
+              },
               child: Column(
                 children: [
                   Icon(Icons.textsms_sharp, size: 36,),
@@ -339,16 +319,9 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
     // );
     if (initialized && !videoPlayerController.value.isPlaying) {
       return Center(
-        child: InkWell(
+        child: GestureDetector(
           onTap: () {
-            if(!commentShow){
-              _init();
-            }else{
-              setState(() {
-                commentShow = false;
-                if(widget.callback != null) widget.callback!(commentShow);
-              });
-            }
+            _init();
           },
           child: Icon(
             Icons.play_arrow_sharp,
@@ -395,27 +368,11 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
           return Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              // GestureDetector(
-              //   onTap: () {
-              //     _init();
-              //   },
-              // ),
-              // Container(),
               InkWell(
                 onTap: () {
-                  if(commentShow){
-                    _callback();
-                  }else{
-                    if(_isFullScreen){
-                      setState(() {
-                        showBottom = !showBottom;
-                      });
-                    }else{
-                      setState(() {
-                        _init();
-                      });
-                    }
-                  }
+                  setState(() {
+                    _init();
+                  });
                 },
                 //双击点赞
                 onDoubleTap: () {
@@ -429,12 +386,12 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                   }
                 },
                 child: Column(
-                  mainAxisAlignment: (!commentShow && initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
+                  mainAxisAlignment: (initialized && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
                   children: [
                     Flexible(
                       // flex:2,
-                      child: Container(
-                        margin: !commentShow?null:const EdgeInsets.all(12),
+                      child: Hero(
+                        tag: "player",
                         child: AspectRatio(
                           ///设置视频的大小 宽高比。长宽比表示为宽高比。例如，16:9宽高比的值为16.0/9.0
                           aspectRatio: videoPlayerController.value.aspectRatio,
@@ -451,9 +408,7 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                         ),
                       ),
                     ),
-                    if (!commentShow
-                        && initialized
-                        && !_isFullScreen
+                    if (initialized
                         && videoPlayerController.value.aspectRatio > 1.7)
                       InkWell(
                         child: Container(
@@ -469,41 +424,15 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
                             ],
                           ),
                         ),
-                        onTap: () => setLandscape(),
+                        onTap: (){
+                          if(initialized) Navigator.push(context, FadeRoute(page: ShortVideoFullScreen(widget.video, videoPlayerController)));
+                        },
                       ),
-                    if(commentShow
-                        && initialized
-                        && !_isFullScreen
-                        // && videoPlayerController.value.aspectRatio > 1.7
-                    )
-                      Expanded(flex: 2,child: CommentPage(widget.video.id,callback: _callback,)),
                   ],
                 ),
               ),
-              if(showBottom && _isFullScreen)
-                Container(
-                  // alignment: Alignment.bottomCenter,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Padding(padding: EdgeInsets.only(left: 35)),
-                            InkWell(
-                              child: Icon(Icons.reply_outlined,size: 30,),
-                              onTap: (){
-                                setPortrait();
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              if (initialized && !showBottom  && !_isFullScreen &&
+
+              if (initialized &&
                   videoPlayerController.value.duration.inMinutes > 1)
                 LinearProgressIndicator(
                   color: Colors.white.withOpacity(0.9),
@@ -539,7 +468,6 @@ class FindVideoItemPageState extends State<FindVideoItemPage> {
     alive = false;
     super.dispose();
     _timer.cancel();
-    setPortrait();
     Wakelock.disable();
     videoPlayerController.dispose();
   }

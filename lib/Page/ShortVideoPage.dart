@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:movie_fix/Module/FindVideoItemPage.dart';
+import 'package:movie_fix/Module/ShortVideoItem.dart';
 import 'package:movie_fix/Module/cRefresh.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/Word.dart';
@@ -21,9 +21,6 @@ class ShortVideoPage extends StatefulWidget {
 }
 
 class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderStateMixin {
-  // 是否全屏
-  bool get _isFullScreen =>
-      MediaQuery.of(context).orientation == Orientation.landscape;
   final _tabKey = const ValueKey('tabShortVideo');
   late TabController controller;
   int? initialIndex;
@@ -33,7 +30,6 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
   int lPage = 1;
   int fTotal = 1;
   int lTotal = 1;
-  bool commentShow = false;
 
   final ImagePicker _picker = ImagePicker();
   List<Word> barLeft = [];
@@ -128,7 +124,6 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         // allowImplicitScrolling: true,
         onPageChanged: (int? index){
           if(index == null) return;
-          commentShow = false;
           if(list.length - index < 2){
             if(initialIndex == 0){
               fPage++;
@@ -143,7 +138,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context,int index){
           ShortVideo video = list[index];
-          return FindVideoItemPage(value,video,callback: (value)=>setState((){commentShow = value;}),);
+          return ShortVideoItem(value,video);
         });
   }
   @override
@@ -159,7 +154,7 @@ class _ShortVideoPage extends State<ShortVideoPage> with SingleTickerProviderSta
               buildTableViewItemWidget(_list,'推荐'),
             ],
           ),
-          if(!_isFullScreen && !commentShow) Container(
+          Container(
             width: (MediaQuery.of(context).size.width),
             margin: EdgeInsets.only(top: 40),
             // alignment: Alignment.topLeft,

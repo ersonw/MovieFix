@@ -482,7 +482,7 @@ class DialogRouter extends PageRouteBuilder{
   DialogRouter(this.page)
       : super(
     opaque: false,
-    barrierColor: Colors.black54,
+    // barrierColor: Colors.black54,
     pageBuilder: (context, animation, secondaryAnimation) => page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
   );
