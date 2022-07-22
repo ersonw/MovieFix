@@ -10,7 +10,9 @@ class ShortComment {
   String? nickname;
   int likes = 0;
   bool like = false;
-  List<ShortComment> reply = [];
+  // List<ShortComment> reply = [];
+  int reply =0;
+  String? replyUser;
   int count = 0;
 
   bool show = false;
@@ -28,9 +30,12 @@ class ShortComment {
         nickname = json['nickname'],
         likes = json['likes'] ?? 0,
         like = json['like'] ?? false,
-        count = json['reply']['count'] ?? 0,
-        reply = json['reply']['list'] != null ?
-            (json['reply']['list'] as List).map((e) => ShortComment.formJson(e)).toList() : [];
+        reply = json['reply'],
+        replyUser = json['replyUser']
+        // count = json['reply']!=null&&json['reply']['count']!=null ? json['reply']['count']:0,
+        // reply = json['reply']!=null&&json['reply']['list'] != null ?
+        //     (json['reply']['list'] as List).map((e) => ShortComment.formJson(e)).toList() : []
+  ;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -42,8 +47,10 @@ class ShortComment {
         'nickname': nickname,
         'likes': likes,
         'like': like,
-    'count': count,
-        'reply': reply.map((e) => e.toJson()).toList(),
+        'reply': reply,
+        'replyUser': replyUser,
+    // 'count': count,
+    //     'reply': reply.map((e) => e.toJson()).toList(),
       };
 
   @override

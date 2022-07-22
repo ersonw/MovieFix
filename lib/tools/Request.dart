@@ -472,9 +472,9 @@ class Request {
     }
     return Map<String, dynamic>();
   }
-  static Future<Map<String, dynamic>> getShortVideoComments(int id,{int page=0})async{
+  static Future<Map<String, dynamic>> shortVideoCommentChildren(int id,{int page=0})async{
     // Loading.show();
-    String? result = await _get(RequestApi.shortVideoComment+'/$id/$page', {});
+    String? result = await _get(RequestApi.shortVideoCommentChildren.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
     if(result != null){
       return jsonDecode(result);
     }

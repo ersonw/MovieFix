@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/CommentChild.dart';
 import 'package:movie_fix/Module/CommentInput.dart';
+import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/data/ShortComment.dart';
 import 'package:movie_fix/tools/CustomDialog.dart';
 import 'package:movie_fix/tools/Request.dart';
@@ -19,6 +20,7 @@ class CommentPage extends StatefulWidget{
   _CommentPage createState() =>_CommentPage();
 }
 class _CommentPage extends State<CommentPage>{
+  final ScrollController _scrollController = ScrollController();
   final TextEditingController _controller = TextEditingController();
   FocusNode _focusNode = FocusNode();
 
@@ -34,6 +36,13 @@ class _CommentPage extends State<CommentPage>{
   void initState() {
     _init();
     super.initState();
+    _scrollController.addListener(() {
+      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+        page++;
+        _getList();
+        if(mounted) setState(() {});
+      }
+    });
     _controller.addListener(() {
       if(_controller.text.isNotEmpty){
         showSending = true;
@@ -69,10 +78,21 @@ class _CommentPage extends State<CommentPage>{
     Map<String,dynamic> result = await Request.shortVideoComment(widget.id, _controller.text,toId: toId);
     if (result['id'] != null) {
       print(result);
+      _controller.text = '';
+      if(toId == 0){
+        comments.insert(0, ShortComment.formJson(result));
+      }else{
+        toId = 0;
+        hintText=null;
+        _getList();
+      }
     }else{
       CustomDialog.message('评论失败！');
     }
     if(mounted) setState(() {});
+  }
+  _unfocus(){
+    _listener();
   }
   _getList()async{
     if(page > total){
@@ -80,15 +100,15 @@ class _CommentPage extends State<CommentPage>{
       return;
     }
     Map<String, dynamic> result = await Request.shortVideoComments(widget.id,page: page);
-    print(result);
+    // print(result);
     if(result.isNotEmpty){
       if(result['total'] != null) total = result['total'];
       if(result['count'] != null) count = result['count'];
       List<ShortComment> list = (result['list'] as List).map((e) => ShortComment.formJson(e)).toList();
       if(page > 1){
-        comments = list;
-      }else{
         comments.addAll(list);
+      }else{
+        comments = list;
       }
     }
     if(mounted) setState(() {});
@@ -152,20 +172,41 @@ class _CommentPage extends State<CommentPage>{
                 _dialog(),
             ],
           ),
-          if(_focusNode.hasFocus) CommentInput(focusNode: _focusNode, controller: _controller,hintText:hintText,callback: _comment,),
+          if(_focusNode.hasFocus) CommentInput(focusNode: _focusNode, controller: _controller,hintText:hintText,callback: _comment,unfocus: _unfocus,),
         ],
       ),
     );
   }
+  _commentCallback({int? id, String? nickname}){
+    // print(id);
+    // print(nickname);
+    if(id==null || nickname==null) return;
+    hintText = '@ 回复$nickname';
+    toId = id;
+    _controller.text='';
+    _focusNode.requestFocus();
+    setState(() {});
+  }
   _buildComments(){
     List<Widget> list = [];
     for(int i = 0; i < comments.length; i++){
-      list.add(CommentChild(comments[i]));
+      list.add(CommentChild(comments[i],callback: _commentCallback,));
     }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    list.add(const Padding(padding: EdgeInsets.all(15)));
+    if(list.isEmpty){
+      list.add(Center(
+        child: Text('暂未有人评论，可抢先一步评论哟～'),
+      ));
+    }else if(page < total){
+      list.add(GeneralRefresh.getLoading());
+    }else{
+      list.add(Center(
+        child: Text('没有更多咯～'),
+      ));
+    }
+    return Expanded(child: ListView(
       children: list,
-    );
+    ));
   }
   _callback(){
     Navigator.pop(context);
