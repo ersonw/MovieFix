@@ -14,6 +14,7 @@ class ShortComment {
   int count = 0;
 
   bool show = false;
+  bool pin = false;
 
   ShortComment();
 
@@ -21,6 +22,7 @@ class ShortComment {
       : id = json['id'],
         text = json['text'],
         addTime = json['addTime'] ?? 0,
+        pin = json['pin'] ?? false,
         userId = json['userId'],
         avatar = json['avatar'],
         nickname = json['nickname'],
@@ -34,6 +36,7 @@ class ShortComment {
         'id': id,
         'text': text,
         'addTime': addTime,
+        'pin': pin,
         'userId': userId,
         'avatar': avatar,
         'nickname': nickname,

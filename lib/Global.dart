@@ -367,6 +367,10 @@ class Global {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(t);
     return '${dateTime.year}-${dateTime.month}-${dateTime.day}';
   }
+  static String getShortDateToString(int t){
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(t);
+    return '${dateTime.month}-${dateTime.day}';
+  }
   static String getNumbersToChinese(int n){
     if(n < 9999){
       return '$n';

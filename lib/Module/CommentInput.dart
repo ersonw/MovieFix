@@ -5,7 +5,8 @@ class CommentInput extends StatefulWidget{
   TextEditingController? controller;
   FocusNode? focusNode;
   String? hintText;
-  CommentInput({Key? key,this.controller,this.focusNode,this.hintText}) : super(key: key);
+  void Function()? callback;
+  CommentInput({Key? key,this.controller,this.focusNode,this.hintText,this.callback}) : super(key: key);
 
   @override
   _CommentInput createState() =>_CommentInput();
@@ -35,7 +36,10 @@ class _CommentInput extends State<CommentInput>{
       alignment: Alignment.bottomCenter,
       children: [
         GestureDetector(
-          onTap: _onDone,
+          onTap: (){
+            if(widget.focusNode != null) widget.focusNode?.nextFocus();
+            if(mounted) setState(() {});
+          },
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -102,6 +106,7 @@ class _CommentInput extends State<CommentInput>{
   _onDone(){
     print("done!!!");
     if(widget.focusNode != null) widget.focusNode?.nextFocus();
+    if(widget.callback != null) widget.callback!();
     if(mounted) setState(() {});
     // Navigator.pop(context);
   }

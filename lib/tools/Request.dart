@@ -494,4 +494,20 @@ class Request {
     }
     return {};
   }
+  static Future<bool> shortVideoCommentLike(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentLike.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoCommentUnlike(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentUnlike.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
 }

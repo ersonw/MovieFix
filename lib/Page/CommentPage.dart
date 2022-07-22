@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Module/CommentChild.dart';
 import 'package:movie_fix/Module/CommentInput.dart';
 import 'package:movie_fix/data/ShortComment.dart';
 import 'package:movie_fix/tools/CustomDialog.dart';
@@ -41,17 +42,30 @@ class _CommentPage extends State<CommentPage>{
       }
       if(mounted) setState(() {});
     });
+    _listener();
+  }
+  _listener(){
+    _focusNode = FocusNode();
     _focusNode.addListener(() {
-      print('hasNode:${_focusNode.hasFocus}');
+      // print('hasNode:${_focusNode.hasFocus}');
       // _commentInput();
-      // if(_focusNode.hasFocus) _commentInput();
+      // if(_focusNode.hasFocus) {
+        // _commentInput();
+      // }else{
+        // _focusNode = FocusNode();
+      // }
       if(mounted) setState(() {});
     });
+    if(mounted) setState(() {});
   }
   _init()async{
     await _getList();
   }
   _comment()async{
+    _listener();
+    // print('comment: ${_controller.text}');
+    // _controller.text='';
+    // return;
     Map<String,dynamic> result = await Request.shortVideoComment(widget.id, _controller.text,toId: toId);
     if (result['id'] != null) {
       print(result);
@@ -111,20 +125,22 @@ class _CommentPage extends State<CommentPage>{
               ),
               Expanded(
                 flex: 5,
-                child: Column(
+                child: Stack(
+                  alignment: Alignment.topCenter,
                   children: [
-                    Stack(
-                      alignment: Alignment.center,
+                    Column(
                       children: [
+                        const Padding(padding: EdgeInsets.only(top: 15)),
                         Text('$count条评论',style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: _callback,
-                              child: Icon(Icons.clear,size: 20,color: Colors.white,),
-                            ),
-                          ],
+                        _buildComments(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: _callback,
+                          child: Icon(Icons.clear,size: 20,color: Colors.white,),
                         ),
                       ],
                     ),
@@ -136,107 +152,82 @@ class _CommentPage extends State<CommentPage>{
                 _dialog(),
             ],
           ),
-          if(_focusNode.hasFocus) CommentInput(focusNode: _focusNode, controller: _controller,hintText:hintText),
+          if(_focusNode.hasFocus) CommentInput(focusNode: _focusNode, controller: _controller,hintText:hintText,callback: _comment,),
         ],
       ),
     );
   }
-  _commentInput()async{
-    await Navigator.push(context, DialogRouter(CommentInput(focusNode: _focusNode, controller: _controller,hintText:hintText)));
+  _buildComments(){
+    List<Widget> list = [];
+    for(int i = 0; i < comments.length; i++){
+      list.add(CommentChild(comments[i]));
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: list,
+    );
   }
   _callback(){
     Navigator.pop(context);
   }
-  // Widget _dialog() {
-  //   return Container(
-  //     color: Colors.black,
-  //     // height: 20,
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.min,
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: [
-  //         Expanded(
-  //           child: Container(
-  //               margin: const EdgeInsets.all(21),
-  //               // height: ,
-  //               decoration: BoxDecoration(
-  //                 color: Colors.white.withOpacity(0.1),
-  //                 borderRadius: BorderRadius.all(Radius.circular(15)),
-  //               ),
-  //               child: Container(
-  //                 margin: const EdgeInsets.only(left: 9,right: 9),
-  //                 child: TextField(
-  //                   focusNode: _focusNode,
-  //                   maxLines: 1,
-  //                   textAlign: TextAlign.left,
-  //                   controller: _controller,
-  //                   // autofocus: false,
-  //                   style: const TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),
-  //                   onEditingComplete: () {
-  //                   },
-  //                   keyboardType: TextInputType.text,
-  //                   textInputAction: TextInputAction.done,
-  //                   decoration:  InputDecoration(
-  //                     hintText: hintText??'善于结善缘，恶语伤人心~',
-  //                     hintStyle: const TextStyle(color: Colors.white30,fontSize: 15,fontWeight: FontWeight.bold),
-  //                     border: InputBorder.none,
-  //                     filled: true,
-  //                     fillColor: Colors.transparent,
-  //                     contentPadding: const EdgeInsets.only(top: 10,bottom: 10),
-  //                     isDense: true,
-  //                   ),
-  //                 ),
-  //               ),
-  //           ),
-  //         ),
-  //         Row(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             if(showSending) InkWell(
-  //               child: Icon(Icons.upload,color: Colors.orange,),
-  //             ),
-  //           ],
-  //         ),
-  //         const Padding(padding: EdgeInsets.only(right: 9)),
-  //       ],
-  //     ),
-  //   );
-  // }
   Widget _dialog() {
     return Container(
       color: Colors.black,
-      height: 90,
-      width: MediaQuery.of(context).size.width,
+      // height: 20,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(child: InkWell(
-            onTap: (){
-              print('canRequestFocus:${_focusNode.canRequestFocus}');
-              print('hasFocus:${_focusNode.hasFocus}');
-              _focusNode.requestFocus();
-            },
-            child: Container(
-              // margin: const EdgeInsets.all(21),
-              height: 36,
-              // width: MediaQuery.of(context).size.width/1.1,
-              alignment: Alignment.centerLeft,
+          Expanded(child: Container(
+              margin: const EdgeInsets.all(21),
+              // height: ,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(0.1),
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
-              child: Container(
-                margin: const EdgeInsets.only(left: 9,right: 9),
-                child: Text(_controller.text.isNotEmpty?_controller.text:(hintText??'善于结善缘，恶语伤人心~'),style: TextStyle(color: _controller.text.isNotEmpty?Colors.white:Colors.white30,fontSize: 15,fontWeight: FontWeight.bold),),
-              ),
-            ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 9,right: 9),
+                      child: TextField(
+                        focusNode: _focusNode,
+                        maxLines: 1,
+                        textAlign: TextAlign.left,
+                        controller: _controller,
+                        // autofocus: false,
+                        style: const TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),
+                        onEditingComplete: _comment,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        decoration:  InputDecoration(
+                          hintText: hintText??'善于结善缘，恶语伤人心~',
+                          hintStyle: const TextStyle(color: Colors.white30,fontSize: 15,fontWeight: FontWeight.bold),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          contentPadding: const EdgeInsets.only(top: 10,bottom: 10),
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    // onTap: _comment,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 6),
+                      child: Icon(Icons.alternate_email,color: Colors.white.withOpacity(0.6),size: 20,),
+                    ),
+                  ),
+                ],
+              )
           )),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if(showSending) InkWell(
+                onTap: _comment,
                 child: Icon(Icons.upload,color: Colors.orange,),
               ),
             ],

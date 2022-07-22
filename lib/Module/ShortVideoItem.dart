@@ -115,19 +115,6 @@ class ShortVideoItemState extends State<ShortVideoItem> {
       ),
     );
   }
-  _callback(){
-    setState(() {
-      commentShow = false;
-    });
-  }
-  _likeAnimated(){
-    if(likeSize == 36){
-      likeSize = 39;
-      Timer(const Duration(milliseconds: 120), (){
-        likeSize = 36;
-      });
-    }
-  }
   buildRightUserWidget(){
     return Container(
       alignment: Alignment.bottomRight,
@@ -212,8 +199,8 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                     transitionBuilder: (child, anim){
                       return ScaleTransition(child: child,scale: anim);
                     },
-                    duration: Duration(milliseconds: 72),
-                    child: Icon(Icons.favorite, size: likeSize, color: widget.video.like ? Colors.red:Colors.white,),
+                    duration: Duration(milliseconds: 500),
+                    child: Icon(widget.video.like ? Icons.favorite:Icons.favorite_outlined, size: 36, color: widget.video.like ? Colors.red:Colors.white,),
                   ),
                   Text(Global.getNumbersToChinese(widget.video.likes)),
                 ],

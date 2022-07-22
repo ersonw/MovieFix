@@ -37,6 +37,8 @@ class RequestApi {
   static const shortVideoUnfollow = '/api/shortVideo/unfollow/{id}';
   static const shortVideoComments = '/api/shortVideo/comments/{id}/{page}';
   static const shortVideoComment = '/api/shortVideo/comment';
+  static const shortVideoCommentLike = '/api/shortVideo/comment/like/{id}';
+  static const shortVideoCommentUnlike = '/api/shortVideo/comment/unlike/{id}';
   static const shortVideoLike = '/api/shortVideo/like/{id}';
   static const shortVideoUnlike = '/api/shortVideo/unlike/{id}';
   static const shortVideoFriend = '/api/shortVideo/friend/{id}/{page}';
