@@ -77,7 +77,7 @@ class _CommentPage extends State<CommentPage>{
     // return;
     Map<String,dynamic> result = await Request.shortVideoComment(widget.id, _controller.text,toId: toId);
     if (result['id'] != null) {
-      print(result);
+      // print(result);
       _controller.text = '';
       if(toId == 0){
         comments.insert(0, ShortComment.formJson(result));
@@ -100,7 +100,7 @@ class _CommentPage extends State<CommentPage>{
       return;
     }
     Map<String, dynamic> result = await Request.shortVideoComments(widget.id,page: page);
-    // print(result);
+    print(result);
     if(result.isNotEmpty){
       if(result['total'] != null) total = result['total'];
       if(result['count'] != null) count = result['count'];
