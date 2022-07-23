@@ -38,6 +38,10 @@ class RequestApi {
   static const shortVideoComments = '/api/shortVideo/comments/{id}/{page}';
   static const shortVideoCommentChildren = '/api/shortVideo/comment/children/{id}/{page}';
   static const shortVideoComment = '/api/shortVideo/comment';
+  static const shortVideoCommentPin = '/api/shortVideo/comment/pin/{id}';
+  static const shortVideoCommentUnpin = '/api/shortVideo/comment/unpin/{id}';
+  static const shortVideoCommentDelete = '/api/shortVideo/comment/delete/{id}';
+  static const shortVideoCommentReport = '/api/shortVideo/comment/report/{id}';
   static const shortVideoCommentLike = '/api/shortVideo/comment/like/{id}';
   static const shortVideoCommentUnlike = '/api/shortVideo/comment/unlike/{id}';
   static const shortVideoLike = '/api/shortVideo/like/{id}';

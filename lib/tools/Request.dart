@@ -510,4 +510,36 @@ class Request {
     }
     return false;
   }
+  static Future<bool> shortVideoCommentDelete(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentDelete.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoCommentReport(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentReport.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoCommentPin(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentPin.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> shortVideoCommentUnpin(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoCommentUnpin.replaceAll('{id}', '$id'), {});
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
 }

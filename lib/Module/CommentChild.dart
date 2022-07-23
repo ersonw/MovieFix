@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Module/cCommentMenu.dart';
 import 'package:movie_fix/Module/cRichText.dart';
 import 'package:movie_fix/data/ShortComment.dart';
 import 'package:movie_fix/tools/Request.dart';
@@ -11,9 +12,10 @@ import '../Global.dart';
 class CommentChild extends StatefulWidget {
   void Function({int? id, String? nickname})? callback;
   ShortComment comment;
+  void Function()? remove;
 
   int userId;
-  CommentChild(this.comment,{Key? key,this.callback,this.userId=0}) : super(key: key);
+  CommentChild(this.comment,{Key? key,this.callback,this.remove,this.userId=0}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -24,16 +26,24 @@ class _CommentChild extends State<CommentChild> {
   List<ShortComment> comments=[];
   bool _show = false;
   int page = 1;
+  int pageOld = 1;
   int total = 1;
+  int count =0;
   @override
   void initState() {
-    if(widget.comment.reply > 0){
-      _getChildren();
+    count = widget.comment.reply;
+    if(count > 0){
+      getChildren();
     }
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    if(count != widget.comment.reply){
+      count = widget.comment.reply;
+      page = 1;
+      getChildren();
+    }
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,6 +100,11 @@ class _CommentChild extends State<CommentChild> {
               ],
             ),
             InkWell(
+              onLongPress: (){
+                Navigator.push(context, DialogRouter(cCommentMenu(widget.comment,widget.userId,callback: (){
+                  if(widget.remove != null) widget.remove!();
+                },)));
+              },
               onTap: (){
                 if(widget.callback != null) widget.callback!(id:widget.comment.id,nickname: widget.comment.nickname);
               },
@@ -159,7 +174,7 @@ class _CommentChild extends State<CommentChild> {
             if(!_show && widget.comment.reply > 0) InkWell(
               onTap: (){
                 if(comments.isNotEmpty){
-                  _getChildren();
+                  getChildren();
                 }
                 _show=true;
                 setState(() {});
@@ -172,16 +187,16 @@ class _CommentChild extends State<CommentChild> {
               ),
             ),
             _buildChildren(),
-            if(_show && page < total)Container(
+            if(_show)Container(
               margin: const EdgeInsets.only(top: 6,bottom: 6),
               width: MediaQuery.of(context).size.width-50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  InkWell(
+                  if( page < total) InkWell(
                     onTap: (){
                       page++;
-                      _getChildren();
+                      getChildren();
                     },
                     child: Row(
                       children: [
@@ -210,17 +225,24 @@ class _CommentChild extends State<CommentChild> {
       ],
     );
   }
-  _getChildren()async{
+  getChildren()async{
     if(page>total){
       page--;
       return;
     }
+    // if(page > 1 && pageOld == page){
+    //   for(int i = 1;i< pageOld;i++){
+    //     page = i;
+    //     getChildren();
+    //   }
+    // }
     Map<String,dynamic> result = await Request.shortVideoCommentChildren(widget.comment.id,page: page);
     print(result);
     if(result.isNotEmpty){
       if(result['total'] != null) total = result['total'];
       if(result['list']!=null){
         List<ShortComment> list = (result['list'] as List).map((e) => ShortComment.formJson(e)).toList();
+        // list = list.reversed.toList();
         if(page > 1){
           comments.addAll(list);
         }else{
@@ -293,6 +315,11 @@ class _CommentChild extends State<CommentChild> {
               ],
             ),
             InkWell(
+              onLongPress: (){
+                Navigator.push(context, DialogRouter(cCommentMenu(comment,widget.userId,callback: (){
+                  if(widget.remove != null) widget.remove!();
+                },)));
+              },
               onTap: (){
                 if(widget.callback != null) widget.callback!(id:comment.id,nickname: comment.nickname);
               },

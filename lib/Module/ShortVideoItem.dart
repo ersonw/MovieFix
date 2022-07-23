@@ -211,7 +211,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
             margin: EdgeInsets.only(bottom: 15,right: 9),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, FadeRoute(page: CommentPage(widget.video.id,videoPlayerController)));
+                Navigator.push(context, FadeRoute(page: CommentPage(widget.video.id,widget.video.userId,videoPlayerController)));
               },
               child: Column(
                 children: [

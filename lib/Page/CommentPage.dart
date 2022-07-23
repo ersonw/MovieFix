@@ -13,8 +13,9 @@ import '../Global.dart';
 class CommentPage extends StatefulWidget{
   VideoPlayerController controller;
   int id;
+  int userId;
 
-  CommentPage(this.id,this.controller,{Key? key}) : super(key: key);
+  CommentPage(this.id,this.userId,this.controller,{Key? key}) : super(key: key);
 
   @override
   _CommentPage createState() =>_CommentPage();
@@ -84,8 +85,10 @@ class _CommentPage extends State<CommentPage>{
       }else{
         toId = 0;
         hintText=null;
-        _getList();
       }
+      page=1;
+      total =1;
+      _getList();
     }else{
       CustomDialog.message('评论失败！');
     }
@@ -105,6 +108,7 @@ class _CommentPage extends State<CommentPage>{
       if(result['total'] != null) total = result['total'];
       if(result['count'] != null) count = result['count'];
       List<ShortComment> list = (result['list'] as List).map((e) => ShortComment.formJson(e)).toList();
+      // list = list.reversed.toList();
       if(page > 1){
         comments.addAll(list);
       }else{
@@ -190,7 +194,12 @@ class _CommentPage extends State<CommentPage>{
   _buildComments(){
     List<Widget> list = [];
     for(int i = 0; i < comments.length; i++){
-      list.add(CommentChild(comments[i],callback: _commentCallback,));
+      // print(comments[i].reply);
+      list.add(CommentChild(comments[i],userId: widget.userId,callback: (
+          {int? id, String? nickname}) => _commentCallback(id: id,nickname: nickname),remove: (){
+        comments.removeAt(i);
+        setState(() {});
+      },));
     }
     list.add(const Padding(padding: EdgeInsets.all(15)));
     if(list.isEmpty){
