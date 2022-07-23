@@ -103,7 +103,7 @@ class _CommentPage extends State<CommentPage>{
       return;
     }
     Map<String, dynamic> result = await Request.shortVideoComments(widget.id,page: page);
-    print(result);
+    // print(result);
     if(result.isNotEmpty){
       if(result['total'] != null) total = result['total'];
       if(result['count'] != null) count = result['count'];
@@ -204,13 +204,13 @@ class _CommentPage extends State<CommentPage>{
     list.add(const Padding(padding: EdgeInsets.all(15)));
     if(list.isEmpty){
       list.add(Center(
-        child: Text('暂未有人评论，可抢先一步评论哟～'),
+        child: Text('暂未有人评论，可抢先一步评论哟～',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
       ));
     }else if(page < total){
       list.add(GeneralRefresh.getLoading());
     }else{
       list.add(Center(
-        child: Text('没有更多咯～'),
+        child: Text('没有更多咯～',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
       ));
     }
     return Expanded(child: ListView(

@@ -6,6 +6,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
 import 'package:movie_fix/Module/PairVideoList.dart';
+import 'package:movie_fix/Module/cSwiper.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/Page/CategoryPage.dart';
 import 'package:movie_fix/Page/ConcentrationVideo.dart';
@@ -46,13 +47,13 @@ class _IndexPage extends State<IndexPage>{
   @override
   void initState() {
     SwiperData data = SwiperData();
-    data.image = 'https://23porn.oss-cn-hangzhou.aliyuncs.com/c030c05a-5ca4-4ad9-af02-6048ab526010.png';
+    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/7751d0fd-817d-470d-ba55-15bb67cf46ba.jpeg';
     data.url = data.image;
-    // _swipers.add(data);
+    _swipers.add(data);
     data = SwiperData();
-    data.image = 'https://23porn.oss-cn-hangzhou.aliyuncs.com/d95661e1-b1d2-4363-b263-ef60b965612d.png';
+    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/789cbfea-63f1-4603-a3da-913181049ca7.jpeg';
     data.url = data.image;
-    // _swipers.add(data);
+    _swipers.add(data);
     _getList();
     super.initState();
   }
@@ -192,19 +193,7 @@ class _IndexPage extends State<IndexPage>{
     widgets.add(refresh ? GeneralRefresh.getLoading() : Container());
     widgets.add(const Padding(padding: EdgeInsets.only(top: 10)));
     if(_swipers.isNotEmpty) {
-      widgets.add(Container(
-        // color: Colors.black,
-        margin: const EdgeInsets.only(top: 15,bottom: 15,left: 20,right: 20),
-        height: 180,
-        child: Swiper(
-          loop: true,
-          autoplay: true,
-          itemCount: _swipers.length,
-          itemBuilder: _buildSwiper,
-          pagination: const SwiperPagination(),
-          control: const SwiperControl(color: Colors.white),
-        ),
-      ));
+      widgets.add(cSwiper(_swipers));
     }
     if(_list.isNotEmpty){
       for(int i = 0; i < _list.length; i++){
@@ -299,25 +288,4 @@ class _IndexPage extends State<IndexPage>{
   _concentration(int id, String name)async{
     Navigator.push(context, SlideRightRoute(page:  ConcentrationVideo(id,name: name,)));
   }
-  Widget _buildSwiper(BuildContext context, int index) {
-    SwiperData _swiper = _swipers[index];
-    return InkWell(
-      onTap: () {
-        handlerSwiper(_swiper);
-      },
-      child: Container(
-        // height: 120,
-        decoration: BoxDecoration(
-          // color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          image: DecorationImage(
-            image: NetworkImage(_swiper.image),
-            fit: BoxFit.fill,
-            alignment: Alignment.center,
-          ),
-        ),
-      ),
-    );
-  }
-
 }

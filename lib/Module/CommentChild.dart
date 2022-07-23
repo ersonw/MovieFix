@@ -69,107 +69,114 @@ class _CommentChild extends State<CommentChild> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('${widget.comment.nickname}',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 12)),
-                if(widget.userId == widget.comment.userId) Container(
-                  margin: const EdgeInsets.only(left: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                    color: Colors.pinkAccent,
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 5,right: 5),
-                    child: Text('作者',style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                if(widget.comment.pin)
-                  Container(
-                  margin: const EdgeInsets.only(left: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                    color: Colors.white.withOpacity(0.15),
-                  ),
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 5,right: 5),
-                    child: Text('置顶',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 8,fontWeight: FontWeight.bold)),
-                  ),
-                ),
-              ],
-            ),
             InkWell(
-              onLongPress: (){
-                Navigator.push(context, DialogRouter(cCommentMenu(widget.comment,widget.userId,callback: (){
-                  if(widget.remove != null) widget.remove!();
-                },)));
-              },
-              onTap: (){
-                if(widget.callback != null) widget.callback!(id:widget.comment.id,nickname: widget.comment.nickname);
-              },
-              child: cRichText(widget.comment.text,style: TextStyle(color: Colors.white,fontSize: 12),left: true,maxWidth: MediaQuery.of(context).size.width-50,),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 6,bottom: 6),
-              width: MediaQuery.of(context).size.width-50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(Global.getShortDateToString(widget.comment.addTime),style: TextStyle(color: Colors.white.withOpacity(0.3),fontSize: 12)),
-                      InkWell(
-                        onTap: (){
-                          if(widget.callback != null) widget.callback!(id:widget.comment.id,nickname: widget.comment.nickname);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 5,right: 5),
-                          child: Text('回复',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 12)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: ()async{
-                      if(widget.comment.like){
-                        if(await Request.shortVideoCommentUnlike(widget.comment.id) == true){
-                          widget.comment.like = false;
-                          widget.comment.likes--;
-                        }
-                      }else{
-                        if(await Request.shortVideoCommentLike(widget.comment.id) == true){
-                          widget.comment.like = true;
-                          widget.comment.likes++;
-                        }
-                      }
-                      setState(() {});
-                    },
-                    child: Row(
+                onLongPress: (){
+                  Navigator.push(context, DialogRouter(cCommentMenu(widget.comment,widget.userId,callback: (){
+                    if(widget.remove != null) widget.remove!();
+                  },)));
+                },
+                onTap: (){
+                  if(widget.callback != null) widget.callback!(id:widget.comment.id,nickname: widget.comment.nickname);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-
-                        AnimatedSwitcher(
-                          transitionBuilder: (child, anim){
-                            return ScaleTransition(scale: anim,child: child);
-                          },
-                          duration: Duration(milliseconds: 300),
-                          child: widget.comment.like?Container(
-                            margin: const EdgeInsets.only(left: 6,right: 3),
-                            child: Icon(Icons.thumb_up,size: 15,color: Colors.red,),
-                          ):Container(
-                            margin: const EdgeInsets.only(left: 6,right: 3),
-                            child: Icon(Icons.thumb_up_alt_outlined,size: 15,color: Colors.white.withOpacity(0.6),),
+                        Text('${widget.comment.nickname}',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 12)),
+                        if(widget.userId == widget.comment.userId) Container(
+                          margin: const EdgeInsets.only(left: 2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(3)),
+                            color: Colors.pinkAccent,
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 5,right: 5),
+                            child: Text('作者',style: TextStyle(color: Colors.white,fontSize: 8,fontWeight: FontWeight.bold)),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(right: 6),
-                          child: Text(Global.getNumbersToChinese(widget.comment.likes),style: TextStyle(color: widget.comment.like?Colors.red:Colors.white.withOpacity(0.6),fontSize: 12)),
-                        ),
+                        if(widget.comment.pin)
+                          Container(
+                            margin: const EdgeInsets.only(left: 2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(3)),
+                              color: Colors.white.withOpacity(0.15),
+                            ),
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 5,right: 5),
+                              child: Text('置顶',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 8,fontWeight: FontWeight.bold)),
+                            ),
+                          ),
                       ],
                     ),
-                  ),
-                ],
-              ),
+                    cRichText(widget.comment.text,style: TextStyle(color: Colors.white,fontSize: 12),left: true,maxWidth: MediaQuery.of(context).size.width-50,),
+                    Container(
+                      margin: const EdgeInsets.only(top: 6,bottom: 6),
+                      width: MediaQuery.of(context).size.width-50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(Global.getShortDateToString(widget.comment.addTime),style: TextStyle(color: Colors.white.withOpacity(0.3),fontSize: 12)),
+                              InkWell(
+                                onTap: (){
+                                  if(widget.callback != null) widget.callback!(id:widget.comment.id,nickname: widget.comment.nickname);
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 5,right: 5),
+                                  child: Text('回复',style: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 12)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          InkWell(
+                            onTap: ()async{
+                              if(widget.comment.like){
+                                if(await Request.shortVideoCommentUnlike(widget.comment.id) == true){
+                                  widget.comment.like = false;
+                                  widget.comment.likes--;
+                                }
+                              }else{
+                                if(await Request.shortVideoCommentLike(widget.comment.id) == true){
+                                  widget.comment.like = true;
+                                  widget.comment.likes++;
+                                }
+                              }
+                              setState(() {});
+                            },
+                            child: Row(
+                              children: [
+
+                                AnimatedSwitcher(
+                                  transitionBuilder: (child, anim){
+                                    return ScaleTransition(scale: anim,child: child);
+                                  },
+                                  duration: Duration(milliseconds: 300),
+                                  child: widget.comment.like?Container(
+                                    margin: const EdgeInsets.only(left: 6,right: 3),
+                                    child: Icon(Icons.thumb_up,size: 15,color: Colors.red,),
+                                  ):Container(
+                                    margin: const EdgeInsets.only(left: 6,right: 3),
+                                    child: Icon(Icons.thumb_up_alt_outlined,size: 15,color: Colors.white.withOpacity(0.6),),
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(right: 6),
+                                  child: Text(Global.getNumbersToChinese(widget.comment.likes),style: TextStyle(color: widget.comment.like?Colors.red:Colors.white.withOpacity(0.6),fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
             ),
             if(!_show && widget.comment.reply > 0) InkWell(
               onTap: (){
@@ -237,7 +244,7 @@ class _CommentChild extends State<CommentChild> {
     //   }
     // }
     Map<String,dynamic> result = await Request.shortVideoCommentChildren(widget.comment.id,page: page);
-    print(result);
+    // print(result);
     if(result.isNotEmpty){
       if(result['total'] != null) total = result['total'];
       if(result['list']!=null){

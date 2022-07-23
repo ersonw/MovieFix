@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'AssetsIcon.dart';
+import 'Module/Undeveloped.dart';
+import 'Page/GamePage.dart';
 import 'Page/IndexPage.dart';
 
 import 'Global.dart';
@@ -26,8 +28,8 @@ class _BottomAppBarState extends State<BottomAppBarState> {
     super.initState();
     _eachView.add(const IndexPage());
     _eachView.add(const ShortVideoPage());
-    _eachView.add(Container());
-    _eachView.add(Container());
+    _eachView.add(const Undeveloped());
+    _eachView.add(const GamePage());
     _eachView.add(Container());
   }
   Future<void> _popUps(BuildContext context)async {
@@ -91,19 +93,24 @@ class _BottomAppBarState extends State<BottomAppBarState> {
       //   // child: Image.asset(ImageIcons.game),
       // ),
       bottomNavigationBar: BottomAppBar(
-        color: const Color(0xff201e2b),
+        // color: const Color(0xff201e2b),
+        color: Colors.black.withOpacity(0.3),
         shape: const CircularNotchedRectangle(),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            InkWell(
+            GestureDetector(
                 child: SizedBox(
                   height: 60,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(_index == 0 ? AssetsIcon.indexActiveIcon : AssetsIcon.indexIcon,width: _index == 0 ? 30 : 25,),
-                      const Text("首页",style: TextStyle()),
+                      // Image.asset(_index == 0 ? AssetsIcon.indexActiveIcon : AssetsIcon.indexIcon,width: _index == 0 ? 30 : 25,),
+                      Text("首页",style: TextStyle(color: _index == 0 ?Colors.white:Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -113,13 +120,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   });
                 }
             ),
-            InkWell(
+            GestureDetector(
                 child: SizedBox(
                   height: 60,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(_index == 1 ? AssetsIcon.videoActiveIcon : AssetsIcon.videoIcon,width: _index == 1 ? 30 : 25,),
-                      const Text("短视频",style: TextStyle()),
+                      // Image.asset(_index == 1 ? AssetsIcon.videoActiveIcon : AssetsIcon.videoIcon,width: _index == 1 ? 30 : 25,),
+                      Text("短视频",style: TextStyle(color: _index == 1 ?Colors.white:Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -130,13 +140,28 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 }
             ),
             // const Padding(padding: EdgeInsets.only(left: 10)),
-            InkWell(
+            GestureDetector(
                 child: SizedBox(
                   height: 60,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(_index == 2 ? AssetsIcon.likeActiveIcon : AssetsIcon.likeIcon,width: _index == 2 ? 30 : 25,),
-                      const Text("心动",style: TextStyle()),
+                      // Image.asset(_index == 2 ? AssetsIcon.likeActiveIcon : AssetsIcon.likeIcon,width: _index == 2 ? 30 : 25,),
+                      Container(
+                        width: 45,
+                        height: 27,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          color: Colors.transparent,
+                          border: Border.all(width: 2,color: _index == 2 ?Colors.white:Colors.white.withOpacity(0.6)),
+                        ),
+                        child: Center(
+                          child: Icon(Icons.add_rounded,color: _index == 2 ?Colors.white:Colors.white.withOpacity(0.6)),
+                        ),
+                      ),
+                      // Text("心动",style: TextStyle(color: _index == 2 ?Colors.white:Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -146,13 +171,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   });
                 }
             ),
-            InkWell(
+            GestureDetector(
                 child: SizedBox(
                   height: 60,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(_index == 3 ? AssetsIcon.gameActiveIcon : AssetsIcon.gameIcon,width: _index == 3 ? 30 : 25,),
-                      const Text("游戏",style: TextStyle()),
+                      // Image.asset(_index == 3 ? AssetsIcon.gameActiveIcon : AssetsIcon.gameIcon,width: _index == 3 ? 30 : 25,),
+                      Text("游戏",style: TextStyle(color: _index == 3 ?Colors.white:Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -163,13 +191,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 }
             ),
 
-            InkWell(
+            GestureDetector(
                 child: SizedBox(
                   height: 60,
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(_index == 4 ? AssetsIcon.myActiveIcon : AssetsIcon.myIcon,width: _index == 4 ? 30 : 25,),
-                      const Text("我的",style: TextStyle()),
+                      // Image.asset(_index == 4 ? AssetsIcon.myActiveIcon : AssetsIcon.myIcon,width: _index == 4 ? 30 : 25,),
+                      Text("我的",style: TextStyle(color: _index == 4 ?Colors.white:Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),

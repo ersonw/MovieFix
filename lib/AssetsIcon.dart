@@ -33,4 +33,8 @@ class AssetsIcon {
   static const String starIcon = ('assets/icons/starIcon.png');
   static const String activeIcon = ('assets/icons/activeIcon.png');
 
+  static const String money = ('assets/icons/money.png');
+  static const String wallet = ('assets/icons/wallet.png');
+  static const String game = ('assets/icons/game.png');
+  static const String message = ('assets/icons/message.png');
 }
