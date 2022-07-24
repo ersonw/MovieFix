@@ -102,8 +102,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             GestureDetector(
-                child: SizedBox(
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
                   height: 60,
+                  width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -121,8 +123,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 }
             ),
             GestureDetector(
-                child: SizedBox(
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
                   height: 60,
+                  width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -141,8 +145,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
             ),
             // const Padding(padding: EdgeInsets.only(left: 10)),
             GestureDetector(
-                child: SizedBox(
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
                   height: 60,
+                  width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -172,8 +178,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 }
             ),
             GestureDetector(
-                child: SizedBox(
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
                   height: 60,
+                  width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -192,8 +200,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
             ),
 
             GestureDetector(
-                child: SizedBox(
+                child: Container(
+                  color: Colors.black.withOpacity(0.1),
                   height: 60,
+                  width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,

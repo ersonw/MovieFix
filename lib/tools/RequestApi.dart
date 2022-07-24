@@ -51,7 +51,10 @@ class RequestApi {
   static const shortVideoFriend = '/api/shortVideo/friend/{id}/{page}';
   static const shortVideoConcentration = '/api/shortVideo/concentration/{page}';
 
+  static const gameTest = '/api/game/test';
   static const gameList = '/api/game/list';
+  static const gameRecords = '/api/game/records';
+  static const gameEnter = '/api/game/enterGame';
   static const gameScroll = '/api/game/scroll';
   static const gameBalance = '/api/game/getBalance';
   static const gamePublicity = '/api/game/publicity';

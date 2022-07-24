@@ -588,4 +588,24 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> gameRecords()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameRecords, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> gameEnter({int id=0})async{
+    Loading.show();
+    String? result = await _post(RequestApi.gameEnter, {'id': id});
+    // print(result);
+    if(result != null && jsonDecode(result)['gameUrl'] != null){
+      return jsonDecode(result)['gameUrl'];
+    }
+    return null;
+  }
+  static Future<void> gameTest()async{
+    await _get(RequestApi.gameTest, {});
+  }
 }
