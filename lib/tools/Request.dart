@@ -542,4 +542,50 @@ class Request {
     }
     return false;
   }
+  static Future<Map<String, dynamic>> gameScroll()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameScroll, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<double> gameBalance()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameBalance, {});
+    if(result != null && jsonDecode(result)['balance'] != null){
+      return jsonDecode(result)['balance'];
+    }
+    return 0.00;
+  }
+  static Future<Map<String, dynamic>> gamePublicity()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gamePublicity, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<void> gamePublicityReport({int id=0})async{
+    await _get(RequestApi.gamePublicityReport.replaceAll('{id}', '$id'), {});
+  }
+  static Future<Map<String, dynamic>> videoPublicity()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.videoPublicity, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<void> videoPublicityReport({int id=0})async{
+    await _get(RequestApi.videoPublicityReport.replaceAll('{id}', '$id'), {});
+  }
+  static Future<Map<String, dynamic>> gameList()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameList, {});
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

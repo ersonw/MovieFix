@@ -30,6 +30,8 @@ class RequestApi {
   static const videoMembership = '/api/video/membership/{page}';
   static const videoDiamond = '/api/video/diamond/{page}';
   static const videoRank = '/api/video/rank/{first}/{second}';
+  static const videoPublicity = '/api/video/publicity';
+  static const videoPublicityReport = '/api/video/publicity/report/{id}';
 
   static const shortVideoHeartbeat = '/api/shortVideo/heartbeat';
   static const shortVideoUpload = '/api/shortVideo/upload';
@@ -48,4 +50,10 @@ class RequestApi {
   static const shortVideoUnlike = '/api/shortVideo/unlike/{id}';
   static const shortVideoFriend = '/api/shortVideo/friend/{id}/{page}';
   static const shortVideoConcentration = '/api/shortVideo/concentration/{page}';
+
+  static const gameList = '/api/game/list';
+  static const gameScroll = '/api/game/scroll';
+  static const gameBalance = '/api/game/getBalance';
+  static const gamePublicity = '/api/game/publicity';
+  static const gamePublicityReport = '/api/game/publicity/report/{id}';
 }

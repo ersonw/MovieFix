@@ -46,15 +46,8 @@ class _IndexPage extends State<IndexPage>{
   bool refresh = true;
   @override
   void initState() {
-    SwiperData data = SwiperData();
-    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/7751d0fd-817d-470d-ba55-15bb67cf46ba.jpeg';
-    data.url = data.image;
-    _swipers.add(data);
-    data = SwiperData();
-    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/789cbfea-63f1-4603-a3da-913181049ca7.jpeg';
-    data.url = data.image;
-    _swipers.add(data);
     _getList();
+    _getPublicity();
     super.initState();
   }
   Future<void> _onRefresh() async {
@@ -62,6 +55,13 @@ class _IndexPage extends State<IndexPage>{
     _getList();
     if(!mounted) return;
     setState(() {});
+  }
+  _getPublicity()async{
+    Map<String, dynamic> result = await Request.videoPublicity();
+    if (result['list'] != null) {
+      _swipers = (result['list'] as List).map((e) => SwiperData.formJson(e)).toList();
+    }
+    if(mounted) setState(() {});
   }
   _getList()async{
     Map<String,dynamic> map = await Request.videoConcentrations();
@@ -193,7 +193,9 @@ class _IndexPage extends State<IndexPage>{
     widgets.add(refresh ? GeneralRefresh.getLoading() : Container());
     widgets.add(const Padding(padding: EdgeInsets.only(top: 10)));
     if(_swipers.isNotEmpty) {
-      widgets.add(cSwiper(_swipers));
+      widgets.add(cSwiper(_swipers,callback: (SwiperData data){
+        Request.videoPublicityReport(id: data.id);
+      },));
     }
     if(_list.isNotEmpty){
       for(int i = 0; i < _list.length; i++){

@@ -4,7 +4,10 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Module/cSwiper.dart';
 import 'package:movie_fix/data/Announcement.dart';
+import 'package:movie_fix/data/Game.dart';
 import 'package:movie_fix/data/SwiperData.dart';
+import 'package:movie_fix/tools/Loading.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/YYMarquee.dart';
 
 class GamePage extends StatefulWidget{
@@ -18,22 +21,38 @@ class GamePage extends StatefulWidget{
 class _GamePage extends State<GamePage>{
   List<Announcement> announcements =[];
   List<SwiperData> _swipers = [];
+  List<Game> games = [];
+  double balance = 0;
   @override
   void initState() {
-    announcements.add(Announcement(text2: 'sdadsadsad13大大大'));
-    announcements.add(Announcement(text2: 'sdadsadsad13大大大'));
-    announcements.add(Announcement(text2: 'sdadsadsad13大大大'));
-    announcements.add(Announcement(text2: 'sdadsadsad13大大大'));
-    announcements.add(Announcement(text2: 'sdadsadsad13大大大'));
-    SwiperData data = SwiperData();
-    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/7751d0fd-817d-470d-ba55-15bb67cf46ba.jpeg';
-    data.url = data.image;
-    _swipers.add(data);
-    data = SwiperData();
-    data.image = 'http://github1.oss-cn-hongkong.aliyuncs.com/789cbfea-63f1-4603-a3da-913181049ca7.jpeg';
-    data.url = data.image;
-    _swipers.add(data);
+    _getAnnouncements();
+    _getBalance();
+    _getPublicity();
+    _getGames();
     super.initState();
+  }
+  _getGames() async{
+    Map<String, dynamic> result = await Request.gameList();
+    print(result);
+    if(result['list'] != null){
+      games = (result['list'] as List).map((e) => Game.fromJson(e)).toList();
+      if(mounted) setState(() {});
+    }
+  }
+  _getPublicity()async{
+    Map<String, dynamic> result = await Request.gamePublicity();
+    if (result['list'] != null) {
+      _swipers = (result['list'] as List).map((e) => SwiperData.formJson(e)).toList();
+    }
+    if(mounted) setState(() {});
+  }
+  _getBalance()async{
+    balance = await Request.gameBalance();
+  }
+  _getAnnouncements()async{
+    Map<String, dynamic> result = await Request.gameScroll();
+    if(result.isNotEmpty && result['list'] != null) announcements = (result['list'] as List).map((e) => Announcement.fromJson(e)).toList();
+    if(mounted) setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -157,9 +176,24 @@ class _GamePage extends State<GamePage>{
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('钱包余额',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('钱包余额',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+                    const Padding(padding: EdgeInsets.only(left: 9)),
+                    InkWell(
+                      onTap: (){
+                        Loading.show();
+                        _getBalance();
+                      },
+                      child: Icon(Icons.refresh,size: 24,),
+                    ),
+                  ],
+                ),
                 const Padding(padding: EdgeInsets.only(top: 9)),
-                Text('¥ 3680',style: TextStyle(color: Colors.white,fontSize: 30),),
+                Text('¥ $balance',style: TextStyle(color: Colors.white,fontSize: 30),),
               ],
             ),
           ),
@@ -249,7 +283,9 @@ class _GamePage extends State<GamePage>{
             ),
           ],
         ),
-        if(_swipers.isNotEmpty) cSwiper(_swipers),
+        if(_swipers.isNotEmpty) cSwiper(_swipers,height: 100,callback: (SwiperData data){
+          Request.gamePublicityReport(id: data.id);
+        },),
       ],
     );
   }

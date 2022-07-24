@@ -2,14 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/data/SwiperData.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../Global.dart';
 
 class cSwiper extends StatefulWidget{
+  void Function(SwiperData data)? callback;
   List<SwiperData> swipers;
-
-  cSwiper(this.swipers,{Key? key}) : super(key: key);
+  double? height;
+  bool loop;
+  bool autoPlay;
+  bool control;
+  cSwiper(this.swipers,{Key? key,this.height,this.callback,this.loop=true,this.autoPlay=true,this.control=false}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _cSwiper();
@@ -21,14 +26,14 @@ class _cSwiper extends State<cSwiper>{
     return Container(
       // color: Colors.black,
       margin: const EdgeInsets.only(top: 15,bottom: 15,left: 20,right: 20),
-      height: 180,
+      height: widget.height??180,
       child: Swiper(
-        loop: true,
-        autoplay: true,
+        loop: widget.loop,
+        autoplay: widget.autoPlay,
         itemCount: widget.swipers.length,
         itemBuilder: _buildSwiper,
         pagination: const SwiperPagination(),
-        control: const SwiperControl(color: Colors.white),
+        control: widget.control?const SwiperControl(color: Colors.white):null,
       ),
     );
   }
@@ -37,6 +42,7 @@ class _cSwiper extends State<cSwiper>{
     return InkWell(
       onTap: () {
         handlerSwiper(_swiper);
+        if(widget.callback != null) widget.callback!(_swiper);
       },
       child: Container(
         // height: 120,
