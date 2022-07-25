@@ -13,6 +13,8 @@ import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/YYMarquee.dart';
 
+import 'GameRechargePage.dart';
+
 class GamePage extends StatefulWidget{
   const GamePage({Key? key}) : super(key: key);
 
@@ -68,8 +70,9 @@ class _GamePage extends State<GamePage>{
     balance = await Request.gameBalance();
   }
   _enterGame({int id=0})async{
+    Loading.show();
     String? result = await Request.gameEnter(id: id);
-    print(result);
+    // print(result);
     if(result != null){
       Navigator.push(context, FadeRoute(page: cGameWeb(result))).then((value) {
         _getRecords();
@@ -372,7 +375,8 @@ class _GamePage extends State<GamePage>{
           children: [
             InkWell(
               onTap: (){
-                Request.gameTest().then((value) => _getBalance());
+                // Request.gameTest().then((value) => _getBalance());
+                Navigator.push(context, FadeRoute(page: GameRechargePage()));
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,
@@ -459,13 +463,13 @@ class _GamePage extends State<GamePage>{
         if(_swipers.isNotEmpty) cSwiper(_swipers,height: 100,callback: (SwiperData data){
           Request.gamePublicityReport(id: data.id);
         },),
-        Container(
+        if(records.isNotEmpty)Container(
           margin: const EdgeInsets.all(9),
           alignment: Alignment.centerLeft,
           child: Text('最近游戏'),
         ),
         _buildRecords(),
-        Container(
+        if(games.isNotEmpty)Container(
           margin: const EdgeInsets.all(9),
           alignment: Alignment.centerLeft,
           child: Text('全部游戏'),

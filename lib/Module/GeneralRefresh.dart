@@ -142,7 +142,6 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     if(widget.children != null) widgets.addAll(widget.children!);
     widgets.add(widget.footer ?? Container());
     if(widget.onRefresh != null) {
-
       return MediaQuery.removePadding(
         removeTop: true,
         removeBottom: true,
