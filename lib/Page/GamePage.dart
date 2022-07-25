@@ -74,6 +74,7 @@ class _GamePage extends State<GamePage>{
     String? result = await Request.gameEnter(id: id);
     // print(result);
     if(result != null){
+      // Loading.show();
       Navigator.push(context, FadeRoute(page: cGameWeb(result))).then((value) {
         _getRecords();
         _getBalance();
@@ -376,7 +377,8 @@ class _GamePage extends State<GamePage>{
             InkWell(
               onTap: (){
                 // Request.gameTest().then((value) => _getBalance());
-                Navigator.push(context, FadeRoute(page: GameRechargePage()));
+                // Loading.show();
+                Navigator.push(context, SlideRightRoute(page: GameRechargePage()));
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,

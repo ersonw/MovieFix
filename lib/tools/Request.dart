@@ -608,4 +608,22 @@ class Request {
   static Future<void> gameTest()async{
     await _get(RequestApi.gameTest, {});
   }
+  static Future<Map<String, dynamic>> gameButtons()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameButtons, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameButton({int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameButton.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

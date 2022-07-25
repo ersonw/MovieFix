@@ -103,7 +103,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
           children: <Widget>[
             GestureDetector(
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.01),
                   height: 60,
                   width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
@@ -124,7 +124,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
             ),
             GestureDetector(
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.01),
                   height: 60,
                   width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
@@ -146,7 +146,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
             // const Padding(padding: EdgeInsets.only(left: 10)),
             GestureDetector(
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.01),
                   height: 60,
                   width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
@@ -179,7 +179,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
             ),
             GestureDetector(
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.01),
                   height: 60,
                   width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(
@@ -201,7 +201,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
 
             GestureDetector(
                 child: Container(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.01),
                   height: 60,
                   width: MediaQuery.of(context).size.width / 5.5,
                   child: Column(

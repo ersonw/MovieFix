@@ -17,6 +17,8 @@ class AssetsIcon {
   static const String classIcon = ('assets/icons/classIcon.png');
   static const String diamondIcon = ('assets/icons/diamondIcon.png');
   static const String diamondTag = ('assets/icons/diamondTag.png');
+  static const String diamond = ('assets/icons/diamond.png');
+  static const String less = ('assets/icons/less.png');
   static const String diamondTagBK = ('assets/icons/diamondTagBK.png');
   static const String playIcon = ('assets/icons/playIcon.png');
   static const String popularIcon = ('assets/icons/popularIcon.png');
@@ -37,4 +39,6 @@ class AssetsIcon {
   static const String wallet = ('assets/icons/wallet.png');
   static const String game = ('assets/icons/game.png');
   static const String message = ('assets/icons/message.png');
+  static const String select = ('assets/icons/select.png');
+  static const String unselect = ('assets/icons/unselect.png');
 }

@@ -12,6 +12,7 @@ class GeneralRefresh extends StatefulWidget {
   final Widget? body;
   final List<Widget>? children;
   final Widget? footer;
+  final Widget? expanded;
   final ScrollController? controller;
   final Function()? callback;
   void Function(bool value)? onRefresh;
@@ -27,6 +28,7 @@ class GeneralRefresh extends StatefulWidget {
     this.body,
     this.children,
     this.footer,
+    this.expanded,
   }) : super(key: key);
   static getLoading(){
     return Container(
@@ -126,7 +128,11 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     }
     widgets.add(widget.header ?? Container());
     widgets.add(widget.body ?? Container());
-    widgets.add(Expanded(child: _buildList(context)));
+    widgets.add(Expanded(child: _buildList(context),flex: 9,));
+    widgets.add(widget.expanded ?? Container());
+    // if(widget.expanded != null){
+    //   widgets.add(Expanded(child: widget.expanded!));
+    // }
     return widgets;
   }
   _buildList(BuildContext context){
