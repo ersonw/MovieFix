@@ -53,6 +53,7 @@ class RequestApi {
 
   static const gameTest = '/api/game/test';
   static const gameList = '/api/game/list';
+  static const gamePayment = '/api/game/payment';
   static const gameRecords = '/api/game/records';
   static const gameEnter = '/api/game/enterGame';
   static const gameScroll = '/api/game/scroll';

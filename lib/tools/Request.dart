@@ -626,4 +626,17 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<String?> gamePayment( {int id=0,int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.gamePayment, data);
+    print(result);
+    if(result != null && jsonDecode(result)['url'] != null){
+      return jsonDecode(result)['url'];
+    }
+    return null;
+  }
 }

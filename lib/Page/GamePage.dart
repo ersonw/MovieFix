@@ -32,12 +32,16 @@ class _GamePage extends State<GamePage>{
   bool refresh = true;
   @override
   void initState() {
+    _init();
+    super.initState();
+  }
+  _init(){
+    refresh = true;
     _getAnnouncements();
     _getBalance();
     _getPublicity();
     _getGames();
     _getRecords();
-    super.initState();
   }
   _getGames() async{
     Map<String, dynamic> result = await Request.gameList();
@@ -68,6 +72,7 @@ class _GamePage extends State<GamePage>{
   _getBalance()async{
     refresh = false;
     balance = await Request.gameBalance();
+    if(mounted) setState(() {});
   }
   _enterGame({int id=0})async{
     Loading.show();

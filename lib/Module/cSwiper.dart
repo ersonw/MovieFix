@@ -61,7 +61,8 @@ class _cSwiper extends State<cSwiper>{
   handlerSwiper(SwiperData data){
     switch(data.type){
       case SwiperData.OPEN_WEB_OUTSIDE:
-        launchUrl(Uri.parse(data.url));
+        // launchUrl(Uri.parse(data.url));
+        launch(data.url,enableJavaScript: true,enableDomStorage: true,universalLinksOnly: true);
         break;
       case SwiperData.OPEN_WEB_INSIDE:
         Global.openWebview(data.url, inline: true);

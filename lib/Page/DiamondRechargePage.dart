@@ -10,35 +10,32 @@ import 'dart:math' as math;
 
 import 'package:url_launcher/url_launcher.dart';
 
-class GameRechargePage extends StatefulWidget{
-  const GameRechargePage({Key? key}) : super(key: key);
+class DiamondRechargePage extends StatefulWidget{
+  const DiamondRechargePage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _GameRechargePage();
+    return _DiamondRechargePage();
   }
 }
-class _GameRechargePage extends State<GameRechargePage>{
+class _DiamondRechargePage extends State<DiamondRechargePage>{
   double balance = 0.00;
   List<Button> buttons = [];
   List<PayType> types = [];
   int buttonIndex = 0;
   int typeIndex = 0;
-  bool refresh = false;
   @override
   void initState() {
     _init();
     super.initState();
   }
   _init(){
-    refresh = true;
     _getBalance();
     _getButtons();
   }
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
-      refresh: refresh,
       onRefresh: (bool value)=>_init(),
       title: "游戏充值",
       children: [
@@ -181,8 +178,7 @@ class _GameRechargePage extends State<GameRechargePage>{
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Flexible(child: Text('${button.amount}',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),)),
-                            // Image.asset(AssetsIcon.diamond,),
-                            Icon(Icons.monetization_on,color: Colors.orangeAccent,size: 18,),
+                            Image.asset(AssetsIcon.diamond,),
                           ],
                         ),
                         RichText(text: TextSpan(
@@ -380,7 +376,6 @@ class _GameRechargePage extends State<GameRechargePage>{
   }
   _getButtons()async{
     Map<String,dynamic> result = await Request.gameButtons();
-    refresh = false;
     if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
     _getButton();
     if(mounted) setState(() {});
