@@ -145,6 +145,9 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     ) : Container());
     // widgets.add(const Padding(padding: EdgeInsets.only(top: 15)));
     // widgets.add(widget.body);
+    // if(widget.children != null && widget.callback != null){
+    //   widget.children?.add(GeneralRefresh.getLoading());
+    // }
     if(widget.children != null) widgets.addAll(widget.children!);
     widgets.add(widget.footer ?? Container());
     if(widget.onRefresh != null) {

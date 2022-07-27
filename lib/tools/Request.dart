@@ -639,4 +639,22 @@ class Request {
     }
     return null;
   }
+  static Future<Map<String, dynamic>> gameOrder({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameOrder.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameFunds({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameFunds.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

@@ -2,13 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Module/cMessage.dart';
+import 'package:movie_fix/Page/GameFundsPage.dart';
+import 'package:movie_fix/Page/GameRechargeRecordPage.dart';
 import 'package:movie_fix/data/Button.dart';
 import 'package:movie_fix/data/PayType.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'dart:math' as math;
 
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Global.dart';
 
 class GameRechargePage extends StatefulWidget{
   const GameRechargePage({Key? key}) : super(key: key);
@@ -326,7 +332,9 @@ class _GameRechargePage extends State<GameRechargePage>{
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, SlideRightRoute(page: GameRechargeRecordPage()));
+                  },
                   child: Row(
                     children: [
                       Transform(
@@ -342,7 +350,9 @@ class _GameRechargePage extends State<GameRechargePage>{
                   ),
                 ),
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, SlideRightRoute(page: GameFundsPage()));
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.monetization_on_outlined,),
@@ -367,6 +377,7 @@ class _GameRechargePage extends State<GameRechargePage>{
     if(result == null) return;
     launch(result,enableJavaScript: true,enableDomStorage: true,universalLinksOnly: true);
     // launchUrl(Uri.parse(result),webViewConfiguration: WebViewConfiguration());
+    Navigator.push(context, DialogRouter( cMessage(title: '温馨提示提醒',text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',)));
   }
   _getBalance()async{
     balance = await Request.gameBalance();

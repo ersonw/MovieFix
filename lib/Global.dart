@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:movie_fix/Module/cToast.dart';
 import 'package:movie_fix/tools/MinioUtil.dart';
 import 'Page/ShareVideoPage.dart';
 import 'tools/MessageUtil.dart';
@@ -35,7 +36,7 @@ import 'package:encrypt/encrypt.dart' as XYQ;
 import 'package:crypto/crypto.dart';
 import 'package:convert/convert.dart';
 
-
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 final GeneralModel generalModel = GeneralModel();
 final ConfigModel configModel = ConfigModel();
 final UserModel userModel = UserModel();
@@ -259,8 +260,9 @@ class Global {
     String? savePath = await getPhoneLocalPath();
     return '$savePath$path';
   }
-  static void showWebColoredToast(String msg) {
+  static Future<void> showWebColoredToast(String msg) async{
     print('Toast:$msg}');
+    await Navigator.push(mainContext, DialogRouter(cToast(msg)));
     // Fluttertoast.showToast(
     //   msg: msg,
     //   toastLength: Toast.LENGTH_SHORT,
