@@ -54,7 +54,7 @@ class _GameRechargePage extends State<GameRechargePage>{
           InkWell(
             onTap: _payment,
             child: Container(
-              margin: const EdgeInsets.only(left: 15,right: 15,bottom: 60),
+              margin: const EdgeInsets.all(15),
               width: MediaQuery.of(context).size.width,
               height: 54,
               decoration: BoxDecoration(
@@ -72,6 +72,7 @@ class _GameRechargePage extends State<GameRechargePage>{
               child: Text('确认充值',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
             ),
           ),
+        const Padding(padding: EdgeInsets.all(30))
       ],
     );
   }

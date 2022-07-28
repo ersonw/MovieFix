@@ -72,8 +72,8 @@ class Global {
       deviceId = await getUUID();
       platform = Platform.operatingSystem;
       // print(platform);
-      // _openinstallFlutterPlugin.init(wakeupHandler);
-      // _openinstallFlutterPlugin.install(installHandler);
+      _openinstallFlutterPlugin.init(wakeupHandler);
+      _openinstallFlutterPlugin.install(installHandler);
       packageInfo = await PackageInfo.fromPlatform();
       // print(packageInfo.buildNumber);
       if(userModel.hasToken() == false){
@@ -168,6 +168,7 @@ class Global {
     //     }, error: (error) {});
   }
   static Future<void> wakeupHandler(Map<String, dynamic> data) async {
+    print(data);
     // if(null != data['bindData']){
     //   Map<String, dynamic> map = jsonDecode(data['bindData']);
     //   if(null != map['code']){
@@ -310,6 +311,15 @@ class Global {
       print(e);
     }
     return null;
+  }
+  static String getPriceNumber(int number,{bool fixed = false}) {
+    double price = number / 100;
+    // if (fixed) {
+    //   price = price / 100;
+    // }
+    String result = fixed ? price.toStringAsFixed(2): price.toStringAsFixed(0);
+    if(price < 0) return result;
+    return '+$result';
   }
   static String getDateTime(int date) {
     if(date > 9999999999){

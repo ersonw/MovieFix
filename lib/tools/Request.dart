@@ -633,7 +633,7 @@ class Request {
       'toId': toId,
     };
     String? result = await _post(RequestApi.gamePayment, data);
-    print(result);
+    // print(result);
     if(result != null && jsonDecode(result)['url'] != null){
       return jsonDecode(result)['url'];
     }
@@ -656,5 +656,63 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameCashOutBalance()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameCashOutBalance, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameCashOutGetConfig()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameCashOutGetConfig, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameCashOutGetCards({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.gameCashOutGetCards.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> gameCashOutEditCard( {int id=0,String name='',String bank='',String card='',String address=''})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'name': name,
+      'bank': bank,
+      'card': card,
+      'address': address,
+    };
+    String? result = await _post(RequestApi.gameCashOutEditCard, data);
+    print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return {};
+  }
+  static Future<Map<String, dynamic>> gameCashOutAddCard( {String name='',String bank='',String card='',String address=''})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'name': name,
+      'bank': bank,
+      'card': card,
+      'address': address,
+    };
+    String? result = await _post(RequestApi.gameCashOutAddCard, data);
+    print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return {};
   }
 }

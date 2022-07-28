@@ -105,7 +105,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 child: Container(
                   color: Colors.black.withOpacity(0.01),
                   height: 60,
-                  width: MediaQuery.of(context).size.width / 5.5,
+                  width: MediaQuery.of(context).size.width / 6,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +126,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 child: Container(
                   color: Colors.black.withOpacity(0.01),
                   height: 60,
-                  width: MediaQuery.of(context).size.width / 5.5,
+                  width: MediaQuery.of(context).size.width / 6,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -181,7 +181,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 child: Container(
                   color: Colors.black.withOpacity(0.01),
                   height: 60,
-                  width: MediaQuery.of(context).size.width / 5.5,
+                  width: MediaQuery.of(context).size.width / 6,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -203,7 +203,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 child: Container(
                   color: Colors.black.withOpacity(0.01),
                   height: 60,
-                  width: MediaQuery.of(context).size.width / 5.5,
+                  width: MediaQuery.of(context).size.width / 6,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,

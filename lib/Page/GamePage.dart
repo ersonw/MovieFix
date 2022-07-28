@@ -13,6 +13,7 @@ import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/YYMarquee.dart';
 
+import 'GameCashOutPage.dart';
 import 'GameRechargePage.dart';
 
 class GamePage extends StatefulWidget{
@@ -404,7 +405,9 @@ class _GamePage extends State<GamePage>{
               ),
             ),
             InkWell(
-              onTap: (){},
+              onTap: (){
+                Navigator.push(context, SlideRightRoute(page: GameCashOutPage()));
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,
                 height: MediaQuery.of(context).size.width / 5,

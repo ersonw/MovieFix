@@ -103,7 +103,7 @@ class _GameFundsPage extends State<GameFundsPage>{
                       children: [
                         Container(
                           // child: Text('+${(fund.amount / 100).toStringAsFixed(2)}',style: TextStyle(color: Colors.red,fontSize: 30),),
-                          child: Text('+${(fund.amount / 100).toStringAsFixed(0)}',style: TextStyle(color: Colors.red,fontSize: 30),),
+                          child: Text(Global.getPriceNumber(fund.amount),style: TextStyle(color: Colors.red,fontSize: 30),),
                         ),
                         Icon(Icons.monetization_on,color: Colors.orange,size: 18,),
                       ],

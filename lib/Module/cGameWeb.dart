@@ -2,6 +2,9 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:movie_fix/Page/GameCashOutPage.dart';
+import 'package:movie_fix/Page/GameRechargePage.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
@@ -17,9 +20,8 @@ class cGameWeb extends StatefulWidget{
   }
 }
 class _cGameWeb extends State<cGameWeb>{
-  final GlobalKey _parentKey = GlobalKey();
-  double oWith = 0;
-  double oHeight = 0;
+  bool move=false;
+  Offset _offset = Offset(30, 30);
 
   @override
   void initState() {
@@ -47,48 +49,187 @@ class _cGameWeb extends State<cGameWeb>{
             javascriptMode: JavascriptMode.unrestricted,
             initialUrl: widget.url,
           ),
-          DraggableFloatingActionButton(
-            child: InkWell(
-              child: Container(
-                width: 45,
-                height: 45,
-                decoration:  BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(60)),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 10, //阴影范围
-                      spreadRadius: 0.1, //阴影浓度
-                      color: Colors.grey.withOpacity(0.2), //阴影颜色
-                    ),
-                  ],
-                ),
-                child: Center(child: Container(
-                  width: 35,
-                  height: 35,
-                  decoration:  BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(60)),
-                    color: Colors.grey,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10, //阴影范围
-                        spreadRadius: 0.1, //阴影浓度
-                        color: Colors.grey.withOpacity(0.2), //阴影颜色
-                      ),
-                    ],
-                  ),
-                  child: const Icon(Icons.exit_to_app_outlined,color: Colors.white,),
-                ),),
+          Positioned(
+            left: _offset.dx,
+              top: _offset.dy,
+              child: Draggable(
+                child: buildBox(),
+                childWhenDragging: Container(),
+                feedback: buildBox(),
+                onDraggableCanceled: (Velocity velocity, Offset offset) => setState(() {
+                  _offset = Offset(offset.dx,offset.dy);
+                }),
+                onDragEnd: (value) => setState(() {
+                  move = false;
+                }),
+                // onDragStarted: ()=> setState(() {
+                //   move = false;
+                // }),
+                // onDragUpdate: (value) => setState(() {
+                //   move = false;
+                // }),
               ),
-              onTap: () async{
-                // if(await ShowAlertDialogBool(context,"温馨提醒", "退出游戏还回桌面，未完成的对局将会自动托管，确定继续退出吗?")){
-                  Navigator.pop(context);
-                // }
-              },
+          ),
+        ],
+      ),
+    );
+  }
+  _buildButton(){
+    setState(() {
+      move = !move;
+    });
+
+  }
+  buildBox(){
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          GestureDetector(
+            onTap: (){
+              _buildButton();
+              print('单击');
+            },
+            onDoubleTap: (){
+              Navigator.pop(context);
+              print('双击');
+            },
+            onLongPress: (){
+              print('长按');
+            },
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                // color: Colors.black.withOpacity(0.3),
+                borderRadius: BorderRadius.all(Radius.circular(90))
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        // color: Colors.black.withOpacity(0.3),
+                        // borderRadius: BorderRadius.all(Radius.circular(60)),
+                      ),
+                      margin: const EdgeInsets.all(9),
+                      child: CircularProgressIndicator(backgroundColor: Colors.greenAccent.withOpacity(0.6),color: Colors.green,value: move?null:100,strokeWidth: 6,),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            initialOffset:  Offset(oWith, oHeight),
-            parentKey: _parentKey,
-            onPressed: () {},
+          ),
+          if(move) Container(
+            width: 150,
+            height: 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap:(){
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    margin: const EdgeInsets.only(right: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Colors.greenAccent.withOpacity(0.6),
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                        child: Icon(Icons.reply),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap:(){
+                    print('单击');
+                    setPortrait();
+                    Navigator.push(context, SlideRightRoute(page: GameRechargePage())).then((value) => setLandscape());
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    margin: const EdgeInsets.only(right: 15,left: 45),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.6),
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                        child: Icon(Icons.monetization_on_outlined,color: Colors.orangeAccent,),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap:(){
+                    setPortrait();
+                    Navigator.push(context, SlideRightRoute(page: GameCashOutPage())).then((value) => setLandscape());
+                  },
+                  child: Container(
+                    width: 45,
+                    height: 45,
+                    margin: const EdgeInsets.only(right: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.6),
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                        child: Icon(Icons.account_balance_wallet_outlined,color: Colors.redAccent),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

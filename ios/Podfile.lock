@@ -13,7 +13,7 @@ PODS:
     - ffmpeg-kit-ios-min-gpl (= 4.5.1.LTS)
     - Flutter
   - Flutter (1.0.0)
-  - flutter_webrtc (0.7.1):
+  - flutter_webrtc (0.8.0):
     - Flutter
     - WebRTC-SDK (= 97.4692.05)
   - image_gallery_saver (1.5.0):
@@ -123,7 +123,7 @@ SPEC CHECKSUMS:
   ffmpeg-kit-ios-min-gpl: 074814f41eeb3d4980a3051c46f05b18b1d5b2e3
   ffmpeg_kit_flutter_min_gpl: 1507ed8e57a2a9f09a8c96834a115c8301f0d468
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_webrtc: c4d09b864e7a8e93ad931bb84eed0ceb1ed51444
+  flutter_webrtc: 1062ea68c08f530ad3d97f743729dd390d8cbf7b
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
@@ -141,4 +141,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0732cff4bd82aa77d6288ab38e40d1c998e26216
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
