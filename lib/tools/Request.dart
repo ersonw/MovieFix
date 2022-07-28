@@ -694,11 +694,29 @@ class Request {
       'address': address,
     };
     String? result = await _post(RequestApi.gameCashOutEditCard, data);
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }
     return {};
+  }
+  static Future<bool> gameCashOutSetDefault( {int id=0})async{
+    Loading.show();
+    String? result = await _get(RequestApi.gameCashOutSetDefault.replaceAll('{id}', '$id'), {});
+    print(result);
+    if(result != null && jsonDecode(result)['state'] != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
+  }
+  static Future<bool> gameCashOutRemoveCard( {int id=0})async{
+    Loading.show();
+    String? result = await _get(RequestApi.gameCashOutRemoveCard.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null && jsonDecode(result)['state'] != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
   }
   static Future<Map<String, dynamic>> gameCashOutAddCard( {String name='',String bank='',String card='',String address=''})async{
     Loading.show();
@@ -709,10 +727,23 @@ class Request {
       'address': address,
     };
     String? result = await _post(RequestApi.gameCashOutAddCard, data);
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }
     return {};
+  }
+  static Future<bool> gameCashOut( {int id=0, int amount=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'amount': amount,
+    };
+    String? result = await _post(RequestApi.gameCashOut, data);
+    print(result);
+    if(result != null && jsonDecode(result)['state'] != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
   }
 }

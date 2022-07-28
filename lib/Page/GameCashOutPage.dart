@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cInput.dart';
+import 'package:movie_fix/Page/ManageCardPage.dart';
 import 'package:movie_fix/data/BankCard.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'dart:math' as math;
+import '../Global.dart';
 import 'GameFundsPage.dart';
 
 class GameCashOutPage extends StatefulWidget{
@@ -41,11 +43,34 @@ class _GameCashOutPage extends State<GameCashOutPage>{
     if(result['mini'] != null) mini = result['mini'];
     if(result['fee']!= null) fee = result['fee'];
     if(result['rate']!= null) rate = result['rate'];
+    if(result['card']!= null) _card = BankCard.fromJson(result['card']);
     if(mounted) setState(() {});
   }
   _init(){
     _getBalance();
     _getConfig();
+  }
+  _post()async {
+    if(double.parse(amount) < mini){
+      Global.showWebColoredToast('单笔最小提款额度 $mini 元');
+      return;
+    }
+    if(double.parse(amount) > max){
+      Global.showWebColoredToast('单笔最大提款额度 $max 元');
+      return;
+    }
+     if(double.parse(amount) > balance){
+       Global.showWebColoredToast('余额不足！');
+       return;
+     }
+     if(_card == null || _card?.id == 0){
+       Global.showWebColoredToast('请先选择收款方式！');
+       return;
+     }
+     int id = int.parse('${_card?.id}');
+     if(await Request.gameCashOut(id: id,amount: int.parse(amount)) == true){
+       _getBalance();
+     }
   }
   @override
   void initState() {
@@ -120,14 +145,25 @@ class _GameCashOutPage extends State<GameCashOutPage>{
                 ),
               ),
               Flexible(child: cInput(text: amount,hintText: '可提现 ${balance.toStringAsFixed(0)} 元',number: true,callback: (value)=>setState(() {
-                amount = double.parse(value) < double.parse(balance.toStringAsFixed(0))? value: balance.toStringAsFixed(0);
+                amount = double.parse(value).toStringAsFixed(0);
+                if(double.parse(amount) > balance.toInt()){
+                  amount = '${balance.toInt()}';
+                }
                 _fee =  double.parse((double.parse(amount) * rate +fee).toStringAsFixed(2));
-                _fee = _fee > double.parse(_fee.toStringAsFixed(0))?double.parse(_fee.toStringAsFixed(0))+1: _fee;
-                _amount = double.parse((double.parse(amount) - _fee).toStringAsFixed(0));
+                if(_fee > _fee.toInt()){
+                  _fee = double.parse('${_fee.toInt()+1}');
+                }
+                _amount = double.parse(amount) - _fee;
                 _fee = double.parse(amount) - _amount;
               }),)),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  Navigator.push(context, FadeRoute(page: ManageCardPage(callback: (card){
+                    setState(() {
+                      _card = card;
+                    });
+                  },)));
+                },
                 child: Container(
                   margin: const EdgeInsets.all(15),
                   height: 45,
@@ -135,12 +171,17 @@ class _GameCashOutPage extends State<GameCashOutPage>{
                     color: Colors.white.withOpacity(0.3),
                     borderRadius: BorderRadius.all(Radius.circular(9)),
                   ),
-                  child: Center(child: RichText(
+                  child: Center(child:
+                  _card==null?
+                  Text(
+                    '点击选择收款账号'
+                  )
+                      : RichText(
                     text: TextSpan(
                         text: '已选择: ',
                         children: [
                           TextSpan(
-                            text: ' 中国银行 ',
+                            text: ' ${_card?.bank} ',
                             style: TextStyle(color: Colors.deepOrange),
                           ),
                           TextSpan(
@@ -148,7 +189,7 @@ class _GameCashOutPage extends State<GameCashOutPage>{
                             style: TextStyle(color: Colors.white.withOpacity(0.6)),
                           ),
                           TextSpan(
-                            text: ' 79986 ',
+                            text: ' ${_card?.card.substring((_card?.card.length)!-6)} ',
                             style: TextStyle(color: Colors.orange),
                           ),
                         ]
@@ -157,7 +198,7 @@ class _GameCashOutPage extends State<GameCashOutPage>{
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: _post,
                 child: Container(
                   margin: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,

@@ -63,6 +63,8 @@ class RequestApi {
   static const gameCashOutGetCards = '/api/game/cashOut/getCards/{page}';
   static const gameCashOutEditCard = '/api/game/cashOut/editCard';
   static const gameCashOutAddCard = '/api/game/cashOut/addCard';
+  static const gameCashOutRemoveCard = '/api/game/cashOut/removeCard/{id}';
+  static const gameCashOutSetDefault = '/api/game/cashOut/setDefault/{id}';
   static const gameCashOut = '/api/game/cashOut';
   static const gamePublicity = '/api/game/publicity';
   static const gameButtons = '/api/game/buttons';

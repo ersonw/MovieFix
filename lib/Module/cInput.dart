@@ -6,8 +6,9 @@ class cInput extends StatefulWidget{
   String? hintText;
   bool number;
   void Function(String value)? callback;
+  Color? color;
 
-  cInput({Key? key,this.text,this.hintText,this.number = false,this.callback}) : super(key: key);
+  cInput({Key? key,this.color,this.text,this.hintText,this.number = false,this.callback}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -32,7 +33,7 @@ class _cInput extends State<cInput>{
       }
       // widget.text = _controller.text;
       if(widget.callback != null) widget.callback!(_controller.text);
-      if(mounted) setState(() {});
+      // if(mounted) setState(() {});
     });
     super.initState();
   }
@@ -50,6 +51,7 @@ class _cInput extends State<cInput>{
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: widget.color,
       child: Stack(
         children: [
           Container(
