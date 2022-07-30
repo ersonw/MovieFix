@@ -384,16 +384,23 @@ class Global {
     return '${dateTime.month}-${dateTime.day}';
   }
   static String getNumbersToChinese(int n){
-    if(n < 9999){
+    if(n < 999){
       return '$n';
     }else{
-      double d= n / 10000;
-      if(d < 9999){
-        return '${d.toStringAsFixed(2)}万';
+      double d= n / 1000;
+      if(d < 999){
+        return '${d.toStringAsFixed(2)}K';
       }else{
-        d= d / 10000;
-        return '${d.toStringAsFixed(2)}亿';
+          d= d / 1000;
+          return '${d.toStringAsFixed(2)}M';
       }
+      // double d= n / 10000;
+      // if(d < 9999){
+      //   return '${d.toStringAsFixed(2)}万';
+      // }else{
+      //   d= d / 10000;
+      //   return '${d.toStringAsFixed(2)}亿';
+      // }
     }
   }
   static Future<Map<String, String>> getQueryString(String url)async{

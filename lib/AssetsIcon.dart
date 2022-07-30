@@ -41,4 +41,6 @@ class AssetsIcon {
   static const String message = ('assets/icons/message.png');
   static const String select = ('assets/icons/select.png');
   static const String unselect = ('assets/icons/unselect.png');
+
+  static const String crown = ('assets/icons/crown.png');
 }

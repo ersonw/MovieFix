@@ -8,6 +8,7 @@ import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'dart:math' as math;
 import '../Global.dart';
+import 'GameCashOutRecordPage.dart';
 import 'GameFundsPage.dart';
 
 class GameCashOutPage extends StatefulWidget{
@@ -424,7 +425,7 @@ class _GameCashOutPage extends State<GameCashOutPage>{
               children: [
                 InkWell(
                   onTap: (){
-                    // Navigator.push(context, SlideRightRoute(page: GameRechargeRecordPage()));
+                    Navigator.push(context, SlideRightRoute(page: GameCashOutRecordPage()));
                   },
                   child: Row(
                     children: [

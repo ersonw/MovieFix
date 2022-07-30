@@ -93,7 +93,7 @@ class _ManageCardPage extends State<ManageCardPage>{
               ),
               InkWell(
                 onTap: (){
-                  print(_cards);
+                  // print(_cards);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(right: 30),
