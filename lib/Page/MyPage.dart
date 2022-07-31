@@ -23,6 +23,7 @@ class _MyPage extends State<MyPage>{
       // children: _buildChildren(),
       children: [
         Stack(
+          alignment: Alignment.topRight,
           children: [
             Stack(
               alignment: Alignment.bottomCenter,
@@ -83,6 +84,43 @@ class _MyPage extends State<MyPage>{
                   ),
                 ),
               ],
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 36,right: 15),
+              // color: Colors.red,
+              height: 30,
+              width: 100,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                      color: Colors.white.withOpacity(0.15)
+                    ),
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: const EdgeInsets.all(3),
+                      child: Icon(Icons.search_outlined),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                        color: Colors.white.withOpacity(0.15)
+                    ),
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: const EdgeInsets.all(3),
+                      child: Icon(Icons.menu_outlined),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
