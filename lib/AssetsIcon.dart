@@ -43,4 +43,10 @@ class AssetsIcon {
   static const String unselect = ('assets/icons/unselect.png');
 
   static const String crown = ('assets/icons/crown.png');
+  static const String vip1 = ('assets/icons/vip1.png');
+  static const String vip2 = ('assets/icons/vip2.png');
+  static const String vip3 = ('assets/icons/vip3.png');
+  static const String vip4 = ('assets/icons/vip4.png');
+  static const String vip5 = ('assets/icons/vip5.png');
+  static const String vip6 = ('assets/icons/vip6.png');
 }
