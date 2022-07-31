@@ -122,6 +122,7 @@ class Request {
     String? result = await _get(RequestApi.checkDeviceId.replaceAll('{deviceId}', Global.deviceId!),{});
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
+      // print(map);
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/tools/Request.dart';
 
 import 'AssetsIcon.dart';
 import 'Module/Undeveloped.dart';
@@ -217,9 +218,9 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 ),
                 onTap: (){
                   if(userModel.hasToken()){
-                    setState(() {
+                    Request.checkDeviceId().then((value) => setState(() {
                       _index = 4;
-                    });
+                    }));
                   }else{
                     Global.loginPage().then((v) {
                       if(userModel.hasToken()){
