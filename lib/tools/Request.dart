@@ -765,6 +765,17 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> userProfileVideoLike({int page=1,int id=0})async{
+    // Loading.show();
+    String url = RequestApi.userProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id');
+    url = '$url/like';
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
   static Future<Map<String, dynamic>> userProfile({int id=0})async{
     // Loading.show();
     String? result = await _get(RequestApi.userProfile.replaceAll('{id}', '$id'), {});
@@ -774,9 +785,20 @@ class Request {
     }
     return Map<String, dynamic>();
   }
-  static Future<Map<String, dynamic>> userMyProfileVideo({int page=1,int id=0})async{
+  static Future<Map<String, dynamic>> userMyProfileVideo({int page=0})async{
     // Loading.show();
-    String? result = await _get(RequestApi.userMyProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id'), {});
+    String? result = await _get(RequestApi.userMyProfileVideo.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userMyProfileVideoLike({int page=0})async{
+    // Loading.show();
+    String url = RequestApi.userMyProfileVideo.replaceAll('{page}', '$page');
+    url = '$url/like';
+    String? result = await _get(url, {});
     // print(result);
     if(result != null){
       return jsonDecode(result);
