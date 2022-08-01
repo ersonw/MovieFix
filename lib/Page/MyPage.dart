@@ -4,6 +4,8 @@ import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/data/ShortVideo.dart';
+import 'package:movie_fix/data/User.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/Tools.dart';
@@ -15,36 +17,82 @@ class MyPage extends StatefulWidget{
   }
 }
 class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
-  final _tabKey = const ValueKey('myPageTab');
-  late TabController controller;
-  int? initialIndex;
+  User user = userModel.user;
+  int diamond = 0;
+  int works = 0;
+  int follows = 0;
+  int cash = 0;
+  int likes = 0;
+  int fans = 0;
+  int progress = 0;
+  int addFriends = 0;
+  List<ShortVideo> videos = [];
+  int page = 1;
+  int total = 1;
 
   @override
   void initState() {
-    _getInfo();
+    _init();
     super.initState();
-    initialIndex = PageStorage.of(context)?.readState(context, identifier: _tabKey);
-    controller = TabController(
-        length: 2,
-        vsync: this,
-        initialIndex: initialIndex ?? 0);
-    controller.addListener(handleTabChange);
+  }
+  _init(){
+    _getInfo();
+    _getVideos();
+  }
+  _getVideos()async{
+    if(page > total){
+      page--;
+      return;
+    }
+    Map<String, dynamic> result = await Request.userMyProfileVideo(page: page);
+    if(result['total'] != null) total = result['total'];
+    if(result['list'] != null){
+      List<ShortVideo> list = (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
+      if(page > 1){
+        videos.addAll(list);
+      }else{
+        videos = list;
+      }
+      // videos.addAll(list);
+    }
+    // print(result);
+    if(mounted) setState(() {});
   }
   _getInfo()async{
     Map<String, dynamic> result = await Request.userMyProfile();
-    print(result);
+    if(result['user'] != null) {
+      user = User.formJson(result['user']);
+      userModel.user = user;
+    }
+    if(result['diamond'] != null) diamond = result['diamond'];
+    if(result['works'] != null) works = result['works'];
+    if(result['follows'] != null) follows = result['follows'];
+    if(result['cash'] != null) cash = result['cash'];
+    if(result['likes'] != null) likes = result['likes'];
+    if(result['fans'] != null) diamond = result['fans'];
+    if(result['progress'] != null) progress = result['progress'];
+    if(result['addFriends'] != null) addFriends = result['addFriends'];
+    if(mounted) setState(() {});
   }
-  void handleTabChange() {
-    setState(() {
-      initialIndex = controller.index;
-    });
-    PageStorage.of(context)?.writeState(context, controller.index, identifier: _tabKey);
+  void handleTabChange(int value) {
+    page=0;
+    _handlerList(value);
+  }
+  _handlerList(int value){
+    switch(value) {
+      case 0:
+        _getVideos();
+    }
   }
   @override
   Widget build(BuildContext context) {
     return cTabBarView(
-      // header: _buildHeader(),
-      // children: _buildChildren(),
+      onButton: (value){
+        page++;
+        _handlerList(value);
+      },
+      listView: true,
+      callback: handleTabChange,
       header: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -60,11 +108,90 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
         Tab(text: '视频'),
       ],
       children: [
-        Container(),
+        _buildShrotVideo(),
         Container(),
         Container(),
       ],
     );
+  }
+  _buildShrotVideo(){
+    if(videos.isEmpty) return _buildNothing();
+    List<Widget> list = [];
+    for(int i=0;i< videos.length;i++){
+      ShortVideo video = videos[i];
+      list.add(Stack(
+        alignment: Alignment.bottomLeft,
+        children: [
+          Stack(
+            alignment: Alignment.topLeft,
+            children: [
+              Container(
+                height: 180,
+                margin: const EdgeInsets.only(right: 1),
+                width: MediaQuery.of(context).size.width / 3.2,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(3)),
+                  image: DecorationImage(
+                    image: NetworkImage(video.pic),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              if(video.pin) Container(
+                height: 21,
+                width: 36,
+                margin: const EdgeInsets.only(left: 3),
+                decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.all(Radius.circular(3))
+                ),
+                child: Center(
+                  child: Text('置顶',style: TextStyle(fontSize:12),),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.play_arrow_outlined,),
+                Text('${video.plays}')
+              ],
+            ),
+          ),
+        ],
+      ));
+    }
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.all(9),
+      child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: ListView(
+            physics:const NeverScrollableScrollPhysics(),
+            children: [
+              Wrap(
+                // spacing: 3,
+                runSpacing: 1,
+                children: list,
+              ),
+            ],
+          ),
+      ),
+    );
+    // return Container(
+    //   width: MediaQuery.of(context).size.width,
+    //   // height: MediaQuery.of(context).size.height,
+    //   margin: const EdgeInsets.all(9),
+    //   child: Wrap(
+    //     // spacing: 3,
+    //     runSpacing: 1,
+    //     children: list,
+    //   ),
+    // );
+    // return Container();
   }
   _buildNothing(){
     return Container(
@@ -98,7 +225,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
-                    text: ' 10%',
+                    text: ' $progress%',
                     style: TextStyle(color: Colors.white.withOpacity(0.2)),
                   ),
                 ]
@@ -118,15 +245,20 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('添加朋友',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                Container(
-                  height: 12,
-                  width: 12,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(60)),
+                if(addFriends > 0) Center(
+                  child: Container(
+                    height: 18,
+                    width: 18,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                    ),
+                    child: Container(
+                      // margin: const EdgeInsets.only(left: 3,right: 3,),
+                      child: Text('$addFriends',style: TextStyle(fontSize: 9)),
+                    ),
                   ),
-                  child: Text('2',style: TextStyle(fontSize: 9)),
                 ),
               ],
             ),
@@ -137,103 +269,140 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   }
   _buildSignature() {
     String signature = userModel.user.text ?? '点击添加介绍，让大家认识你';
-    return Container(
-      margin: const EdgeInsets.all(15),
-      alignment: Alignment.centerLeft,
-      child: Text(signature,style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+    return InkWell(
+      child: Container(
+        margin: const EdgeInsets.all(15),
+        alignment: Alignment.centerLeft,
+        child: Text(signature,style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+      ),
     );
   }
   _buildCount() {
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.all(15),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '3030',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '  钻石',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
-                        fontWeight: FontWeight.w300,
-                        fontSize: 12,
-                      ),
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: RichText(
+                text: TextSpan(
+                    text: Global.getNumbersToChinese(diamond),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ]
+                    children: [
+                      TextSpan(
+                        text: '  钻石',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.3),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ]
+                ),
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '3030',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '  获赞',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
-                        fontWeight: FontWeight.w300,
-                        fontSize: 12,
-                      ),
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: RichText(
+                text: TextSpan(
+                    text: Global.getNumbersToChinese(works),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ]
+                    children: [
+                      TextSpan(
+                        text: '  作品',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.3),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ]
+                ),
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '3030',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '  关注',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
-                        fontWeight: FontWeight.w300,
-                        fontSize: 12,
-                      ),
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: RichText(
+                text: TextSpan(
+                    text: Global.getNumbersToChinese(likes),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ]
+                    children: [
+                      TextSpan(
+                        text: '  获赞',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.3),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ]
+                ),
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '3030',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '  粉丝',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.3),
-                        fontWeight: FontWeight.w300,
-                        fontSize: 12,
-                      ),
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: RichText(
+                text: TextSpan(
+                    text: Global.getNumbersToChinese(follows),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ]
+                    children: [
+                      TextSpan(
+                        text: '  关注',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.3),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            child:  Container(
+              margin: const EdgeInsets.only(right: 15),
+              child: RichText(
+                text: TextSpan(
+                    text: Global.getNumbersToChinese(fans),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: '  粉丝',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.3),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ]
+                ),
               ),
             ),
           ),
@@ -284,7 +453,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                       borderRadius: BorderRadius.all(Radius.circular(60)),
                       border: Border.all(width: 2,color: Colors.white),
                       image: DecorationImage(
-                        image: buildHeaderPicture(self: true),
+                        image: buildHeaderPicture(avatar: user.avatar,self: true),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -295,8 +464,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(child: Text(userModel.user.nickname,style: TextStyle(fontWeight: FontWeight.bold),)),
-                        Text('ID: ${userModel.user.username}',style: TextStyle(color: Colors.white.withOpacity(0.6))),
+                        Flexible(child: Text(user.nickname,style: TextStyle(fontWeight: FontWeight.bold),)),
+                        Text('ID: ${user.username}',style: TextStyle(color: Colors.white.withOpacity(0.6))),
                       ],
                     ),
                   ),
