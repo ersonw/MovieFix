@@ -89,8 +89,10 @@ class _cTabBarView extends State<cTabBarView> with SingleTickerProviderStateMixi
               // padding: const EdgeInsets.only(left: 10),
               // indicatorPadding: const EdgeInsets.only(left: 10),
               labelPadding: const EdgeInsets.only(left: 10),
-              labelStyle: const TextStyle(fontSize: 18),
-              unselectedLabelStyle: const TextStyle(fontSize: 15),
+              // labelStyle: const TextStyle(fontSize: 18),
+              // unselectedLabelStyle: const TextStyle(fontSize: 15),
+              labelStyle:  const TextStyle(fontSize: 15,fontWeight: FontWeight.normal),
+              unselectedLabelStyle: const TextStyle(fontSize: 15,fontWeight: FontWeight.w200),
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white.withOpacity(0.6),
               indicator: const RoundUnderlineTabIndicator(

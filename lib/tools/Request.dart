@@ -750,7 +750,43 @@ class Request {
   static Future<Map<String, dynamic>> gameCashOutRecords({int page=1})async{
     // Loading.show();
     String? result = await _get(RequestApi.gameCashOutRecords.replaceAll('{page}', '$page'), {});
-    print(result);
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userProfileVideo({int page=1,int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userProfile({int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userProfile.replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userMyProfileVideo({int page=1,int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userMyProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userMyProfile()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userMyProfile, {});
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }
