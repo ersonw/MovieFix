@@ -10,6 +10,7 @@ class User {
   String? email;
   String token = '';
   int level = 0;
+  bool member = false;
 
   User();
 
@@ -22,6 +23,7 @@ class User {
         phone = json['phone'],
         email = json['email'],
         level = json['level'],
+        member = json['member'] ?? false,
         token = json['token'];
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +35,7 @@ class User {
         'phone': phone,
         'email': email,
         'level': level,
+        'member': member,
         'token': token,
       };
 

@@ -218,9 +218,12 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                 ),
                 onTap: (){
                   if(userModel.hasToken()){
-                    Request.checkDeviceId().then((value) => setState(() {
+                    // Request.checkDeviceId().then((value) => setState(() {
+                    //   _index = 4;
+                    // }));
+                    setState(() {
                       _index = 4;
-                    }));
+                    });
                   }else{
                     Global.loginPage().then((v) {
                       if(userModel.hasToken()){
