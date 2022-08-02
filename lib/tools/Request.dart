@@ -758,7 +758,10 @@ class Request {
   }
   static Future<Map<String, dynamic>> userProfileVideo({int page=1,int id=0})async{
     // Loading.show();
-    String? result = await _get(RequestApi.userProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id'), {});
+    String url = RequestApi.userProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id');
+    // print(url);
+    // print(configModel.config.mainDomain);
+    String? result = await _get(url, {});
     // print(result);
     if(result != null){
       return jsonDecode(result);
@@ -770,7 +773,7 @@ class Request {
     String url = RequestApi.userProfileVideo.replaceAll('{page}', '$page').replaceAll('{id}', '$id');
     url = '$url/like';
     String? result = await _get(url, {});
-    // print(result);
+    // print(url);
     if(result != null){
       return jsonDecode(result);
     }

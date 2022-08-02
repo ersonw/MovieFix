@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_fix/Module/ShortVideoFullScreen.dart';
 import 'package:movie_fix/Page/CommentPage.dart';
+import 'package:movie_fix/Page/ShortVideoMyProfilePage.dart';
+import 'package:movie_fix/Page/ShortVideoUserProfilePage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
@@ -128,7 +130,14 @@ class ShortVideoItemState extends State<ShortVideoItem> {
               children: [
                 InkWell(
                   onTap: (){
-                    print('点击头像');
+                    // print('点击头像');
+                    if(widget.video.userId == userModel.user.id){
+                      Navigator.push(
+                          context, SlideRightRoute(page: ShortVideoMyProfilePage(layout: true,)));
+                    }else{
+                      Navigator.push(
+                          context, SlideRightRoute(page: ShortVideoUserProfilePage(widget.video.userId)));
+                    }
                   },
                   child: Container(
                     alignment: Alignment.topCenter,
@@ -227,6 +236,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
             child: InkWell(
               onTap: (){
                 print('点击分享按钮');
+                Global.showWebColoredToast('暂未开放!');
               },
               child: Column(
                 children: [
