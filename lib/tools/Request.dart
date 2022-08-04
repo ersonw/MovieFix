@@ -817,4 +817,40 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> userMyFollow({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userMyFollow.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userMyFans({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userMyFans.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userFollow({int page=1,int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userFollow.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userFans({int page=1,int id=0})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userFans.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

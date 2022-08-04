@@ -11,6 +11,10 @@ class RequestApi {
 
   static const userLogin  = '/api/user/login';
   static const userProfile = '/api/user/profile/{id}';
+  static const userFans = '/api/user/fans/{id}/{page}';
+  static const userFollow = '/api/user/follow/{id}/{page}';
+  static const userMyFans = '/api/user/myFans/{page}';
+  static const userMyFollow = '/api/user/myFollow/{page}';
   static const userProfileVideo = '/api/user/profile/{id}/video/{page}';
   static const userMyProfile = '/api/user/my/profile';
   static const userMyProfileVideo = '/api/user/my/profile/video/{page}';

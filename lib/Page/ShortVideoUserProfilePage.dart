@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/UserFansPage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/User.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 import '../Global.dart';
+import 'UserFollowPage.dart';
 
 class ShortVideoUserProfilePage extends StatefulWidget{
   int id;
@@ -248,7 +251,14 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
       ),
     );
   }
-
+  _followPage() {
+    Navigator.push(
+        context, SlideRightRoute(page: UserFollowPage(widget.id,)));
+  }
+  _fansPage() {
+    Navigator.push(
+        context, SlideRightRoute(page: UserFansPage(widget.id,)));
+  }
   _buildCount() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -282,6 +292,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
             ),
           ),
           InkWell(
+            onTap: _followPage,
             child: Container(
               margin: const EdgeInsets.only(right: 15),
               child: RichText(
@@ -305,6 +316,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
             ),
           ),
           InkWell(
+            onTap: _fansPage,
             child: Container(
               margin: const EdgeInsets.only(right: 15),
               child: RichText(
