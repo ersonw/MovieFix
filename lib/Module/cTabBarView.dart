@@ -119,41 +119,6 @@ class _cTabBarView extends State<cTabBarView>
                 ),
               ]),
           ),
-//           SliverOverlapAbsorber(
-//             handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-//             sliver: SliverAppBar(
-//               // title: const Text('个人主页'),
-// // floating: true,
-// //               pinned: true,
-//               // expandedHeight: 300,
-//               // snap: false,
-//               // primary: true,
-//               // forceElevated: innerBoxIsScrolled,
-//               bottom: widget.tabs.isEmpty
-//                   ? null
-//                   : TabBar(
-//                 controller: controller,
-//                 isScrollable: true,
-//                 // padding: const EdgeInsets.only(left: 10),
-//                 // indicatorPadding: const EdgeInsets.only(left: 10),
-//                 labelPadding: const EdgeInsets.only(left: 10),
-//                 // labelStyle: const TextStyle(fontSize: 18),
-//                 // unselectedLabelStyle: const TextStyle(fontSize: 15),
-//                 labelStyle: const TextStyle(
-//                     fontSize: 15, fontWeight: FontWeight.normal),
-//                 unselectedLabelStyle: const TextStyle(
-//                     fontSize: 15, fontWeight: FontWeight.w200),
-//                 labelColor: Colors.white,
-//                 unselectedLabelColor: Colors.white.withOpacity(0.6),
-//                 indicator: const RoundUnderlineTabIndicator(
-//                     borderSide: BorderSide(
-//                       width: 3,
-//                       color: Colors.deepOrangeAccent,
-//                     )),
-//                 tabs: widget.tabs,
-//               ),
-//             ),
-//           ),
         ];
       },
       body: widget.children == null?Container():TabBarView(

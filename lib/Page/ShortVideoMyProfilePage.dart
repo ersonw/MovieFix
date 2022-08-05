@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/User.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 import '../Global.dart';
+import 'UserFansPage.dart';
+import 'UserFollowPage.dart';
 
 class ShortVideoMyProfilePage extends StatefulWidget {
   bool layout;
@@ -408,6 +411,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
@@ -415,7 +419,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),
@@ -423,6 +427,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
             ),
           ),
           InkWell(
+            onTap: _followPage,
             child: Container(
               margin: const EdgeInsets.only(right: 15),
               child: RichText(
@@ -431,6 +436,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
@@ -438,7 +444,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),
@@ -446,6 +452,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
             ),
           ),
           InkWell(
+            onTap: _fansPage,
             child: Container(
               margin: const EdgeInsets.only(right: 15),
               child: RichText(
@@ -454,6 +461,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
@@ -461,7 +469,7 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),
@@ -472,7 +480,14 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
       ),
     );
   }
-
+  _followPage() {
+    Navigator.push(
+        context, SlideRightRoute(page: UserFollowPage(userModel.user.id,)));
+  }
+  _fansPage() {
+    Navigator.push(
+        context, SlideRightRoute(page: UserFansPage(userModel.user.id,)));
+  }
   _buildHeader() {
     return Stack(
       alignment: Alignment.topRight,

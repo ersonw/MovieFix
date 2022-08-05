@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cSearch.dart';
+import 'package:movie_fix/Page/ShortVideoMyProfilePage.dart';
 import 'package:movie_fix/Page/ShortVideoUserProfilePage.dart';
 import 'package:movie_fix/data/Users.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
@@ -19,14 +21,23 @@ class UserFollowPage extends StatefulWidget {
 }
 
 class _UserFollowPage extends State<UserFollowPage> {
+  final TextEditingController _controller = TextEditingController();
   List<Users> _users = [];
   int page = 1;
   int total = 1;
+  String text = '';
 
   @override
   void initState() {
     _init();
     super.initState();
+    _controller.addListener(() {
+      // if(mounted) setState(() {
+      //   text = _controller.text;
+      // });
+      text = _controller.text;
+      _getList();
+    });
   }
 
   _init() {
@@ -40,7 +51,7 @@ class _UserFollowPage extends State<UserFollowPage> {
       });
       return;
     }
-    Map<String, dynamic> result = await Request.userFollow(page: page,id: widget.id);
+    Map<String, dynamic> result = await Request.userFollow(page: page,id: widget.id,text: text);
     if(result['total'] != null) total = result['total'];
     if(result['list'] != null){
       List<Users> list = (result['list'] as List).map((e) => Users.formJson(e)).toList();
@@ -56,8 +67,9 @@ class _UserFollowPage extends State<UserFollowPage> {
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
-      title: '关注',
+      title: '关注列表',
       header: cSearch(
+        controller: _controller,
         hintText: '搜索用户名',
       ),
       children: _buildChildren(),
@@ -66,7 +78,7 @@ class _UserFollowPage extends State<UserFollowPage> {
 
   _follow(int index) async {
     if (await Request.shortVideoFollow(_users[index].id) == true) {
-      _users[index].follow = true;
+      _users[index].follow=true;
       _users[index].fans++;
       if (mounted) setState(() {});
     }
@@ -74,7 +86,7 @@ class _UserFollowPage extends State<UserFollowPage> {
 
   _unfollow(int index) async {
     if (await Request.shortVideoUnfollow(_users[index].id) == true) {
-      _users[index].follow = false;
+      _users[index].follow=false;
       _users[index].fans--;
       if (mounted) setState(() {});
     }
@@ -106,8 +118,13 @@ class _UserFollowPage extends State<UserFollowPage> {
             Expanded(
                 child: InkWell(
               onTap: () {
-                Navigator.push(context,
-                    SlideRightRoute(page: ShortVideoUserProfilePage(0)));
+                if(user.id != userModel.user.id){
+                  Navigator.push(context,
+                      SlideRightRoute(page: ShortVideoUserProfilePage(user.id)));
+                }else{
+                  Navigator.push(context,
+                      SlideRightRoute(page: ShortVideoMyProfilePage(layout: true,)));
+                }
               },
               child: Row(
                 children: [
@@ -131,39 +148,57 @@ class _UserFollowPage extends State<UserFollowPage> {
                 ],
               ),
             )),
-            if (user.follow)
-              InkWell(
-                onTap: _unfollow(i),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Colors.white.withOpacity(0.3),
-                  ),
-                  height: 27,
-                  width: 72,
-                  alignment: Alignment.center,
-                  child: Text('已关注'),
-                ),
-              ),
-            if (user.follow == false)
-              InkWell(
-                onTap: _follow(i),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Colors.deepOrangeAccent,
-                  ),
-                  height: 27,
-                  width: 72,
-                  alignment: Alignment.center,
-                  child: Text('关注'),
-                ),
-              ),
+            _buildButton(i),
           ],
         ),
       ));
     }
     if (_users.isEmpty) return list.add(_buildNothing());
     return list;
+  }
+  _buildButton(int index){
+    if(_users[index].follow && _users[index].followed) {
+      return InkWell(
+        onTap: () => _unfollow(index),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: Colors.white.withOpacity(0.3),
+          ),
+          height: 27,
+          width: 72,
+          alignment: Alignment.center,
+          child: Text('互相关注'),
+        ),
+      );
+    }
+    if(_users[index].follow) {
+      return InkWell(
+        onTap: () => _unfollow(index),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(15)),
+            color: Colors.white.withOpacity(0.3),
+          ),
+          height: 27,
+          width: 72,
+          alignment: Alignment.center,
+          child: Text('已关注'),
+        ),
+      );
+    }
+    return InkWell(
+      onTap: () => _follow(index),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          color: Colors.deepOrangeAccent,
+        ),
+        height: 27,
+        width: 72,
+        alignment: Alignment.center,
+        child: Text('关注'),
+      ),
+    );
   }
 }

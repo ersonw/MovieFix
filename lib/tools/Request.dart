@@ -835,18 +835,22 @@ class Request {
     }
     return Map<String, dynamic>();
   }
-  static Future<Map<String, dynamic>> userFollow({int page=1,int id=0})async{
+  static Future<Map<String, dynamic>> userFollow({int page=1,int id=0,String text=''})async{
     // Loading.show();
-    String? result = await _get(RequestApi.userFollow.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    String url = RequestApi.userFollow.replaceAll('{id}', '$id').replaceAll('{page}', '$page');
+    if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _get(url, {});
     // print(result);
     if(result != null){
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
   }
-  static Future<Map<String, dynamic>> userFans({int page=1,int id=0})async{
+  static Future<Map<String, dynamic>> userFans({int page=1,int id=0,String text=''})async{
     // Loading.show();
-    String? result = await _get(RequestApi.userFans.replaceAll('{id}', '$id').replaceAll('{page}', '$page'), {});
+    String url = RequestApi.userFans.replaceAll('{id}', '$id').replaceAll('{page}', '$page');
+    if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _get(url, {});
     // print(result);
     if(result != null){
       return jsonDecode(result);

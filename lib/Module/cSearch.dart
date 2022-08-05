@@ -64,9 +64,9 @@ class _cSearch extends State<cSearch>{
                   String value ='';
                   if(widget.controller == null){
                     value = _controller.text;
-                    _controller.text = '';
+                    // _controller.text = '';
                   }else{
-                    // value = '${widget.controller?.text}';
+                    value = '${widget.controller?.text}';
                     // widget.controller?.text = '';
                   }
                   if(widget.callback != null){

@@ -22,7 +22,7 @@ class ShortVideoUserProfilePage extends StatefulWidget{
 }
 class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with SingleTickerProviderStateMixin {
   User? user;
-  int works = 0;
+  int likes = 0;
   int follows = 0;
   bool follow = false;
   int fans = 0;
@@ -92,7 +92,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
     if (result['user'] != null) {
       user = User.formJson(result['user']);
     }
-    if (result['works'] != null) works = result['works'];
+    if (result['likes'] != null) likes = result['likes'];
     if (result['follows'] != null) follows = result['follows'];
     if (result['follow'] != null) follow = result['follow'];
     if (result['fans'] != null) fans = result['fans'];
@@ -273,18 +273,19 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
               margin: const EdgeInsets.only(right: 15),
               child: RichText(
                 text: TextSpan(
-                    text: Global.getNumbersToChinese(works),
+                    text: Global.getNumbersToChinese(likes),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
-                        text: '  作品',
+                        text: '  获赞',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),
@@ -301,6 +302,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
@@ -308,7 +310,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),
@@ -325,6 +327,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                     children: [
                       TextSpan(
@@ -332,7 +335,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.3),
                           fontWeight: FontWeight.w300,
-                          fontSize: 12,
+                          fontSize: 15,
                         ),
                       ),
                     ]),

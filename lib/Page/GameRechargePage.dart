@@ -72,8 +72,92 @@ class _GameRechargePage extends State<GameRechargePage>{
               child: Text('确认充值',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
             ),
           ),
-        const Padding(padding: EdgeInsets.all(30))
+        // const Padding(padding: EdgeInsets.all(30)),
+        _buildQuestion(),
+        const Padding(padding: EdgeInsets.all(30)),
       ],
+    );
+  }
+  _buildQuestion(){
+    return Container(
+      margin: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('常见问题',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+          Container(
+            margin: const EdgeInsets.only(top: 15),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(9)),
+              color: Colors.white.withOpacity(0.3),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('如多次支付失败，请尝试其他支付方式',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('部分安卓手机支付时报毒，请选择忽略即可',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('支付成功后一般10分钟内到账，如超过10分钟请联系在线客服',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
   _buildButton(){

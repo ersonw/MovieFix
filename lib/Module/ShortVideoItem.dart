@@ -131,6 +131,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                 InkWell(
                   onTap: (){
                     // print('点击头像');
+                    if(initialized) videoPlayerController.pause();
                     if(widget.video.userId == userModel.user.id){
                       Navigator.push(
                           context, SlideRightRoute(page: ShortVideoMyProfilePage(layout: true,)));

@@ -36,6 +36,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     super.initState();
   }
   _init(){
+    userModel.setToken('');
     _getInfo();
     _getVideos();
   }
