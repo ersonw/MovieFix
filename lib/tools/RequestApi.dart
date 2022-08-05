@@ -10,6 +10,8 @@ class RequestApi {
   static const checkDeviceId = '/api/device/check/{deviceId}';
 
   static const userLogin  = '/api/user/login';
+  static const userLoginPhone  = '/api/user/login/phone';
+  static const userLoginSms  = '/api/user/login/sms/{phone}';
   static const userProfile = '/api/user/profile/{id}';
   static const userFans = '/api/user/fans/{id}/{page}';
   static const userFollow = '/api/user/follow/{id}/{page}';

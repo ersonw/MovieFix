@@ -262,7 +262,7 @@ class Global {
     return '$savePath$path';
   }
   static Future<void> showWebColoredToast(String msg) async{
-    print('Toast:$msg}');
+    print('Toast:$msg');
     await Navigator.push(mainContext, DialogRouter(cToast(msg)));
     // Fluttertoast.showToast(
     //   msg: msg,

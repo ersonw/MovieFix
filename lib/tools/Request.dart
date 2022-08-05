@@ -152,6 +152,38 @@ class Request {
     }
     return false;
   }
+  static Future<String?> userLoginSms(String phone)async{
+    Loading.show();
+    String? result = await _get(RequestApi.userLoginSms.replaceAll('{phone}', phone),{});
+
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map['id'];
+    }
+    return null;
+  }
+  static Future<bool> userLoginPhone(String codeId,String code)async{
+    String deviceId = Global.deviceId ?? 'unknown';
+    String platform = Global.platform ?? 'Html5';
+    Map<String, dynamic> data = {
+      "deviceId": deviceId,
+      "platform": platform,
+      "codeId": codeId,
+      "code": code
+    };
+    Loading.show();
+    String? result = await _post(RequestApi.userLoginPhone, data);
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['token'] != null) {
+        // userModel.setToken(map['token']);
+        userModel.user = User.formJson(map);
+        MessageUtil.reconnect();
+        return true;
+      }
+    }
+    return false;
+  }
   static Future<String?> userRegisterSms(String phone)async{
     Loading.show();
     String? result = await _get(RequestApi.userRegisterSms.replaceAll('{phone}', phone),{});
