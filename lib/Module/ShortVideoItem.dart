@@ -135,12 +135,15 @@ class ShortVideoItemState extends State<ShortVideoItem> {
     return Container(
       alignment: Alignment.bottomRight,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
+            // color: Colors.white,
             margin: EdgeInsets.only(bottom: 15,right: 9),
-            child: Stack(
-              alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
                   onTap: (){
@@ -154,119 +157,91 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                           context, SlideRightRoute(page: ShortVideoUserProfilePage(widget.video.userId)));
                     }
                   },
-                  // child: Container(
-                  //   alignment: Alignment.topCenter,
-                  //   height: 60,
-                  //   width: 42,
-                  //   child: Center(
-                  //     child: Container(
-                  //       width: 42,
-                  //       height: 42,
-                  //       decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
-                  //         image: DecorationImage(
-                  //           fit: BoxFit.fill,
-                  //           image: buildHeaderPicture(avatar: widget.video.avatar),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // ),
-                  child: cAvatar(user: _user,size: 42,),
+                  child:  cAvatar(user: _user,size: 42,),
                 ),
-                // if(widget.video.userId != userModel.user.id)
-                // (widget.video.follow ?
-                // InkWell(
-                //   onTap: (){
-                //     print('点击取消关注按钮');
-                //     // widget.video.follow = false;
-                //   },
-                //   child: Container(
-                //     decoration: const BoxDecoration(
-                //       color: Colors.grey,
-                //       borderRadius: BorderRadius.all(Radius.circular(120)),
-                //     ),
-                //     child: Icon(Icons.done,color: Colors.deepOrange,size: 15,),
-                //   ),
-                // ) :
-                // InkWell(
-                //   onTap: (){
-                //     _follow();
-                //     // print('点击加关注按钮');
-                //     // widget.video.follow = true;
-                //   },
-                //   child: Container(
-                //     decoration: const BoxDecoration(
-                //       color: Colors.white,
-                //       borderRadius: BorderRadius.all(Radius.circular(50)),
-                //     ),
-                //     child: const Icon(Icons.add_circle,color: Colors.red,size: 15,),
-                //   ),
-                // )),
               ],
-            )
+            ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 15,right: 9),
-            width: 60,
-            height: 60,
-            child: InkWell(
-              onTap: (){
-                if(widget.video.like){
-                  _unlike();
-                }else{
-                  _like();
-                }
-              },
-              child: Column(
-                children: [
-                  AnimatedSwitcher(
-                    transitionBuilder: (child, anim){
-                      return ScaleTransition(child: child,scale: anim);
-                    },
-                    duration: Duration(milliseconds: 500),
-                    child: Icon(widget.video.like ? Icons.favorite:Icons.favorite_outlined, size: 36, color: widget.video.like ? Colors.red:Colors.white,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: (){
+                  if(widget.video.like){
+                    _unlike();
+                  }else{
+                    _like();
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15,right: 9),
+                  // width: 52,
+                  // height: 52,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AnimatedSwitcher(
+                        transitionBuilder: (child, anim){
+                          return ScaleTransition(child: child,scale: anim);
+                        },
+                        duration: Duration(milliseconds: 500),
+                        child: Icon(widget.video.like ? Icons.favorite:Icons.favorite_outlined, size: 36, color: widget.video.like ? Colors.red:Colors.white,),
+                      ),
+                      Text(Global.getNumbersToChinese(widget.video.likes)),
+                    ],
                   ),
-                  Text(Global.getNumbersToChinese(widget.video.likes)),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 15,right: 9),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, FadeRoute(page: CommentPage(widget.video.id,widget.video.userId,videoPlayerController)));
-              },
-              child: Column(
-                children: [
-                  Icon(Icons.textsms_sharp, size: 36,),
-                  Text(Global.getNumbersToChinese(widget.video.comments)),
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: (){
+                  Navigator.push(context, FadeRoute(page: CommentPage(widget.video.id,widget.video.userId,videoPlayerController)));
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 15,right: 9),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.textsms_sharp, size: 36,),
+                      Text(Global.getNumbersToChinese(widget.video.comments)),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
+
+
           widget.video.forward?
-            Container(
-            margin: EdgeInsets.only(bottom: 15,right: 9),
-            child: InkWell(
-              onTap: (){
-                print('点击分享按钮');
-                Global.showWebColoredToast('暂未开放!');
-              },
-              child: Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationY(math.pi),
-                    child: Icon(Icons.reply_outlined, size: 45,),
+                  InkWell(
+                      onTap: (){
+                        print('点击分享按钮');
+                        Global.showWebColoredToast('暂未开放!');
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 15,right: 9),
+                        child: Column(
+                          children: [
+                            Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationY(math.pi),
+                              child: Icon(Icons.reply_outlined, size: 45,),
+                            ),
+                            Text(Global.getNumbersToChinese(widget.video.forwards)),
+                          ],
+                        ),
+                      ),
                   ),
-                  Text(Global.getNumbersToChinese(widget.video.forwards)),
                 ],
-              ),
-            ),
-          ):const Padding(padding: EdgeInsets.all( 15)),
+              )
+            :const Padding(padding: EdgeInsets.all( 15)),
           const Padding(padding: EdgeInsets.only(bottom: 12)),
         ],
       ),
@@ -307,7 +282,15 @@ class ShortVideoItemState extends State<ShortVideoItem> {
         children: [
           InkWell(
             onTap: (){
-              print('点击昵称！');
+              // print('点击昵称！');
+              if(initialized) videoPlayerController.pause();
+              if(widget.video.userId == userModel.user.id){
+                Navigator.push(
+                    context, SlideRightRoute(page: ShortVideoMyProfilePage(layout: true,)));
+              }else{
+                Navigator.push(
+                    context, SlideRightRoute(page: ShortVideoUserProfilePage(widget.video.userId)));
+              }
             },
             child: Container(
               margin: const EdgeInsets.only(left: 15),
@@ -400,7 +383,8 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                   }
                 },
                 child: Column(
-                  mainAxisAlignment: (initialized && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
+                  // mainAxisAlignment: (initialized && videoPlayerController.value.aspectRatio > 0.6)?MainAxisAlignment.center:MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Flexible(
                       // flex:2,
@@ -408,7 +392,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                         tag: "player",
                         child: AspectRatio(
                           ///设置视频的大小 宽高比。长宽比表示为宽高比。例如，16:9宽高比的值为16.0/9.0
-                          aspectRatio: videoPlayerController.value.aspectRatio,
+                          aspectRatio: (initialized && videoPlayerController.value.aspectRatio > 0.6)?videoPlayerController.value.aspectRatio: 0.54,
                           ///播放视频的组件
                           child: Stack(
                             // alignment: (initialized && !_isFullScreen && videoPlayerController.value.aspectRatio > 0.6)?Alignment.center:Alignment.bottomCenter,

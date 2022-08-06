@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/data/User.dart';
+import 'package:movie_fix/data/Users.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 import '../AssetsMembership.dart';
@@ -9,21 +10,48 @@ import '../AssetsMembership.dart';
 class cAvatar extends StatelessWidget {
   // ImageProvider<Object> image;
   User? user;
+  Users? users;
   double size;
 
-  cAvatar({Key? key, this.size = 60, this.user}) : super(key: key);
+  cAvatar({Key? key, this.size = 60, this.user,this.users}) : super(key: key);
 
   _buildPicture() {
-    if (this.user == null) {
+    User _user;
+    if (this.user == null && this.users == null) {
       return buildHeaderPicture(self: true);
+    }else if(this.user == null){
+      int level =0;
+      bool member = false;
+      if(this.users != null){
+        level = int.parse('${this.users?.level}');
+        if(this.users?.member == true){
+          member = true;
+        }
+      }
+      _user = User(level: level,member: member);
+    } else {
+      _user = this.user!;
     }
-    return buildHeaderPicture(avatar: user?.avatar);
+    return buildHeaderPicture(avatar: _user.avatar);
   }
 
   _buildColor() {
     User _user;
-    if (this.user == null) {
+    if (this.user == null && this.users == null) {
+
       _user = userModel.user;
+    }else if(this.user == null){
+      int level =0;
+      bool member = false;
+      if(this.users != null){
+        if(this.users?.level != null){
+          level = int.parse('${this.users?.level}');
+        }
+        if(this.users?.member == true){
+          member = true;
+        }
+      }
+      _user = User(level: level,member: member);
     } else {
       _user = this.user!;
     }
@@ -61,8 +89,19 @@ class cAvatar extends StatelessWidget {
 
   _buildIcon() {
     User _user;
-    if (this.user == null) {
+    if (this.user == null && this.users == null) {
+
       _user = userModel.user;
+    }else if(this.user == null){
+      int level =0;
+      bool member = false;
+      if(this.users != null){
+        level = int.parse('${this.users?.level}');
+        if(this.users?.member == true){
+          member = true;
+        }
+      }
+      _user = User(level: level,member: member);
     } else {
       _user = this.user!;
     }

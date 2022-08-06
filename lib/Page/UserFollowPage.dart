@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cSearch.dart';
 import 'package:movie_fix/Page/ShortVideoMyProfilePage.dart';
 import 'package:movie_fix/Page/ShortVideoUserProfilePage.dart';
@@ -128,20 +129,11 @@ class _UserFollowPage extends State<UserFollowPage> {
               },
               child: Row(
                 children: [
-                  Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(60)),
-                      image: DecorationImage(
-                        image: buildHeaderPicture(avatar: user.avatar),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                  cAvatar(users: user,size: 45,),
                   Container(
                     margin: const EdgeInsets.only(
                       left: 6,
+                      top: 9,
                     ),
                     child: Text(user.nickname),
                   ),

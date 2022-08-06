@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
+import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/data/User.dart';
 import 'package:video_player/video_player.dart';
 import '../Module/GeneralInput.dart';
 import '../Module/GeneralVideoList.dart';
@@ -401,11 +403,15 @@ class _PlayerPage extends State<PlayerPage>{
   }
   _buildComment(){
     List<Widget> widgets = [];
-    widgets.add(refresh ? GeneralRefresh.getLoading() : Container());
-    widgets.add(_comments.isEmpty ? Container(
-      margin: const EdgeInsets.all(30),
-      child: const Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
-    ) : Container());
+    if(refresh){
+      widgets.add(GeneralRefresh.getLoading());
+    }
+    if(_comments.isEmpty){
+      widgets.add(Container(
+        margin: const EdgeInsets.all(30),
+        child: const Center(child: Text('还没有人评论哟，赶紧抢个沙发吧～'),),
+      ));
+    }
     if(_comments.isNotEmpty){
       widgets.addAll(buildComment());
     }
@@ -431,6 +437,7 @@ class _PlayerPage extends State<PlayerPage>{
     List<Widget> widgets = [];
     for(int i= 0; i<_comments.length; i++){
       // print('${_comments[i].userId}  ${userModel.user.id}');
+      User user = User(avatar: _comments[i].avatar,id: _comments[i].userId!,level: _comments[i].level,member: _comments[i].member);
       widgets.add(
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -442,17 +449,18 @@ class _PlayerPage extends State<PlayerPage>{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          image: DecorationImage(
-                            image: buildHeaderPicture(avatar: _comments[i].avatar),
-                            fit: BoxFit.fill,
-                          )
-                      ),
-                    ),
+                    // Container(
+                    //   height: 45,
+                    //   width: 45,
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.all(Radius.circular(50)),
+                    //       image: DecorationImage(
+                    //         image: buildHeaderPicture(avatar: _comments[i].avatar),
+                    //         fit: BoxFit.fill,
+                    //       )
+                    //   ),
+                    // ),
+                    cAvatar(user: user,),
                     const Padding(padding: EdgeInsets.all(3)),
                     Container(
                       alignment: Alignment.centerLeft,

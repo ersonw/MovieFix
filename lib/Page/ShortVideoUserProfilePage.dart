@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/ProfileShortVideo.dart';
 import 'package:movie_fix/Page/UserFansPage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/User.dart';
@@ -157,53 +158,67 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
     List<Widget> list = [];
     for (int i = 0; i < lists.length; i++) {
       ShortVideo video = lists[i];
-      list.add(Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Stack(
-            alignment: Alignment.topLeft,
-            children: [
-              Container(
-                height: 180,
-                margin: const EdgeInsets.only(right: 1),
-                width: MediaQuery.of(context).size.width / 3.2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
-                  image: DecorationImage(
-                    image: NetworkImage(video.pic),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              if (work && video.pin)
+      list.add(InkWell(
+        onTap: (){
+          Navigator.push(
+              context, SlideRightRoute(page: ProfileShortVideo(videos,index: i,callback: (){
+                if(work){
+                  page++;
+                  _getVideos();
+                }else{
+                  lpage++;
+                  _getVideoLikes();
+                }
+          },)));
+        },
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Stack(
+              alignment: Alignment.topLeft,
+              children: [
                 Container(
-                  height: 21,
-                  width: 36,
-                  margin: const EdgeInsets.only(left: 3),
+                  height: 180,
+                  margin: const EdgeInsets.only(right: 1),
+                  width: MediaQuery.of(context).size.width / 3.2,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(3))),
-                  child: Center(
-                    child: Text(
-                      '置顶',
-                      style: TextStyle(fontSize: 12),
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                    image: DecorationImage(
+                      image: NetworkImage(video.pic),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
-            ],
-          ),
-          Container(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.play_arrow_outlined,
-                ),
-                Text('${video.plays}')
+                if (work && video.pin)
+                  Container(
+                    height: 21,
+                    width: 36,
+                    margin: const EdgeInsets.only(left: 3),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(3))),
+                    child: Center(
+                      child: Text(
+                        '置顶',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
               ],
             ),
-          ),
-        ],
+            Container(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.play_arrow_outlined,
+                  ),
+                  Text('${video.plays}')
+                ],
+              ),
+            ),
+          ],
+        ),
       ));
     }
     return Container(

@@ -122,7 +122,7 @@ class _ShortVideoPage extends State<ShortVideoPage>
 
   /// 用来创建上下滑动的页面
   Widget buildTableViewItemWidget(List<ShortVideo> list, String value) {
-    if (list.length == 1) {
+    if (list.length < 2) {
       if (initialIndex == 0) {
         fPage++;
         _getForwards();

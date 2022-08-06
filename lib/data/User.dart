@@ -12,7 +12,17 @@ class User {
   int level = 0;
   bool member = false;
 
-  User();
+  User(
+      {this.id = 0,
+      this.avatar,
+      this.nickname = '',
+      this.text,
+      this.username = '',
+      this.phone,
+      this.email,
+      this.token = '',
+      this.level = 0,
+      this.member = false});
 
   User.formJson(Map<String, dynamic> json)
       : id = json['id'],

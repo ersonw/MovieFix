@@ -9,6 +9,7 @@ import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 import '../Global.dart';
+import 'ProfileShortVideo.dart';
 import 'UserFansPage.dart';
 import 'UserFollowPage.dart';
 
@@ -164,58 +165,145 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
     );
   }
 
+  // _buildShrotVideo(List<ShortVideo> lists,{bool work = false}) {
+  //   if (lists.isEmpty) return _buildNothing();
+  //   List<Widget> list = [];
+  //   for (int i = 0; i < lists.length; i++) {
+  //     ShortVideo video = lists[i];
+  //     list.add(Stack(
+  //       alignment: Alignment.bottomLeft,
+  //       children: [
+  //         Stack(
+  //           alignment: Alignment.topLeft,
+  //           children: [
+  //             Container(
+  //               height: 180,
+  //               margin: const EdgeInsets.only(right: 1),
+  //               width: MediaQuery.of(context).size.width / 3.2,
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.all(Radius.circular(3)),
+  //                 image: DecorationImage(
+  //                   image: NetworkImage(video.pic),
+  //                   fit: BoxFit.fill,
+  //                 ),
+  //               ),
+  //             ),
+  //             if (work && video.pin)
+  //               Container(
+  //                 height: 21,
+  //                 width: 36,
+  //                 margin: const EdgeInsets.only(left: 3),
+  //                 decoration: BoxDecoration(
+  //                     color: Colors.red,
+  //                     borderRadius: BorderRadius.all(Radius.circular(3))),
+  //                 child: Center(
+  //                   child: Text(
+  //                     '置顶',
+  //                     style: TextStyle(fontSize: 12),
+  //                   ),
+  //                 ),
+  //               ),
+  //           ],
+  //         ),
+  //         Container(
+  //           child: Row(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               Icon(
+  //                 Icons.play_arrow_outlined,
+  //               ),
+  //               Text('${video.plays}')
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ));
+  //   }
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width,
+  //     margin: const EdgeInsets.all(9),
+  //     child: MediaQuery.removePadding(
+  //       context: context,
+  //       removeTop: true,
+  //       child: ListView(
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         children: [
+  //           Wrap(
+  //             // spacing: 3,
+  //             runSpacing: 1,
+  //             children: list,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
   _buildShrotVideo(List<ShortVideo> lists,{bool work = false}) {
     if (lists.isEmpty) return _buildNothing();
     List<Widget> list = [];
     for (int i = 0; i < lists.length; i++) {
       ShortVideo video = lists[i];
-      list.add(Stack(
-        alignment: Alignment.bottomLeft,
-        children: [
-          Stack(
-            alignment: Alignment.topLeft,
-            children: [
-              Container(
-                height: 180,
-                margin: const EdgeInsets.only(right: 1),
-                width: MediaQuery.of(context).size.width / 3.2,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
-                  image: DecorationImage(
-                    image: NetworkImage(video.pic),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              if (work && video.pin)
+      list.add(InkWell(
+        onTap: (){
+          Navigator.push(
+              context, SlideRightRoute(page: ProfileShortVideo(videos,index: i,callback: (){
+            if(work){
+              page++;
+              _getVideos();
+            }else{
+              lpage++;
+              _getVideoLikes();
+            }
+          },)));
+        },
+        child: Stack(
+          alignment: Alignment.bottomLeft,
+          children: [
+            Stack(
+              alignment: Alignment.topLeft,
+              children: [
                 Container(
-                  height: 21,
-                  width: 36,
-                  margin: const EdgeInsets.only(left: 3),
+                  height: 180,
+                  margin: const EdgeInsets.only(right: 1),
+                  width: MediaQuery.of(context).size.width / 3.2,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(3))),
-                  child: Center(
-                    child: Text(
-                      '置顶',
-                      style: TextStyle(fontSize: 12),
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                    image: DecorationImage(
+                      image: NetworkImage(video.pic),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
-            ],
-          ),
-          Container(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.play_arrow_outlined,
-                ),
-                Text('${video.plays}')
+                if (work && video.pin)
+                  Container(
+                    height: 21,
+                    width: 36,
+                    margin: const EdgeInsets.only(left: 3),
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(3))),
+                    child: Center(
+                      child: Text(
+                        '置顶',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ),
               ],
             ),
-          ),
-        ],
+            Container(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.play_arrow_outlined,
+                  ),
+                  Text('${video.plays}')
+                ],
+              ),
+            ),
+          ],
+        ),
       ));
     }
     return Container(
@@ -237,7 +325,6 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
       ),
     );
   }
-
   _buildNothing() {
     return Container(
       margin: const EdgeInsets.all(30),

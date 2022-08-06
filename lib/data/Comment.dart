@@ -9,6 +9,8 @@ class Comment {
   int? userId;
   String? avatar;
   String? nickname;
+  int level = 0;
+  bool member = false;
   int likes = 0;
   bool like = false;
   List<Comment> reply = [];
@@ -27,6 +29,8 @@ class Comment {
         nickname = json['nickname'],
         likes = json['likes'] ?? 0,
         like = json['like'] ?? false,
+        level = json['level'] ?? 0,
+        member = json['member'] ?? false,
         reply = json['reply'] != null ?
             (json['reply'] as List).map((e) => Comment.formJson(e)).toList() : [];
 
@@ -40,6 +44,8 @@ class Comment {
         'nickname': nickname,
         'likes': likes,
         'like': like,
+        'level': level,
+        'member': member,
         'reply': reply.map((e) => e.toJson()).toList(),
       };
 

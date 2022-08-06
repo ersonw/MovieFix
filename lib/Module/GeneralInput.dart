@@ -82,7 +82,7 @@ class _GeneralInput extends State<GeneralInput> {
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     controller: controller,
-                    autofocus: true,
+                    // autofocus: true,
                     // style: TextStyle(color: Colors.white38),
                     onEditingComplete: () {
                       if(widget.callback != null){
