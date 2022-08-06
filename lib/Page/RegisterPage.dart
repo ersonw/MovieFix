@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Module/GeneralRefresh.dart';
+import '../AssetsBackground.dart';
 import '../tools/CustomDialog.dart';
 import '../tools/CustomRoute.dart';
 import '../tools/Request.dart';
@@ -18,329 +20,412 @@ class RegisterPage extends StatefulWidget {
 
 }
 class _RegisterPage extends State<RegisterPage> {
+  Timer _timer = Timer(const Duration(seconds: 1), (){});
   final TextEditingController usernameEditingController = TextEditingController();
-  final TextEditingController smsEditingController = TextEditingController();
-  final TextEditingController passwdEditingController = TextEditingController();
   final TextEditingController passwordEditingController = TextEditingController();
+  final TextEditingController passwdEditingController = TextEditingController();
+  final TextEditingController codeEditingController = TextEditingController();
+  int _count = 0;
   bool eyes = false;
-  bool _isNumber = true;
-  bool alive = true;
+  bool eyes1 = false;
+  bool first = true;
   String countryCode = '+86';
   String? codeId;
-  String? codeText;
-  String _codeHint = '发送验证码';
-  int validTime = 120;
-  Timer _timer = Timer(const Duration(seconds: 1), () => {});
-
   @override
   void initState() {
     super.initState();
     usernameEditingController.addListener(() {
-      if (usernameEditingController.text.isNotEmpty) {
+      if(usernameEditingController.text.isNotEmpty){
         if (int.tryParse(usernameEditingController.text) != null) {
           setState(() {
-            _isNumber = true;
+            first = true;
           });
-        } else {
-          setState(() {
-            _isNumber = false;
-          });
+        }
+        else{
+          Global.showWebColoredToast('仅支持手机号登录');
+          usernameEditingController.text = '';
+          // setState(() {
+          //   _isNumber = false;
+          // });
         }
       }
     });
-  }
-  void _countDown() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      if(alive) {
-        setState(() {
-          if (validTime < 1) {
-            _codeHint = '重新发送';
-            validTime = 120;
-            _timer.cancel();
-          } else {
-            --validTime;
-            _codeHint = '${validTime}S';
-          }
-        });
+    codeEditingController.addListener(() {
+      if(codeEditingController.text.isNotEmpty){
+        if (int.tryParse(codeEditingController.text) != null) {
+          // setState(() {
+          //   _isNumber = true;
+          // });
+        }
+        else {
+          Global.showWebColoredToast('验证码必须为整数哟～');
+          codeEditingController.text = '';
+          // setState(() {
+          //   _isNumber = false;
+          // });
+        }
+        // if(mounted) setState(() {});
       }
     });
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff181921),
-      body: ListView(
-        children: [
+    return GeneralRefresh(
+      // title: '用户登录',
+        children:[
           Stack(
-            alignment: Alignment.topLeft,
+            alignment: Alignment.topCenter,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.all(30),
-                      child: Center(child: Icon(Icons.clear),),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.all(20),
-            width: ((MediaQuery.of(context).size.width) / 1),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              color: Colors.white.withOpacity(0.6), // 底色
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 10, //阴影范围
-                  spreadRadius: 0.1, //阴影浓度
-                  color: Colors.grey.withOpacity(0.2), //阴影颜色
-                ),
-              ],
-            ),
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              child: SingleChildScrollView(
+              // GestureDetector(),
+              Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top:10,bottom: 20),
-                      child: const Text('注册账号', style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-                    ),
-                    Container(
-                      height: 45,
-                      // width: ((MediaQuery.of(context).size.width) / 1.6),
-                      margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
-                      decoration: const BoxDecoration(
-                        border:
-                        Border(bottom: BorderSide(color: Colors.black12, width: 2)),
-                      ),
-                      child: Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(Global.mainContext, SlideRightRoute(page:  CountryCodePage(callback: (String code) {
-                                  setState(() {
-                                    countryCode = code;
-                                  });
-                                },)));
-                              },
-                              child: Text(countryCode,style: const TextStyle(color: Colors.black),),
-                            ),
-                            Expanded(
-                              child: TextField(
-                                controller: usernameEditingController,
-                                style: TextStyle(color: _isNumber ? Colors.white : Colors.red),
-                                onEditingComplete: () {
-                                },
-                                keyboardType: TextInputType.number,
-                                decoration:  const InputDecoration(
-                                  hintText: '请输入手机号码(13800138000)',
-                                  hintStyle: TextStyle(color: Colors.black26,fontSize: 14),
-                                  border: InputBorder.none,
-                                  filled: true,
-                                  fillColor: Colors.transparent,
-                                ),
-                              ),
-                            ),
-                          ]
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      // width: ((MediaQuery.of(context).size.width) / 1.6),
-                      margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
-                      decoration: const BoxDecoration(
-                        border:
-                        Border(bottom: BorderSide(color: Colors.black12, width: 2)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: smsEditingController,
-                              // style: TextStyle(color: Colors.white38),
-                              onEditingComplete: () {
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                hintText: '请输入验证码',
-                                hintStyle: TextStyle(color: Colors.black26,fontSize: 14),
-                                border: InputBorder.none,
-                                filled: true,
-                                fillColor: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: (){
-                              _sendSms();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.deepOrangeAccent,
-                                borderRadius: BorderRadius.all(Radius.circular(30)),
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 9,right: 9,top: 6,bottom: 6),
-                                child: Text(_codeHint),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      // width: ((MediaQuery.of(context).size.width) / 1.6),
-                      margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
-                      decoration: const BoxDecoration(
-                        border:
-                        Border(bottom: BorderSide(color: Colors.black12, width: 2)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: passwdEditingController,
-                              // style: TextStyle(color: Colors.white38),
-                              onEditingComplete: () {
-                              },
-                              obscureText: !eyes,
-                              keyboardType: TextInputType.visiblePassword,
-                              decoration: const InputDecoration(
-                                hintText: '请输入密码',
-                                hintStyle: TextStyle(color: Colors.black26,fontSize: 14),
-                                border: InputBorder.none,
-                                filled: true,
-                                fillColor: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                eyes = !eyes;
-                              });
-                            },
-                            child: Icon(eyes ? Icons.remove_red_eye : Icons.visibility_off_outlined,size: 30,color: Colors.grey,),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 45,
-                      // width: ((MediaQuery.of(context).size.width) / 1.6),
-                      margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
-                      decoration: const BoxDecoration(
-                        border:
-                        Border(bottom: BorderSide(color: Colors.black12, width: 2)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: passwordEditingController,
-                              // style: TextStyle(color: Colors.white38),
-                              onEditingComplete: () {
-                              },
-                              obscureText: !eyes,
-                              keyboardType: TextInputType.visiblePassword,
-                              decoration: const InputDecoration(
-                                hintText: '再次确认密码',
-                                hintStyle: TextStyle(color: Colors.black26,fontSize: 14),
-                                border: InputBorder.none,
-                                filled: true,
-                                fillColor: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: (){
-                              setState(() {
-                                eyes = !eyes;
-                              });
-                            },
-                            child: Icon(eyes ? Icons.remove_red_eye : Icons.visibility_off_outlined,size: 30,color: Colors.grey,),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          height: 45,
-                          child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(30))),
-                            ),
-                            onPressed: () {
-                              _register();
-                            },
-                            child: const Text(
-                              '注册',
-                              style: TextStyle(color: Colors.white,fontSize: 18),
-                            ),
-                          ),
+                      height: 300,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(AssetsBackground.login),
+                          fit: BoxFit.fill,
                         ),
-                        SizedBox(
-                          width: 120,
-                          height: 45,
-                          child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                              MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(30))),
-                            ),
-                            onPressed: () {
-                              _login();
-                            },
-                            child: const Text(
-                              '登录',
-                              style: TextStyle(color: Colors.white,fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+              Container(
+                // height: MediaQuery.of(context).size.height,
+                // width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 15,top: 45),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Icon(Icons.arrow_back),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('HI',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
+                          Text('欢迎来到23AV！',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 100),
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
+                        color: Color(0xff181921),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.all(15),
+                            child: Text('注册用户',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 30),
+                                child: Text('手机号',style: TextStyle(fontSize: 18),),
+                              ),
+                              Container(
+                                height: 45,
+                                // width: ((MediaQuery.of(context).size.width) / 1.6),
+                                margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
+                                decoration:  BoxDecoration(
+                                  // color: Colors.white,
+                                  border:
+                                  Border(bottom: BorderSide(color: Colors.white.withOpacity(0.1), width: 2)),
+                                ),
+                                child: Row(
+                                    children: [
+                                      // if(_isNumber)
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(Global.mainContext, SlideRightRoute(page:  CountryCodePage(callback: (String code) {
+                                            setState(() {
+                                              countryCode = code;
+                                            });
+                                          },)));
+                                        },
+                                        child: Text(countryCode,style: const TextStyle(color: Colors.white),),
+                                      ),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: usernameEditingController,
+                                          // style: TextStyle(color: Colors.white38),
+                                          onEditingComplete: () {
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          decoration:  InputDecoration(
+                                            hintText: '请输入手机号码(+8613800138000)',
+                                            hintStyle: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 14),
+                                            border: InputBorder.none,
+                                            filled: true,
+                                            fillColor: Colors.transparent,
+                                          ),
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 30),
+                                child: Text('验证码',style: TextStyle(fontSize: 18),),
+                              ),
+                              Container(
+                                height: 45,
+                                // width: ((MediaQuery.of(context).size.width) / 1.6),
+                                margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
+                                decoration:  BoxDecoration(
+                                  border:
+                                  Border(bottom: BorderSide(color: Colors.white.withOpacity(0.1), width: 2)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: codeEditingController,
+                                        // style: TextStyle(color: Colors.white38),
+                                        onEditingComplete: () {
+                                        },
+                                        // obscureText: !eyes,
+                                        keyboardType: TextInputType.number,
+                                        decoration:  InputDecoration(
+                                          hintText: '请输入验证码',
+                                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 14),
+                                          border: InputBorder.none,
+                                          filled: true,
+                                          fillColor: Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                    if(_count == 0)
+                                      InkWell(
+                                        onTap: _sendCode,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(left: 9,),
+                                          child: Text(first?'发送验证码':'重新发送',style: TextStyle(color: Colors.white.withOpacity(0.9)),),
+                                        ),
+                                      ),
+                                    if(_count > 0)
+                                      Container(
+                                        margin: const EdgeInsets.only(left: 9,),
+                                        child: Text('重新发送(${_count}s)',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 30),
+                                child: Text('设置密码',style: TextStyle(fontSize: 18),),
+                              ),
+                              Container(
+                                height: 45,
+                                // width: ((MediaQuery.of(context).size.width) / 1.6),
+                                margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
+                                decoration:  BoxDecoration(
+                                  border:
+                                  Border(bottom: BorderSide(color: Colors.white.withOpacity(0.1), width: 2)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: passwdEditingController,
+                                        // style: TextStyle(color: Colors.white38),
+                                        onEditingComplete: () {
+                                        },
+                                        obscureText: !eyes,
+                                        keyboardType: TextInputType.visiblePassword,
+                                        decoration:  InputDecoration(
+                                          hintText: '请输入密码',
+                                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 14),
+                                          border: InputBorder.none,
+                                          filled: true,
+                                          fillColor: Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          eyes = !eyes;
+                                        });
+                                      },
+                                      child: eyes ? Icon(Icons.remove_red_eye,size: 24,color: Colors.white,):
+                                      Icon(Icons.visibility_off_outlined,size: 24,color: Colors.grey,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 30),
+                                child: Text('确认密码',style: TextStyle(fontSize: 18),),
+                              ),
+                              Container(
+                                height: 45,
+                                // width: ((MediaQuery.of(context).size.width) / 1.6),
+                                margin: const EdgeInsets.only(top:10,bottom: 20, left: 25, right: 25),
+                                decoration:  BoxDecoration(
+                                  border:
+                                  Border(bottom: BorderSide(color: Colors.white.withOpacity(0.1), width: 2)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        controller: passwordEditingController,
+                                        // style: TextStyle(color: Colors.white38),
+                                        onEditingComplete: () {
+                                        },
+                                        obscureText: !eyes1,
+                                        keyboardType: TextInputType.visiblePassword,
+                                        decoration:  InputDecoration(
+                                          hintText: '请确认密码',
+                                          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6),fontSize: 14),
+                                          border: InputBorder.none,
+                                          filled: true,
+                                          fillColor: Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: (){
+                                        setState(() {
+                                          eyes1 = !eyes1;
+                                        });
+                                      },
+                                      child: eyes1 ? Icon(Icons.remove_red_eye,size: 24,color: Colors.white,):
+                                      Icon(Icons.visibility_off_outlined,size: 24,color: Colors.grey,),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          InkWell(
+                            onTap: _register,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 45,
+                              margin: const EdgeInsets.only(left: 30,right: 30,top: 9,bottom: 9),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.deepOrange,
+                                    Colors.orangeAccent,
+                                  ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                ),
+                              ),
+                              child: Center(child: Text('确认注册',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: _login,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 45,
+                              margin: const EdgeInsets.only(left: 30,right: 30,top: 9,bottom: 9),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                color: Colors.white.withOpacity(0.15),
+                              ),
+                              child: Center(child: Text('登录',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ]
     );
   }
-  _sendSms()async{
+  _countDown(){
+    first=false;
+    _timer.cancel();
+    _count = 60;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if(_count > 0){
+        _count--;
+      }else{
+        _count = 0;
+        _timer.cancel();
+      }
+      if(mounted) setState(() {});
+    });
+  }
+  _sendCode()async{
     if(usernameEditingController.text.isEmpty){
-      CustomDialog.message('手机号不可为空！');
+      CustomDialog.message('手机号必须填写');
       return;
     }
-    if(validTime < 120){
-      return;
-    }
-    codeId = await Request.userRegisterSms(countryCode+usernameEditingController.text);
-    if(codeId != null){
+    String? code = await Request.userRegisterSms(countryCode+usernameEditingController.text);
+    // print(code);
+    if(code != null){
+      CustomDialog.message('短信发送成功!');
+      codeId = code;
       _countDown();
-      CustomDialog.message('短信发送成功！');
+    }else{
+      // CustomDialog.message('系统错误!');
     }
   }
   _register()async{
@@ -348,7 +433,7 @@ class _RegisterPage extends State<RegisterPage> {
       CustomDialog.message('请先发送验证码哟！');
       return;
     }
-    if(smsEditingController.text.isEmpty){
+    if(codeEditingController.text.isEmpty){
       CustomDialog.message('验证码必填哟！');
       return;
     }
@@ -360,9 +445,9 @@ class _RegisterPage extends State<RegisterPage> {
       CustomDialog.message('两次密码不一致哟！');
       return;
     }
-    if(await Request.userRegister(passwordEditingController.text, codeId!, smsEditingController.text) == true){
+    if(await Request.userRegister(passwordEditingController.text, codeId!, codeEditingController.text) == true){
       Navigator.pop(context);
-      CustomDialog.message('注册成功，请前往登陆哟!');
+      CustomDialog.message('恭喜您，注册成功!');
     }
   }
   _login()async{
@@ -370,7 +455,6 @@ class _RegisterPage extends State<RegisterPage> {
   }
   @override
   void dispose() {
-    alive = false;
     super.dispose();
   }
 }

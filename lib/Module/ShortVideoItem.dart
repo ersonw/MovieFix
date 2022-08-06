@@ -5,10 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_fix/Module/ShortVideoFullScreen.dart';
+import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Page/CommentPage.dart';
 import 'package:movie_fix/Page/ShortVideoMyProfilePage.dart';
 import 'package:movie_fix/Page/ShortVideoUserProfilePage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
+import 'package:movie_fix/data/User.dart';
+import 'package:movie_fix/data/Users.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
@@ -34,6 +37,7 @@ class ShortVideoItem extends StatefulWidget {
 }
 
 class ShortVideoItemState extends State<ShortVideoItem> {
+  User? _user;
   late Timer _timer;
   // 是否全屏
   bool get _isFullScreen =>
@@ -71,6 +75,16 @@ class ShortVideoItemState extends State<ShortVideoItem> {
       videoPlayerController.play();
       setState(() {});
     });
+  }
+  _getInfo()async{
+    Map<String, dynamic> result = await Request.userMyProfile();
+    if(result['user'] != null) {
+      _user = User.formJson(result['user']);
+      // _user?.level = 20;
+      // _user?.member = true;
+      // userModel.user = user;
+    }
+    if(mounted) setState(() {});
   }
   callback(Timer timer) async{
     timer.cancel();
@@ -140,54 +154,56 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                           context, SlideRightRoute(page: ShortVideoUserProfilePage(widget.video.userId)));
                     }
                   },
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    height: 60,
-                    width: 42,
-                    child: Center(
-                      child: Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: buildHeaderPicture(avatar: widget.video.avatar),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // child: Container(
+                  //   alignment: Alignment.topCenter,
+                  //   height: 60,
+                  //   width: 42,
+                  //   child: Center(
+                  //     child: Container(
+                  //       width: 42,
+                  //       height: 42,
+                  //       decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.all(Radius.circular(50)),
+                  //         image: DecorationImage(
+                  //           fit: BoxFit.fill,
+                  //           image: buildHeaderPicture(avatar: widget.video.avatar),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // ),
+                  child: cAvatar(user: _user,size: 42,),
                 ),
-                if(widget.video.userId != userModel.user.id)
-                (widget.video.follow ?
-                InkWell(
-                  onTap: (){
-                    print('点击取消关注按钮');
-                    // widget.video.follow = false;
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.all(Radius.circular(120)),
-                    ),
-                    child: Icon(Icons.done,color: Colors.deepOrange,size: 15,),
-                  ),
-                ) :
-                InkWell(
-                  onTap: (){
-                    _follow();
-                    // print('点击加关注按钮');
-                    // widget.video.follow = true;
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    child: const Icon(Icons.add_circle,color: Colors.red,size: 15,),
-                  ),
-                )),
+                // if(widget.video.userId != userModel.user.id)
+                // (widget.video.follow ?
+                // InkWell(
+                //   onTap: (){
+                //     print('点击取消关注按钮');
+                //     // widget.video.follow = false;
+                //   },
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //       color: Colors.grey,
+                //       borderRadius: BorderRadius.all(Radius.circular(120)),
+                //     ),
+                //     child: Icon(Icons.done,color: Colors.deepOrange,size: 15,),
+                //   ),
+                // ) :
+                // InkWell(
+                //   onTap: (){
+                //     _follow();
+                //     // print('点击加关注按钮');
+                //     // widget.video.follow = true;
+                //   },
+                //   child: Container(
+                //     decoration: const BoxDecoration(
+                //       color: Colors.white,
+                //       borderRadius: BorderRadius.all(Radius.circular(50)),
+                //     ),
+                //     child: const Icon(Icons.add_circle,color: Colors.red,size: 15,),
+                //   ),
+                // )),
               ],
             )
           ),

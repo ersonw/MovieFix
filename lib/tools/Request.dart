@@ -190,7 +190,7 @@ class Request {
 
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
-      if(map['id'] != null) return map['id'];
+      return map['id'];
     }
     return null;
   }

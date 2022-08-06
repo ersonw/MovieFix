@@ -42,6 +42,14 @@ class AssetsIcon {
   static const String select = ('assets/icons/select.png');
   static const String unselect = ('assets/icons/unselect.png');
 
-  static const String crown = ('assets/icons/crown.png');
-
+  static const String goumaijinbi = ('assets/icons/goumaijinbi.png');
+  static const String goumaizuanshi = ('assets/icons/goumaizuanshi.png');
+  static const String kaichejinqun = ('assets/icons/kaichejinqun.png');
+  static const String saoma = ('assets/icons/saoma.png');
+  static const String shezhi = ('assets/icons/shezhi.png');
+  static const String wodeshipin = ('assets/icons/wodeshipin.png');
+  static const String wodesoucang = ('assets/icons/wodesoucang.png');
+  static const String wodexiazai = ('assets/icons/wodexiazai.png');
+  static const String xiaoxi = ('assets/icons/xiaoxi.png');
+  static const String zaixiankefu = ('assets/icons/zaixiankefu.png');
 }

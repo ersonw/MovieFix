@@ -7,7 +7,9 @@ class Users {
       this.nickname = '',
       this.fans = 0,
       this.follow = false,
-      this.followed=false});
+      this.followed=false,
+      this.level=0,
+      this.member=false});
 
   int id;
   String? avatar;
@@ -15,6 +17,8 @@ class Users {
   int fans;
   bool follow;
   bool followed;
+  int level = 0;
+  bool member = false;
 
   Users.formJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -22,6 +26,8 @@ class Users {
         nickname = json["nickname"],
         fans = json["fans"],
         followed = json["followed"],
+        level = json["level"],
+        member = json["member"],
         follow = json["follow"];
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +36,8 @@ class Users {
         'nickname': nickname,
         'fans': fans,
         'followed': followed,
+        'level': level,
+        'member': member,
         'follow': follow,
       };
 

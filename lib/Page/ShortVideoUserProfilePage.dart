@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/Page/UserFansPage.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
@@ -382,20 +383,7 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 15, bottom: 15),
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(60)),
-                            border: Border.all(width: 2, color: Colors.white),
-                            image: DecorationImage(
-                              image:
-                              buildHeaderPicture(avatar: user?.avatar),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
+                        cAvatar(user: user,),
                         Container(
                           margin: const EdgeInsets.only(left: 15),
                           child: Column(
@@ -488,14 +476,14 @@ class _ShortVideoUserProfilePage extends State<ShortVideoUserProfilePage> with S
   _follow()async{
     if(await Request.shortVideoFollow(widget.id) == true){
       follow = true;
-      follows++;
+      fans++;
       if(mounted) setState(() {});
     }
   }
   _unfollow()async{
     if(await Request.shortVideoUnfollow(widget.id) == true){
       follow = false;
-      follows--;
+      fans--;
       if(mounted) setState(() {});
     }
   }

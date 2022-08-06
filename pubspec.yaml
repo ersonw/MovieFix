@@ -111,6 +111,7 @@ flutter:
       - assets/
       - assets/images/
       - assets/background/
+      - assets/membership/
       - assets/files/
       - assets/icons/
 
