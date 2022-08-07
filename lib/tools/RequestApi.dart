@@ -83,4 +83,6 @@ class RequestApi {
   static const gameOrder = '/api/game/order/{page}';
   static const gameFunds = '/api/game/fund/{page}';
   static const gamePublicityReport = '/api/game/publicity/report/{id}';
+
+  static const myProfile = '/api/myProfile/info';
 }

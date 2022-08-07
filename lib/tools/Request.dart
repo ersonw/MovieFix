@@ -889,4 +889,15 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> myProfile()async{
+    // Loading.show();
+    String url = RequestApi.myProfile;
+    // if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }
