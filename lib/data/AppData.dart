@@ -4,6 +4,7 @@ class AppData {
   AppData(
       {this.buyDiamond = false,
       this.buyCoin = false,
+      this.money = false,
       this.collect = false,
       this.download = false,
       this.openCar = false,
@@ -12,6 +13,7 @@ class AppData {
 
   bool buyDiamond;
   bool buyCoin;
+  bool money;
   bool collect;
   bool download;
   bool openCar;
@@ -19,17 +21,19 @@ class AppData {
   bool service;
 
   AppData.formJson(Map<String, dynamic> json)
-      : buyDiamond = json['buyDiamond'],
-        buyCoin = json['buyCoin'],
-        collect = json['collect'],
-        download = json['download'],
-        openCar = json['openCar'],
-        myVideo = json['myVideo'],
-        service = json['service'];
+      : buyDiamond = json['buyDiamond'] ?? false,
+        buyCoin = json['buyCoin'] ?? false,
+        money = json['money'] ?? false,
+        collect = json['collect'] ?? false,
+        download = json['download'] ?? false,
+        openCar = json['openCar'] ?? false,
+        myVideo = json['myVideo'] ?? false,
+        service = json['service'] ?? false;
 
   Map<String, dynamic> toJson() => {
         'buyDiamond': buyDiamond,
         'buyCoin': buyCoin,
+        'money': money,
         'collect': collect,
         'download': download,
         'openCar': openCar,

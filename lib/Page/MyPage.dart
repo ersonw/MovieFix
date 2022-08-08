@@ -7,10 +7,12 @@ import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/EditProfilePage.dart';
 import 'package:movie_fix/data/AppData.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/User.dart';
 import 'package:movie_fix/data/Video.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/Tools.dart';
@@ -169,6 +171,29 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                     Container(
                       margin: const EdgeInsets.only(left: 6),
                       child: Text('购买金币'),
+                    ),
+                  ],
+                ),
+                Icon(Icons.chevron_right),
+              ],
+            ),
+          )
+      ),
+      if(appData.money) InkWell(
+          onTap: (){},
+          child: Container(
+            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.monetization_on,color: Colors.orange,),
+                    Container(
+                      margin: const EdgeInsets.only(left: 6),
+                      child: Text('我的钱包'),
                     ),
                   ],
                 ),
@@ -621,6 +646,10 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 InkWell(
+                  onTap: (){
+                    Navigator.push(
+                        context, SlideRightRoute(page: EditProfilePage()));
+                  },
                   child: Row(
                     children: [
                       Text('个人资料'),
