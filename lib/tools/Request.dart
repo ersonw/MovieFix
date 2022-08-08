@@ -900,4 +900,19 @@ class Request {
     }
     return Map<String, dynamic>();
   }
+  static Future<Map<String, dynamic>> myProfileEdit({Map<String, dynamic>? data})async{
+    String url = RequestApi.myProfileEdit;
+    String? result;
+    if(data != null){
+      Loading.show();
+      result = await _post(url, data);
+    }else{
+      result = await _get(url, {});
+    }
+    print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

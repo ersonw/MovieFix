@@ -593,7 +593,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   }
   _buildHeader() {
     return Container(
-      margin: const EdgeInsets.only(top: 45),
+      margin: const EdgeInsets.only(top: 60),
       width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -628,7 +628,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(top: 15),
+            margin: const EdgeInsets.only(top: 30),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

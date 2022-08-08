@@ -85,4 +85,5 @@ class RequestApi {
   static const gamePublicityReport = '/api/game/publicity/report/{id}';
 
   static const myProfile = '/api/myProfile/info';
+  static const myProfileEdit = '/api/myProfile/edit';
 }

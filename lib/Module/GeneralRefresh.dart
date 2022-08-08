@@ -130,7 +130,7 @@ class _GeneralRefresh extends State<GeneralRefresh> {
     if(widget.body != null){
       widgets.add(Expanded(child: widget.body!,));
     }
-    widgets.add(widget.body ?? Container());
+    // widgets.add(widget.body ?? Container());
     widgets.add(Expanded(child: _buildList(context),flex: 9,));
     widgets.add(widget.expanded ?? Container());
     // if(widget.expanded != null){
