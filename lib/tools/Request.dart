@@ -894,7 +894,7 @@ class Request {
     String url = RequestApi.myProfile;
     // if(text.isNotEmpty) url = '$url/$text';
     String? result = await _get(url, {});
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }
@@ -909,7 +909,7 @@ class Request {
     }else{
       result = await _get(url, {});
     }
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }
