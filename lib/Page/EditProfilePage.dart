@@ -3,8 +3,10 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cChange.dart';
+import 'package:movie_fix/Page/AvatarPage.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
@@ -16,6 +18,7 @@ class EditProfilePage extends StatefulWidget{
   }
 }
 class _EditProfilePage extends State<EditProfilePage>{
+
   String? avatar;
   String nickname = '';
   String username = '';
@@ -54,6 +57,10 @@ class _EditProfilePage extends State<EditProfilePage>{
     _parse(result);
     if(mounted) setState(() {});
   }
+  _pick()async{
+    Navigator.push(
+        context, FadeRoute(page: AvatarPage()));
+  }
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
@@ -82,15 +89,18 @@ class _EditProfilePage extends State<EditProfilePage>{
                         ),
                       ),
                     ),
-                    Container(
-                      height: 30,
-                      width: 84,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight: Radius.circular(60),),
-                        color: Colors.black.withOpacity(0.3),
-                      ),
-                      child: Center(
-                        child: Icon(Icons.camera_alt),
+                    GestureDetector(
+                      onTap: _pick,
+                      child: Container(
+                        height: 30,
+                        width: 84,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight: Radius.circular(60),),
+                          color: Colors.black.withOpacity(0.3),
+                        ),
+                        child: Center(
+                          child: Icon(Icons.camera_alt),
+                        ),
                       ),
                     ),
                   ],
