@@ -44,7 +44,7 @@ class _cToast extends State<cToast> {
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: true,
       body: Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         children: [
           GestureDetector(),
           _build(context),
@@ -55,7 +55,7 @@ class _cToast extends State<cToast> {
 
   _build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(30),
+      margin: const EdgeInsets.all(60),
       width: MediaQuery
           .of(context)
           .size

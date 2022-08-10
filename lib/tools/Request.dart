@@ -736,7 +736,7 @@ class Request {
   static Future<bool> gameCashOutSetDefault( {int id=0})async{
     Loading.show();
     String? result = await _get(RequestApi.gameCashOutSetDefault.replaceAll('{id}', '$id'), {});
-    print(result);
+    // print(result);
     if(result != null && jsonDecode(result)['state'] != null){
       return jsonDecode(result)['state'];
     }
@@ -914,5 +914,77 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> myProfileEditAvatar(String path)async{
+    // Loading.show();
+    String url = RequestApi.myProfileEditAvatar;
+    String? result = await _post(url, {'imagePath': path, 'oss': jsonEncode(MinioUtil.config)});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> myProfileEditPhoneSms(String phone)async{
+    // Loading.show();
+    String url = RequestApi.myProfileEditPhoneSms.replaceAll('{phone}', phone);
+    // if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['id'];
+    }
+    return null;
+  }
+  static Future<bool> myProfileEditPhone({String codeId='',String code=''})async{
+    Loading.show();
+    String url = RequestApi.myProfileEditPhone;
+    String? result = await _post(url, {'codeId': codeId, 'code': code});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['username'] != null;
+    }
+    return false;
+  }
+  static Future<String?> myProfileEditRestPasswordSms()async{
+    // Loading.show();
+    String url = RequestApi.myProfileEditRestPasswordSms;
+    // if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['id'];
+    }
+    return null;
+  }
+  static Future<String?> myProfileEditRestPasswordVerify({String codeId='',String code=''})async{
+    Loading.show();
+    String url = RequestApi.myProfileEditRestPasswordVerify;
+    String? result = await _post(url, {'codeId': codeId, 'code': code});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['salt'];
+    }
+    return null;
+  }
+  static Future<String?> myProfileEditChangePasswordVerify(String password)async{
+    Loading.show();
+    String url = RequestApi.myProfileEditChangePasswordVerify;
+    String? result = await _post(url, {'password': Global.generateMd5(password)});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['salt'];
+    }
+    return null;
+  }
+  static Future<bool> myProfileEditRestPassword({String password='',String salt=''})async{
+    Loading.show();
+    String url = RequestApi.myProfileEditRestPassword;
+    String? result = await _post(url, {'password': Global.generateMd5(password), 'salt': salt});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
   }
 }

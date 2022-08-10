@@ -648,7 +648,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 InkWell(
                   onTap: (){
                     Navigator.push(
-                        context, SlideRightRoute(page: EditProfilePage()));
+                        context, SlideRightRoute(page: EditProfilePage())).then((value) => _init());
                   },
                   child: Row(
                     children: [

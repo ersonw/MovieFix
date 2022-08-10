@@ -64,7 +64,7 @@ class MinioUtil {
     }
     for(int i = 0; i < keys.length; i++) {
       FilePath key = keys[i];
-      _put(key.key, key.path);
+      put(key.key, key.path,p: 'videos');
       if(callback != null){
         callback(double.parse((i / length).toStringAsFixed(2)));
       }
@@ -73,16 +73,16 @@ class MinioUtil {
     if(callback != null){
       callback(1);
     }
-    return '$pathName/$fileName';
+    return 'videos/$pathName/$fileName';
   }
-  static Future<void> _put(String key, String path)async{
+  static Future<void> put(String key, String path,{String p =''})async{
     // print('key:$key');
     // print('path:$path');
     File file = File(path);
     if(!file.existsSync()) return  ;
     await minio.putObject(
       config.bucket,
-      key,
+      '$p/$key',
       Stream<Uint8List>.value(file.readAsBytesSync()),
       onProgress: (bytes) {
         // uploaded += int.parse('$bytes   ');

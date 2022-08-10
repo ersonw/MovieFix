@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/CropImageRoute.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
+import 'package:movie_fix/tools/Loading.dart';
+import 'package:movie_fix/tools/MinioUtil.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'dart:io';
 
@@ -29,11 +32,25 @@ class _AvatarPage extends State<AvatarPage>{
     if(file == null) return;
     String _avatar = file.path;
     Navigator.push(
-        context, FadeRoute(page: CropImageRoute(File(_avatar),callback: (value){
-          setState(() {
-            avatar = value;
-          });
-    },)));
+        context, FadeRoute(page: CropImageRoute(File(_avatar),callback: _upload,)));
+  }
+  _upload(String value)async{
+    final file = File(value);
+    if(!file.existsSync()) {
+      Global.showWebColoredToast('文件裁剪丢失！');
+      return;
+    }
+    Loading.show();
+    DateTime dateTime = DateTime.now();
+    final path = '${dateTime.year}-${dateTime.month}/${dateTime.day}';
+    final suffix = (file.path.split('/').last).split('.').last;
+    String key = '$path/${dateTime.millisecondsSinceEpoch}.$suffix';
+    await MinioUtil.put(key, value,p: 'users');
+    Loading.dismiss();
+    Map<String, dynamic> result = await Request.myProfileEditAvatar('users/$key');
+    if(result['avatar'] != null) avatar = result['avatar'];
+
+    if(mounted) setState(() {});
   }
   _buildAvatar(){
     if(avatar == null){
@@ -51,22 +68,27 @@ class _AvatarPage extends State<AvatarPage>{
       backgroundColor: const Color(0xff181921),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.only(top: 45,left: 15,),
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(60)),
-                    color: Colors.white.withOpacity(0.15),
+          GestureDetector(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 45,left: 15,),
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(60)),
+                      color: Colors.white.withOpacity(0.15),
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 6,bottom: 6,left: 6,right: 6),
+                      child: Icon(Icons.close),
+                    ),
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 6,bottom: 6,left: 6,right: 6),
-                    child: Icon(Icons.close),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Container(

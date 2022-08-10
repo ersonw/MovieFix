@@ -23,26 +23,83 @@ class _CropImageRouteState extends State<CropImageRoute> {
     return Scaffold(
       backgroundColor: const Color(0xff181921),
         body:  Column(
+          // mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(15),
-              height: MediaQuery.of(context).size.width,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(60)),
-              ),
-              child: Crop.file(
-                widget.image,
-                key: cropKey,
-                aspectRatio: 1.0,
-                alwaysShowGrid: true,
+            GestureDetector(
+              onTap: (){
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 45,left: 15,),
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(60)),
+                        color: Colors.white.withOpacity(0.15),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 6,bottom: 6,left: 6,right: 6),
+                        child: Icon(Icons.close),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            RaisedButton(
-              onPressed: () {
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(15),
+                  // height: MediaQuery.of(context).size.height - 160,
+                  height: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                  child: Crop.file(
+                    widget.image,
+                    key: cropKey,
+                    aspectRatio: 1.0,
+                    scale: 1.0,
+                    maximumScale: 15,
+                    alwaysShowGrid: false,
+                  ),
+                ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //     // borderRadius: BorderRadius.all(Radius.circular(180)),
+                //     color: Colors.black.withOpacity(0.6),
+                //   ),
+                //   child: Container(
+                //     // margin: const EdgeInsets.all(30),
+                //     height: MediaQuery.of(context).size.width - 45,
+                //     width: MediaQuery.of(context).size.width - 45,
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.all(Radius.circular(180)),
+                //       // color: Colors.white.withOpacity(0.15),
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
                 _crop(widget.image);
               },
-              child: Text('ok'),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                  color: Colors.deepOrangeAccent,
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+                alignment: Alignment.center,
+                child: Container(
+                  margin: const EdgeInsets.all(9),
+                  child: Text('确定裁剪'),
+                ),
+              ),
             ),
           ],
         ),
@@ -64,7 +121,10 @@ class _CropImageRouteState extends State<CropImageRoute> {
           area: area!,
         ).then((value) {
           // upload(value);
-        }).catchError(() {
+          // print(value.path);
+          if(widget.callback != null) widget.callback!(value.path);
+          Navigator.pop(context);
+        }).catchError((e) {
           print('裁剪不成功');
         });
       } else {

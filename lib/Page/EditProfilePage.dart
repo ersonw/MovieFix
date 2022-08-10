@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cChange.dart';
+import 'package:movie_fix/Module/cChangePhone.dart';
 import 'package:movie_fix/Page/AvatarPage.dart';
+import 'package:movie_fix/Page/ChangePasswordBySmsPage.dart';
+import 'package:movie_fix/Page/ChangePasswordPage.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
-
+import 'dart:io';
 class EditProfilePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -33,7 +36,6 @@ class _EditProfilePage extends State<EditProfilePage>{
   _init()async{
     Map<String, dynamic> result = await Request.myProfileEdit();
     _parse(result);
-    if(mounted) setState(() {});
   }
   _parse(Map<String, dynamic> result){
     if(result['avatar'] != null) avatar = result['avatar'];
@@ -42,6 +44,7 @@ class _EditProfilePage extends State<EditProfilePage>{
     if(result['phone'] != null) phone = result['phone'];
     if(result['email']!= null) email = result['email'];
     if(result['text']!= null) text = result['text'];
+    if(mounted) setState(() {});
   }
   _post()async{
     Map<String, dynamic> data = {
@@ -55,11 +58,20 @@ class _EditProfilePage extends State<EditProfilePage>{
     Map<String, dynamic> result = await Request.myProfileEdit(data: data);
     if(result['nickname'] == null) return;
     _parse(result);
-    if(mounted) setState(() {});
   }
   _pick()async{
     Navigator.push(
-        context, FadeRoute(page: AvatarPage()));
+        context, FadeRoute(page: AvatarPage())).then((value) => _init());
+  }
+  _buildAvatar(){
+    if(avatar == null){
+      return buildHeaderPicture(self: true);
+    }
+    String _avatar = avatar!;
+    if(_avatar.startsWith('http')){
+      return buildHeaderPicture(avatar: avatar);
+    }
+    return FileImage(File(_avatar));
   }
   @override
   Widget build(BuildContext context) {
@@ -74,7 +86,7 @@ class _EditProfilePage extends State<EditProfilePage>{
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: (){},
+                onTap: _pick,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
@@ -84,23 +96,20 @@ class _EditProfilePage extends State<EditProfilePage>{
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(60)),
                         image: DecorationImage(
-                          image: buildHeaderPicture(avatar: avatar,self: true),
+                          image: _buildAvatar(),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: _pick,
-                      child: Container(
-                        height: 30,
-                        width: 84,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight: Radius.circular(60),),
-                          color: Colors.black.withOpacity(0.3),
-                        ),
-                        child: Center(
-                          child: Icon(Icons.camera_alt),
-                        ),
+                    Container(
+                      height: 30,
+                      width: 84,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60),bottomRight: Radius.circular(60),),
+                        color: Colors.black.withOpacity(0.3),
+                      ),
+                      child: Center(
+                        child: Icon(Icons.camera_alt),
                       ),
                     ),
                   ],
@@ -213,7 +222,10 @@ class _EditProfilePage extends State<EditProfilePage>{
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  Navigator.push(
+                      context, SlideRightRoute(page: cChangePhone(phone))).then((value) => _init());
+                },
                 child: Container(
                   margin: const EdgeInsets.only(top: 15,bottom: 9),
                   width: MediaQuery.of(context).size.width,
@@ -355,7 +367,10 @@ class _EditProfilePage extends State<EditProfilePage>{
               ),
 
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  Navigator.push(
+                      context, SlideRightRoute(page: ChangePasswordBySmsPage()));
+                },
                 child: Container(
                   margin: const EdgeInsets.only(top: 15,bottom: 9),
                   width: MediaQuery.of(context).size.width,
@@ -376,7 +391,10 @@ class _EditProfilePage extends State<EditProfilePage>{
                 ),
               ),
               InkWell(
-                onTap: (){},
+                onTap: (){
+                  Navigator.push(
+                      context, SlideRightRoute(page: ChangePasswordPage()));
+                },
                 child: Container(
                   margin: const EdgeInsets.only(top: 15,bottom: 9),
                   width: MediaQuery.of(context).size.width,
