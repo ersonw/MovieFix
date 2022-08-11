@@ -63,7 +63,7 @@ class _DiamondRechargeRecordPage extends State<DiamondRechargeRecordPage>{
         _getList();
       },
       title: '充值记录',
-      body: _records.isNotEmpty && refresh==false?null: Container(
+      header: _records.isNotEmpty && refresh==false?null: Container(
         margin: const EdgeInsets.all(30),
         width: MediaQuery.of(context).size.width,
         height: 60,
