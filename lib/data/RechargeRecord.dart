@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class GameRechargeRecord {
-  GameRechargeRecord(
+class RechargeRecord {
+  RechargeRecord(
       {this.id = 0,
         this.type,
         this.icon,
@@ -20,7 +20,7 @@ class GameRechargeRecord {
   int addTime;
   int updateTime;
 
-  GameRechargeRecord.formJson(Map<String, dynamic> json)
+  RechargeRecord.formJson(Map<String, dynamic> json)
       : id = json['id'],
         type = json['type'],
         icon = json['icon'],

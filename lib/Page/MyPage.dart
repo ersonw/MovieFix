@@ -7,6 +7,7 @@ import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/DiamondRechargePage.dart';
 import 'package:movie_fix/Page/EditProfilePage.dart';
 import 'package:movie_fix/data/AppData.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
@@ -134,9 +135,12 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     List<Widget> list = [
       Text('常用功能',style: TextStyle(fontSize: 15),),
       if(appData.buyDiamond) InkWell(
-          onTap: (){},
+          onTap: (){
+            Navigator.push(
+                context, SlideRightRoute(page: DiamondRechargePage())).then((value) => _init());
+          },
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -159,7 +163,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.buyCoin) InkWell(
           onTap: (){},
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -182,7 +186,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.money) InkWell(
           onTap: (){},
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -205,7 +209,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.collect) InkWell(
           onTap: (){},
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -228,7 +232,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.download) InkWell(
           onTap: (){},
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -251,7 +255,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.openCar) InkWell(
           onTap: ()=>_openUrl(carUrl),
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -274,7 +278,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.myVideo) InkWell(
           onTap: (){},
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -297,7 +301,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       if(appData.service) InkWell(
           onTap: () => _openUrl(serviceUrl),
           child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6),
+            margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -572,6 +576,10 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             ),
           ),
           InkWell(
+            onTap: (){
+              Navigator.push(
+                  context, SlideRightRoute(page: DiamondRechargePage())).then((value) => _init());
+            },
             child: Column(
               children: [
                 Text('$diamond',style: TextStyle(fontWeight: FontWeight.bold),),

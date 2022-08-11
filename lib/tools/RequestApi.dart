@@ -93,4 +93,11 @@ class RequestApi {
   static const myProfileEditRestPasswordVerify = '/api/myProfile/edit/restPassword/verify';
   static const myProfileEditChangePasswordVerify = '/api/myProfile/edit/changePassword/verify';
   static const myProfileEditPhone = '/api/myProfile/edit/phone';
+
+  static const diamondBalance = '/api/diamond/balance';
+  static const diamondPayment = '/api/diamond/payment';
+  static const diamondButtons = '/api/diamond/buttons';
+  static const diamondButton = '/api/diamond/button/{id}';
+  static const diamondOrder = '/api/diamond/order/{page}';
+  static const diamondFunds = '/api/diamond/fund/{page}';
 }

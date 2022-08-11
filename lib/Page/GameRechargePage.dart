@@ -462,7 +462,7 @@ class _GameRechargePage extends State<GameRechargePage>{
     if(result == null) return;
     launch(result,enableJavaScript: true,enableDomStorage: true,universalLinksOnly: true);
     // launchUrl(Uri.parse(result),webViewConfiguration: WebViewConfiguration());
-    Navigator.push(context, DialogRouter( cMessage(title: '温馨提示提醒',text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',)));
+    Navigator.push(context, DialogRouter( cMessage(title: '温馨提示提醒',text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',))).then((value) => _init());
   }
   _getBalance()async{
     balance = await Request.gameBalance();

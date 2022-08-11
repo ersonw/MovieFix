@@ -4,15 +4,16 @@ import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/data/GameFund.dart';
 import 'package:movie_fix/tools/Request.dart';
 
+import '../AssetsIcon.dart';
 import '../Global.dart';
 
-class GameFundsPage extends StatefulWidget{
+class DiamondBalancePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _GameFundsPage();
+    return _DiamondBalancePage();
   }
 }
-class _GameFundsPage extends State<GameFundsPage>{
+class _DiamondBalancePage extends State<DiamondBalancePage>{
   List<GameFund> _funds = [];
   int page =1;
   int total = 1;
@@ -24,7 +25,7 @@ class _GameFundsPage extends State<GameFundsPage>{
       });
       return;
     }
-    Map<String, dynamic> result = await Request.gameFunds(page: page);
+    Map<String, dynamic> result = await Request.diamondFunds(page: page);
     refresh = false;
     // print(result);
     if(result['total'] != null) total = result['total'];
@@ -103,9 +104,9 @@ class _GameFundsPage extends State<GameFundsPage>{
                       children: [
                         Container(
                           // child: Text('+${(fund.amount / 100).toStringAsFixed(2)}',style: TextStyle(color: Colors.red,fontSize: 30),),
-                          child: Text(Global.getPriceNumber(fund.amount),style: TextStyle(color: Colors.red,fontSize: 30),),
+                          child: Text('${fund.amount}',style: TextStyle(color: Colors.red,fontSize: 30),),
                         ),
-                        Icon(Icons.monetization_on,color: Colors.orange,size: 18,),
+                        Image.asset(AssetsIcon.diamond,),
                       ],
                     ),
                   ),),

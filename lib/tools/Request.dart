@@ -987,4 +987,68 @@ class Request {
     }
     return false;
   }
+  static Future<int> diamondBalance()async{
+    // Loading.show();
+    String url = RequestApi.diamondBalance;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['balance'] != null){
+        return map['balance'];
+      }
+    }
+    return 0;
+  }
+  static Future<Map<String, dynamic>> diamondButtons()async{
+    // Loading.show();
+    String url = RequestApi.diamondButtons;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> diamondButton({int id=0})async{
+    // Loading.show();
+    String url = RequestApi.diamondButton.replaceAll('{id}', '$id');
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> diamondPayment( {int id=0,int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.diamondPayment, data);
+    // print(result);
+    if(result != null && jsonDecode(result)['url'] != null){
+      return jsonDecode(result)['url'];
+    }
+    return null;
+  }
+  static Future<Map<String, dynamic>> diamondOrder({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.diamondOrder.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> diamondFunds({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.diamondFunds.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
 }

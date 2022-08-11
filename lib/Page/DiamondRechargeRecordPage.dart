@@ -1,21 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
-import 'package:movie_fix/data/Game.dart';
 import 'package:movie_fix/data/GameRechargeRecord.dart';
 import 'package:movie_fix/tools/Request.dart';
 
+import '../AssetsIcon.dart';
 import '../Global.dart';
 
-class GameRechargeRecordPage extends StatefulWidget{
+class DiamondRechargeRecordPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _GameRechargeRecordPage();
+    return _DiamondRechargeRecordPage();
   }
 }
-class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
+class _DiamondRechargeRecordPage extends State<DiamondRechargeRecordPage>{
   List<RechargeRecord> _records = [];
   int page =1;
   int total = 1;
@@ -27,7 +26,7 @@ class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
       });
       return;
     }
-    Map<String, dynamic> result = await Request.gameOrder(page: page);
+    Map<String, dynamic> result = await Request.diamondOrder(page: page);
     refresh = false;
     // print(result);
     if(result['total'] != null) total = result['total'];
@@ -107,7 +106,7 @@ class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
                         Container(
                           child: Text('+${record.amount}',style: TextStyle(color: Colors.red,fontSize: 30),),
                         ),
-                        Icon(Icons.monetization_on,color: Colors.orange,size: 18,),
+                        Image.asset(AssetsIcon.diamond,),
                       ],
                     ),
                   ),),
@@ -128,14 +127,14 @@ class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
                   Flexible(child: Container(
                     child: RichText(
                       text: TextSpan(
-                        text: '支付方式:  ',
-                        style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                        children: [
-                          TextSpan(
-                            text: record.type!,
-                            style: TextStyle(color: Colors.green.withOpacity(0.6)),
-                          ),
-                        ]
+                          text: '支付方式:  ',
+                          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                          children: [
+                            TextSpan(
+                              text: record.type!,
+                              style: TextStyle(color: Colors.green.withOpacity(0.6)),
+                            ),
+                          ]
                       ),
                     ),
                   )),

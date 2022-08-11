@@ -2,13 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Module/cMessage.dart';
 import 'package:movie_fix/data/Button.dart';
 import 'package:movie_fix/data/PayType.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'dart:math' as math;
 
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Global.dart';
+import 'DiamondBalancePage.dart';
+import 'DiamondRechargeRecordPage.dart';
 
 class DiamondRechargePage extends StatefulWidget{
   const DiamondRechargePage({Key? key}) : super(key: key);
@@ -19,11 +25,12 @@ class DiamondRechargePage extends StatefulWidget{
   }
 }
 class _DiamondRechargePage extends State<DiamondRechargePage>{
-  double balance = 0.00;
+  int balance = 0;
   List<Button> buttons = [];
   List<PayType> types = [];
   int buttonIndex = 0;
   int typeIndex = 0;
+  bool refresh = true;
   @override
   void initState() {
     _init();
@@ -36,8 +43,14 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
-      onRefresh: (bool value)=>_init(),
-      title: "游戏充值",
+      onRefresh: (bool value){
+        setState(() {
+          refresh = value;
+        });
+        _init();
+      },
+      refresh: refresh,
+      title: "钻石充值",
       children: [
           _buildBalance(),
           if(buttons.isNotEmpty) _buildButtons(),
@@ -63,7 +76,90 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
               child: Text('确认充值',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
             ),
           ),
+        _buildQuestion(),
       ],
+    );
+  }
+  _buildQuestion(){
+    return Container(
+      margin: const EdgeInsets.all(15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('常见问题',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
+          Container(
+            margin: const EdgeInsets.only(top: 15),
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(9)),
+              color: Colors.white.withOpacity(0.3),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(15),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('如多次支付失败，请尝试其他支付方式',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('部分安卓手机支付时报毒，请选择忽略即可',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 9,
+                        width: 9,
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange,
+                          borderRadius: BorderRadius.all(Radius.circular(60)),
+                        ),
+                      ),
+                      Flexible(child: Text('支付成功后一般10分钟内到账，如超过10分钟请联系在线客服',style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 12),)),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 6)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
   _buildButton(){
@@ -299,8 +395,8 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('¥$balance',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
-                Text('游戏余额'),
+                Text('$balance',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),),
+                Text('钻石余额'),
               ],
             ),
           ),
@@ -322,7 +418,9 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, SlideRightRoute(page: DiamondRechargeRecordPage()));
+                  },
                   child: Row(
                     children: [
                       Transform(
@@ -338,7 +436,9 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
                   ),
                 ),
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.push(context, SlideRightRoute(page: DiamondBalancePage()));
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.monetization_on_outlined,),
@@ -359,23 +459,27 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
   _payment()async{
     if(buttonIndex >= buttons.length) return;
     if(typeIndex >= types.length) return;
-    String? result = await Request.gamePayment(id: buttons[buttonIndex].id,toId: types[typeIndex].id);
+    String? result = await Request.diamondPayment(id: buttons[buttonIndex].id,toId: types[typeIndex].id);
     if(result == null) return;
     launch(result,enableJavaScript: true,enableDomStorage: true,universalLinksOnly: true);
     // launchUrl(Uri.parse(result),webViewConfiguration: WebViewConfiguration());
+    Navigator.push(context, DialogRouter( cMessage(title: '温馨提示提醒',text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',))).then((value) => _init());
+
   }
   _getBalance()async{
-    balance = await Request.gameBalance();
+    balance = await Request.diamondBalance();
+    refresh = false;
   }
   _getButton()async{
     if(buttons.isNotEmpty && buttons.length > buttonIndex){
-      Map<String,dynamic> result = await Request.gameButton(id: buttons[buttonIndex].id);
+      Map<String,dynamic> result = await Request.diamondButton(id: buttons[buttonIndex].id);
+      refresh = false;
       if(result['list'] != null) types = (result['list'] as List).map((e) => PayType.fromJson(e)).toList();
       if(mounted) setState(() {});
     }
   }
   _getButtons()async{
-    Map<String,dynamic> result = await Request.gameButtons();
+    Map<String,dynamic> result = await Request.diamondButtons();
     if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
     _getButton();
     if(mounted) setState(() {});
