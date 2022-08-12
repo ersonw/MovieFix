@@ -312,7 +312,7 @@ class Global {
     }
     return null;
   }
-  static String getPriceNumber(int number,{bool fixed = false}) {
+  static String getPriceNumber(int number,{bool fixed = true}) {
     double price = number / 100;
     // if (fixed) {
     //   price = price / 100;

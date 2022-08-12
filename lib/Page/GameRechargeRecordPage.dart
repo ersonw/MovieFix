@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:movie_fix/AssetsIcon.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/data/Game.dart';
-import 'package:movie_fix/data/GameRechargeRecord.dart';
+import 'package:movie_fix/data/RechargeRecord.dart';
 import 'package:movie_fix/tools/Request.dart';
 
 import '../Global.dart';
@@ -24,6 +24,7 @@ class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
     if(page > total){
       setState(() {
         page--;
+        refresh = false;
       });
       return;
     }
@@ -64,7 +65,7 @@ class _GameRechargeRecordPage extends State<GameRechargeRecordPage>{
         _getList();
       },
       title: '充值记录',
-      body: _records.isNotEmpty && refresh==false?null: Container(
+      header: _records.isNotEmpty && refresh==false?null: Container(
         margin: const EdgeInsets.all(30),
         width: MediaQuery.of(context).size.width,
         height: 60,

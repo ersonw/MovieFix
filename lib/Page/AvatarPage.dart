@@ -11,6 +11,9 @@ import 'package:movie_fix/tools/Tools.dart';
 import 'dart:io';
 
 class AvatarPage extends StatefulWidget{
+  String? avatar;
+
+  AvatarPage(this.avatar,{Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _AvatarPage();
@@ -18,7 +21,7 @@ class AvatarPage extends StatefulWidget{
 }
 class _AvatarPage extends State<AvatarPage>{
   final ImagePicker _picker = ImagePicker();
-  String? avatar = userModel.user.avatar;
+  String? avatar;
   _pick()async{
     final XFile? file = await _picker.pickImage(
         source: ImageSource.gallery,
@@ -61,6 +64,11 @@ class _AvatarPage extends State<AvatarPage>{
       return buildHeaderPicture(avatar: avatar);
     }
     return FileImage(File(_avatar));
+  }
+  @override
+  void initState() {
+    avatar = widget.avatar;
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {

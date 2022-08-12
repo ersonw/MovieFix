@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
-import 'package:movie_fix/data/GameRechargeRecord.dart';
+import 'package:movie_fix/data/RechargeRecord.dart';
 import 'package:movie_fix/tools/Request.dart';
 
 import '../AssetsIcon.dart';
@@ -23,6 +23,7 @@ class _DiamondRechargeRecordPage extends State<DiamondRechargeRecordPage>{
     if(page > total){
       setState(() {
         page--;
+        refresh = false;
       });
       return;
     }

@@ -987,6 +987,7 @@ class Request {
     }
     return false;
   }
+
   static Future<int> diamondBalance()async{
     // Loading.show();
     String url = RequestApi.diamondBalance;
@@ -1045,6 +1046,201 @@ class Request {
   static Future<Map<String, dynamic>> diamondFunds({int page=1})async{
     // Loading.show();
     String? result = await _get(RequestApi.diamondFunds.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+
+  static Future<int> coinBalance()async{
+    // Loading.show();
+    String url = RequestApi.coinBalance;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['balance'] != null){
+        return map['balance'];
+      }
+    }
+    return 0;
+  }
+  static Future<Map<String, dynamic>> coinButtons()async{
+    // Loading.show();
+    String url = RequestApi.coinButtons;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> coinButton({int id=0})async{
+    // Loading.show();
+    String url = RequestApi.coinButton.replaceAll('{id}', '$id');
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> coinPayment( {int id=0,int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.coinPayment, data);
+    // print(result);
+    if(result != null && jsonDecode(result)['url'] != null){
+      return jsonDecode(result)['url'];
+    }
+    return null;
+  }
+  static Future<Map<String, dynamic>> coinOrder({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.coinOrder.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> coinFunds({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.coinFunds.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+
+  static Future<double> cashBalance()async{
+    // Loading.show();
+    String url = RequestApi.cashBalance;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['balance'] != null){
+        return map['balance'];
+      }
+    }
+    return 0.00;
+  }
+  static Future<Map<String, dynamic>> cashButtons()async{
+    // Loading.show();
+    String url = RequestApi.cashButtons;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> cashButton({int id=0})async{
+    // Loading.show();
+    String url = RequestApi.cashButton.replaceAll('{id}', '$id');
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> cashPayment( {int id=0,int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.cashPayment, data);
+    // print(result);
+    if(result != null && jsonDecode(result)['url'] != null){
+      return jsonDecode(result)['url'];
+    }
+    return null;
+  }
+  static Future<Map<String, dynamic>> cashOrder({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.cashOrder.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> cashFunds({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.cashFunds.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+
+  static Future<int> membershipBalance()async{
+    // Loading.show();
+    String url = RequestApi.membershipBalance;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      Map<String, dynamic> map = jsonDecode(result);
+      if(map['balance'] != null){
+        return map['balance'];
+      }
+    }
+    return 0;
+  }
+  static Future<Map<String, dynamic>> membershipButtons()async{
+    // Loading.show();
+    String url = RequestApi.membershipButtons;
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> membershipButton({int id=0})async{
+    // Loading.show();
+    String url = RequestApi.membershipButton.replaceAll('{id}', '$id');
+    String? result = await _get(url, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<String?> membershipPayment( {int id=0,int toId=0})async{
+    Loading.show();
+    Map<String, dynamic> data = {
+      'id': id,
+      'toId': toId,
+    };
+    String? result = await _post(RequestApi.membershipPayment, data);
+    // print(result);
+    if(result != null && jsonDecode(result)['url'] != null){
+      return jsonDecode(result)['url'];
+    }
+    return null;
+  }
+  static Future<Map<String, dynamic>> membershipOrder({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.membershipOrder.replaceAll('{page}', '$page'), {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> membershipFunds({int page=1})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.membershipFunds.replaceAll('{page}', '$page'), {});
     // print(result);
     if(result != null){
       return jsonDecode(result);

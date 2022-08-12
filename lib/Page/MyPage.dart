@@ -7,6 +7,7 @@ import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/CashRechargePage.dart';
 import 'package:movie_fix/Page/DiamondRechargePage.dart';
 import 'package:movie_fix/Page/EditProfilePage.dart';
 import 'package:movie_fix/data/AppData.dart';
@@ -18,6 +19,8 @@ import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'CoinRechargePage.dart';
 
 class MyPage extends StatefulWidget{
   @override
@@ -161,7 +164,10 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
           )
       ),
       if(appData.buyCoin) InkWell(
-          onTap: (){},
+          onTap: (){
+            Navigator.push(
+                context, SlideRightRoute(page: CoinRechargePage())).then((value) => _init());
+          },
           child: Container(
             margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,
@@ -181,10 +187,13 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 Icon(Icons.chevron_right),
               ],
             ),
-          )
+          ),
       ),
       if(appData.money) InkWell(
-          onTap: (){},
+          onTap: (){
+            Navigator.push(
+                context, SlideRightRoute(page: CashRechargePage())).then((value) => _init());
+          },
           child: Container(
             margin: const EdgeInsets.only(top: 9,bottom: 9),
             width: MediaQuery.of(context).size.width,

@@ -100,4 +100,25 @@ class RequestApi {
   static const diamondButton = '/api/diamond/button/{id}';
   static const diamondOrder = '/api/diamond/order/{page}';
   static const diamondFunds = '/api/diamond/fund/{page}';
+
+  static const coinBalance = '/api/coin/balance';
+  static const coinPayment = '/api/coin/payment';
+  static const coinButtons = '/api/coin/buttons';
+  static const coinButton = '/api/coin/button/{id}';
+  static const coinOrder = '/api/coin/order/{page}';
+  static const coinFunds = '/api/coin/fund/{page}';
+
+  static const cashBalance = '/api/cash/balance';
+  static const cashPayment = '/api/cash/payment';
+  static const cashButtons = '/api/cash/buttons';
+  static const cashButton = '/api/cash/button/{id}';
+  static const cashOrder = '/api/cash/order/{page}';
+  static const cashFunds = '/api/cash/fund/{page}';
+
+  static const membershipBalance = '/api/membership/balance';
+  static const membershipPayment = '/api/membership/payment';
+  static const membershipButtons = '/api/membership/buttons';
+  static const membershipButton = '/api/membership/button/{id}';
+  static const membershipOrder = '/api/membership/order/{page}';
+  static const membershipFunds = '/api/membership/fund/{page}';
 }

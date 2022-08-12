@@ -2,19 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
-import 'package:movie_fix/data/GameCashOut.dart';
+import 'package:movie_fix/data/RechargeRecord.dart';
 import 'package:movie_fix/tools/Request.dart';
 
 import '../Global.dart';
 
-class GameCashOutRecordPage extends StatefulWidget{
+class CashRechargeRecordPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _GameCashOutRecordPage();
+    return _CashRechargeRecordPage();
   }
 }
-class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
-  List<GameCashOut> _records = [];
+class _CashRechargeRecordPage extends State<CashRechargeRecordPage>{
+  List<RechargeRecord> _records = [];
   int page =1;
   int total = 1;
   bool refresh = true;
@@ -26,12 +26,12 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
       });
       return;
     }
-    Map<String, dynamic> result = await Request.gameCashOutRecords(page: page);
+    Map<String, dynamic> result = await Request.cashOrder(page: page);
     refresh = false;
     // print(result);
     if(result['total'] != null) total = result['total'];
     if(result['list'] != null){
-      List<GameCashOut> list = (result['list'] as List).map((e) => GameCashOut.formJson(e)).toList();
+      List<RechargeRecord> list = (result['list'] as List).map((e) => RechargeRecord.formJson(e)).toList();
       if(page > 1){
         _records.addAll(list);
       }else{
@@ -53,8 +53,10 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
     return GeneralRefresh(
       refresh: refresh,
       onRefresh: (value){
-        refresh = value;
-        page=1;
+        setState(() {
+          refresh = value;
+          page=1;
+        });
         _getList();
         if(mounted) setState(() {});
       },
@@ -63,7 +65,7 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
         _getList();
       },
       title: '充值记录',
-      body: _records.isNotEmpty && refresh==false?null: Container(
+      header: _records.isNotEmpty && refresh==false?null: Container(
         margin: const EdgeInsets.all(30),
         width: MediaQuery.of(context).size.width,
         height: 60,
@@ -80,7 +82,7 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
   _build(){
     List<Widget> list = [];
     for(int i = 0; i < _records.length; i++){
-      GameCashOut record = _records[i];
+      RechargeRecord record = _records[i];
       list.add(Container(
         margin: const EdgeInsets.all(15),
         width: MediaQuery.of(context).size.width,
@@ -104,17 +106,19 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
                     child: Row(
                       children: [
                         Container(
-                          child: Text('${record.amount}',style: TextStyle(color: Colors.red,fontSize: 30),),
+                          child: Text(Global.getPriceNumber(record.amount),style: TextStyle(color: Colors.red,fontSize: 30),),
                         ),
-                        Icon(Icons.monetization_on,color: Colors.orange,size: 18,),
+                        Icon(Icons.monetization_on_outlined,color: Colors.orange,),
                       ],
                     ),
                   ),),
-                  _buildStatus(record.status),
+                  record.status?
+                  Text('成功',style: TextStyle(color: Colors.green),) :
+                  Text('未完成',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
                 ],
               ),
             ),
-            Container(
+            if(record.icon != null && record.type != null) Container(
               margin: const EdgeInsets.only(left: 15,right: 15,top: 6,bottom: 6),
               width: MediaQuery.of(context).size.width,
               child: Row(
@@ -122,38 +126,32 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Flexible(child: RichText(
-                    text: TextSpan(
-                      text: '实际到账: ',
-                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                      children: [
-                        TextSpan(
-                          text: '${record.totalFee}',
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        TextSpan(
-                          text: '元',
+                  Flexible(child: Container(
+                    child: RichText(
+                      text: TextSpan(
+                          text: '支付方式:  ',
                           style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                        ),
-                      ]
+                          children: [
+                            TextSpan(
+                              text: record.type!,
+                              style: TextStyle(color: Colors.green.withOpacity(0.6)),
+                            ),
+                          ]
+                      ),
                     ),
                   )),
-                  Flexible(child: RichText(
-                    text: TextSpan(
-                      text: '手续费: ',
-                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                      children: [
-                        TextSpan(
-                          text: '${record.fee}',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        TextSpan(
-                          text: '元',
-                          style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                        ),
-                      ]
+                  Container(
+                    height: 36,
+                    width: 36,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(9)),
+                      color: Colors.white,
+                      image: DecorationImage(
+                        image: NetworkImage(record.icon!),
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
             ),
@@ -215,15 +213,5 @@ class _GameCashOutRecordPage extends State<GameCashOutRecordPage>{
       ),));
     }
     return list;
-  }
-  _buildStatus(int status){
-    switch(status){
-        case 0:
-          return Text('审核中',style: TextStyle(color: Colors.white.withOpacity(0.6)),);
-          case 1:
-            return Text('提款成功',style: TextStyle(color: Colors.green),);
-            case 2:
-              return Text('提款失败',style: TextStyle(color: Colors.red),);
-  }
   }
 }

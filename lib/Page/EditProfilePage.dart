@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cChange.dart';
 import 'package:movie_fix/Module/cChangePhone.dart';
@@ -22,7 +23,7 @@ class EditProfilePage extends StatefulWidget{
 }
 class _EditProfilePage extends State<EditProfilePage>{
 
-  String? avatar;
+  String? avatar = userModel.user.avatar;
   String nickname = '';
   String username = '';
   String phone = '';
@@ -61,7 +62,7 @@ class _EditProfilePage extends State<EditProfilePage>{
   }
   _pick()async{
     Navigator.push(
-        context, FadeRoute(page: AvatarPage())).then((value) => _init());
+        context, FadeRoute(page: AvatarPage(avatar))).then((value) => _init());
   }
   _buildAvatar(){
     if(avatar == null){
