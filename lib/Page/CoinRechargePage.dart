@@ -51,6 +51,7 @@ class _CoinRechargePage extends State<CoinRechargePage>{
         _buildBalance(),
         if(buttons.isNotEmpty) _buildButtons(),
         if(buttons.isNotEmpty) _buildButton(),
+        _buildQuestion(),
         InkWell(
           onTap: _payment,
           child: Container(
@@ -72,7 +73,7 @@ class _CoinRechargePage extends State<CoinRechargePage>{
             child: Text('确认充值',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
           ),
         ),
-        _buildQuestion(),
+        // _buildQuestion(),
       ],
     );
   }

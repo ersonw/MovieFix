@@ -51,6 +51,7 @@ class _GameRechargePage extends State<GameRechargePage>{
           _buildBalance(),
           if(buttons.isNotEmpty) _buildButtons(),
           if(buttons.isNotEmpty) _buildButton(),
+        _buildQuestion(),
           InkWell(
             onTap: _payment,
             child: Container(
@@ -73,7 +74,7 @@ class _GameRechargePage extends State<GameRechargePage>{
             ),
           ),
         // const Padding(padding: EdgeInsets.all(30)),
-        _buildQuestion(),
+        // _buildQuestion(),
         const Padding(padding: EdgeInsets.all(30)),
       ],
     );

@@ -2,25 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cMessage.dart';
+import 'dart:math' as math;
+
 import 'package:movie_fix/data/Button.dart';
 import 'package:movie_fix/data/PayType.dart';
-import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
+
 import '../AssetsIcon.dart';
 import '../Global.dart';
-import 'CashBalancePage.dart';
-import 'CashRechargeRecordPage.dart';
 
-class CashRechargePage extends StatefulWidget{
+class MembershipDredgePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
-    return _CashRechargePage();
+    return _MembershipDredgePage();
   }
 }
-class _CashRechargePage extends State<CashRechargePage>{
+class _MembershipDredgePage extends State<MembershipDredgePage>{
   double balance = 0.00;
   List<Button> buttons = [];
   List<PayType> types = [];
@@ -46,7 +45,7 @@ class _CashRechargePage extends State<CashRechargePage>{
         _init();
       },
       refresh: refresh,
-      title: "现金钱包",
+      title: "开通会员",
       children: [
         _buildBalance(),
         if(buttons.isNotEmpty) _buildButtons(),
@@ -407,48 +406,48 @@ class _CashRechargePage extends State<CashRechargePage>{
               child: Container(width: 1,height: 36,color: Colors.white.withOpacity(0.3),),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 32,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context, SlideRightRoute(page: CashRechargeRecordPage()));
-                  },
-                  child: Row(
-                    children: [
-                      Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationY(math.pi),
-                        child: Icon(Icons.update,),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 3),
-                        child: Text('充值记录'),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context, SlideRightRoute(page: CashBalancePage()));
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.monetization_on_outlined,),
-                      Container(
-                        margin: const EdgeInsets.only(left: 3),
-                        child: Text('收支明细'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 32,
+          //   child: Row(
+          //     mainAxisSize: MainAxisSize.min,
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       InkWell(
+          //         onTap: (){
+          //           Navigator.push(context, SlideRightRoute(page: CashRechargeRecordPage()));
+          //         },
+          //         child: Row(
+          //           children: [
+          //             Transform(
+          //               alignment: Alignment.center,
+          //               transform: Matrix4.rotationY(math.pi),
+          //               child: Icon(Icons.update,),
+          //             ),
+          //             Container(
+          //               margin: const EdgeInsets.only(left: 3),
+          //               child: Text('充值记录'),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //       InkWell(
+          //         onTap: (){
+          //           Navigator.push(context, SlideRightRoute(page: CashBalancePage()));
+          //         },
+          //         child: Row(
+          //           children: [
+          //             Icon(Icons.monetization_on_outlined,),
+          //             Container(
+          //               margin: const EdgeInsets.only(left: 3),
+          //               child: Text('收支明细'),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

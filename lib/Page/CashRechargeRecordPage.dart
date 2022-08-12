@@ -108,7 +108,8 @@ class _CashRechargeRecordPage extends State<CashRechargeRecordPage>{
                         Container(
                           child: Text(Global.getPriceNumber(record.amount),style: TextStyle(color: Colors.red,fontSize: 30),),
                         ),
-                        Icon(Icons.monetization_on_outlined,color: Colors.orange,),
+                        // Icon(Icons.monetization_on_outlined,color: Colors.orange,),
+                        Text('元'),
                       ],
                     ),
                   ),),

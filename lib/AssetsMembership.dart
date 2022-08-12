@@ -27,4 +27,33 @@ class AssetsMembership {
   static const String glory4 = ('assets/membership/glory4.png');
   static const String glory5 = ('assets/membership/glory5.png');
   static const String glory6 = ('assets/membership/glory6.png');
+
+  static const String bronze1Icon = ('assets/membership/bronze1_icon.png');
+  static const String bronze2Icon = ('assets/membership/bronze2_icon.png');
+  static const String bronze3Icon = ('assets/membership/bronze3_icon.png');
+
+  static const String silver1Icon = ('assets/membership/silver1_icon.png');
+  static const String silver2Icon = ('assets/membership/silver2_icon.png');
+  static const String silver3Icon = ('assets/membership/silver3_icon.png');
+
+  static const String gold1Icon = ('assets/membership/gold1_icon.png');
+  static const String gold2Icon = ('assets/membership/gold2_icon.png');
+  static const String gold3Icon = ('assets/membership/gold3_icon.png');
+  static const String gold4Icon = ('assets/membership/gold4_icon.png');
+  static const String gold5Icon = ('assets/membership/gold5_icon.png');
+  static const String gold6Icon = ('assets/membership/gold6_icon.png');
+
+  static const String diamond1Icon = ('assets/membership/diamond1_icon.png');
+  static const String diamond2Icon = ('assets/membership/diamond2_icon.png');
+  static const String diamond3Icon = ('assets/membership/diamond3_icon.png');
+  static const String diamond4Icon = ('assets/membership/diamond4_icon.png');
+  static const String diamond5Icon = ('assets/membership/diamond5_icon.png');
+  static const String diamond6Icon = ('assets/membership/diamond6_icon.png');
+
+  static const String glory1Icon = ('assets/membership/glory1_icon.png');
+  static const String glory2Icon = ('assets/membership/glory2_icon.png');
+  static const String glory3Icon = ('assets/membership/glory3_icon.png');
+  static const String glory4Icon = ('assets/membership/glory4_icon.png');
+  static const String glory5Icon = ('assets/membership/glory5_icon.png');
+  static const String glory6Icon = ('assets/membership/glory6_icon.png');
 }
