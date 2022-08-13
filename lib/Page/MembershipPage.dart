@@ -5,6 +5,8 @@ import 'package:movie_fix/AssetsMembership.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
+import 'package:movie_fix/Page/MembershipDredgePage.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 class MembershipPage extends StatefulWidget{
@@ -14,6 +16,12 @@ class MembershipPage extends StatefulWidget{
   }
 }
 class _MembershipPage extends State<MembershipPage>{
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+  _init(){}
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
@@ -30,6 +38,24 @@ class _MembershipPage extends State<MembershipPage>{
             children: [
               Text('会员尊享权益',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
             ],
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+                context, SlideRightRoute(page: MembershipDredgePage()))
+                .then((value) => _init());
+          },
+          child: Container(
+            margin: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              color: Colors.orange,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(9),
+              child: Center(child: Text('开通会员'),),
+            ),
           ),
         ),
       ],
@@ -86,7 +112,7 @@ class _MembershipPage extends State<MembershipPage>{
               child: Stack(
                 children: [
                   Container(
-                    height: 60,
+                    height: 45,
                     width: MediaQuery.of(context).size.width - 36,
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -95,10 +121,10 @@ class _MembershipPage extends State<MembershipPage>{
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
-                    child: Center(child: Text('青铜会员',style: TextStyle(color: Color(0xff7f3b1b),fontSize: 18),)),
+                    child: Center(child: Text('青铜会员',style: TextStyle(color: Colors.white,fontSize: 18),)),
                   ),
                   Container(
-                    height: 60,
+                    height: 45,
                     width: MediaQuery.of(context).size.width - 36,
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.3),
@@ -114,19 +140,103 @@ class _MembershipPage extends State<MembershipPage>{
               child: Stack(
                 children: [
                   Container(
-                    height: 60,
+                    height: 45,
                     width: MediaQuery.of(context).size.width - 36,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(AssetsBackground.bronze),
+                        image: AssetImage(AssetsBackground.silver),
                         fit: BoxFit.fill,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                     ),
-                    child: Center(child: Text('青铜会员',style: TextStyle(color: Color(0xff7f3b1b),fontSize: 18),)),
+                    child: Center(child: Text('白银会员',style: TextStyle(color: Colors.white,fontSize: 18),)),
                   ),
                   Container(
-                    height: 60,
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Icon(Icons.lock)),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(9),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(AssetsBackground.gold),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Text('黄金会员',style: TextStyle(color: Colors.white,fontSize: 18),)),
+                  ),
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Icon(Icons.lock)),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(9),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(AssetsBackground.diamond),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Text('钻石会员',style: TextStyle(color: Colors.white,fontSize: 18),)),
+                  ),
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Icon(Icons.lock)),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(9),
+              child: Stack(
+                children: [
+                  Container(
+                    height: 45,
+                    width: MediaQuery.of(context).size.width - 36,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(AssetsBackground.glory),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    child: Center(child: Text('荣耀会员',style: TextStyle(color: Colors.white,fontSize: 18),)),
+                  ),
+                  Container(
+                    height: 45,
                     width: MediaQuery.of(context).size.width - 36,
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.3),
@@ -227,7 +337,7 @@ class _MembershipPage extends State<MembershipPage>{
     for(int i=0;i< 20;i++){
       basic.add(Container(
         height: 9,
-        width: 150/20,
+        width: 100/20,
         margin: const EdgeInsets.all(1/2),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white.withOpacity(0.3)),
@@ -238,7 +348,7 @@ class _MembershipPage extends State<MembershipPage>{
     if(progress > 100) progress = 100;
     return Container(
       height: 9,
-      width: 170,
+      width: 120,
       margin: const EdgeInsets.only(left: 6),
       decoration: BoxDecoration(
         color: Colors.grey,
@@ -252,7 +362,7 @@ class _MembershipPage extends State<MembershipPage>{
           ),
           Container(
             height: 9,
-            width: 168/ 100 * progress,
+            width: 100/ 100 * progress,
             margin: const EdgeInsets.all(1),
             decoration: BoxDecoration(
               color: Colors.green,

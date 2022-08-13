@@ -77,6 +77,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     LaunchMode mode = LaunchMode.externalNonBrowserApplication;
     // if(url.startsWith('http') == false) mode = LaunchMode.inAppWebView;
     launchUrl(Uri.parse(url), mode: mode);
+    // launch(url,enableDomStorage: true,enableJavaScript: true,universalLinksOnly: true,);
   }
 
   @override
