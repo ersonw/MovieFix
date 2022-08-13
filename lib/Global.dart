@@ -356,6 +356,18 @@ class Global {
     }
     return str;
   }
+  static String getDateTimef(int date) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(date);
+    DateTime _dateTime = DateTime.now();
+    if(date < _dateTime.millisecondsSinceEpoch) return '已过期';
+    if(dateTime.year > _dateTime.year) return getDateToString(date);
+    if(dateTime.month < _dateTime.month) {
+      if(dateTime.day > _dateTime.day) return '剩余${dateTime.day - _dateTime.day}天';
+      if(dateTime.hour > _dateTime.hour) return '剩余${dateTime.hour - _dateTime.hour}小时';
+      if(dateTime.minute > _dateTime.minute) return '剩余${dateTime.minute - _dateTime.minute}分钟';
+    }
+    return getDateToString(date);
+  }
   static String getYearsOld(int date) {
 
     String str = '';

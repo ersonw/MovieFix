@@ -7,6 +7,7 @@ import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Page/MembershipDredgePage.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
+import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 class MembershipPage extends StatefulWidget{
@@ -16,12 +17,24 @@ class MembershipPage extends StatefulWidget{
   }
 }
 class _MembershipPage extends State<MembershipPage>{
+  int level = 0;
+  int experience = 0;
+  int experienced = 0;
   @override
   void initState() {
     _init();
     super.initState();
   }
-  _init(){}
+  _init(){
+    _info();
+  }
+  _info()async{
+    Map<String, dynamic> result = await Request.membershipInfo();
+    if(result['level'] != null) level = result['level'];
+    if(result['experience']!= null) experience = result['experience'];
+    if(result['experienced']!= null) experienced = result['experienced'];
+    if(mounted) setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
@@ -53,7 +66,7 @@ class _MembershipPage extends State<MembershipPage>{
               borderRadius: BorderRadius.all(Radius.circular(30)),
             ),
             child: Container(
-              margin: const EdgeInsets.all(9),
+              margin: const EdgeInsets.all(12),
               child: Center(child: Text('开通会员'),),
             ),
           ),

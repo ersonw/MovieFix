@@ -115,7 +115,7 @@ class RequestApi {
   static const cashOrder = '/api/cash/order/{page}';
   static const cashFunds = '/api/cash/fund/{page}';
 
-  static const membershipBalance = '/api/membership/balance';
+  static const membershipInfo = '/api/membership/info';
   static const membershipPayment = '/api/membership/payment';
   static const membershipButtons = '/api/membership/buttons';
   static const membershipButton = '/api/membership/button/{id}';

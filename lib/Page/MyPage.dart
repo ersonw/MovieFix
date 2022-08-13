@@ -398,6 +398,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   _buildMemberShip() {
+    String _date = Global.getDateTimef(user.expired);
     Widget child = Container(
       margin: const EdgeInsets.only(left: 15, right: 15, bottom: 6),
       width: MediaQuery.of(context).size.width,
@@ -465,7 +466,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    '剩余23天',
+                    _date,
                     style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white.withOpacity(0.6)),
@@ -512,7 +513,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    '剩余23天',
+                    _date,
                     style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white.withOpacity(0.6)),
@@ -559,7 +560,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    '剩余23天',
+                    _date,
                     style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white.withOpacity(0.6)),
@@ -606,7 +607,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    '剩余23天',
+                    _date,
                     style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white.withOpacity(0.6)),
@@ -653,7 +654,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               child: Row(
                 children: [
                   Text(
-                    '剩余23天',
+                    _date,
                     style: TextStyle(
                         fontWeight: FontWeight.w200,
                         color: Colors.white.withOpacity(0.6)),

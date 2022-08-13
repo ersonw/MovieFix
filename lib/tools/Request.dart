@@ -1183,24 +1183,21 @@ class Request {
     return Map<String, dynamic>();
   }
 
-  static Future<int> membershipBalance()async{
+  static Future<Map<String, dynamic>> membershipInfo()async{
     // Loading.show();
-    String url = RequestApi.membershipBalance;
+    String url = RequestApi.membershipInfo;
     String? result = await _get(url, {});
-    // print(result);
+    print(result);
     if(result != null){
-      Map<String, dynamic> map = jsonDecode(result);
-      if(map['balance'] != null){
-        return map['balance'];
-      }
+      return jsonDecode(result);
     }
-    return 0;
+    return {};
   }
   static Future<Map<String, dynamic>> membershipButtons()async{
     // Loading.show();
     String url = RequestApi.membershipButtons;
     String? result = await _get(url, {});
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }

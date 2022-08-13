@@ -11,6 +11,7 @@ class User {
   String token = '';
   int level = 0;
   bool member = false;
+  int expired = 0;
 
   User(
       {this.id = 0,
@@ -34,6 +35,7 @@ class User {
         email = json['email'],
         level = json['level'],
         member = json['member'] ?? false,
+        expired = json['expired'] ?? 0,
         token = json['token'];
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +47,7 @@ class User {
         'phone': phone,
         'email': email,
         'level': level,
+        'expired': expired,
         'member': member,
         'token': token,
       };

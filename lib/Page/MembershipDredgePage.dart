@@ -36,7 +36,6 @@ class _MembershipDredgePage extends State<MembershipDredgePage> {
   }
 
   _init() {
-    _getBalance();
     _getButtons();
   }
 
@@ -424,144 +423,10 @@ class _MembershipDredgePage extends State<MembershipDredgePage> {
     );
   }
 
-  _buildBalance() {
-    return Container(
-      margin: const EdgeInsets.all(15),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 156,
-            child: Container(
-              margin: const EdgeInsets.only(left: 6, right: 6),
-              decoration: BoxDecoration(
-                color: Colors.deepOrange,
-                borderRadius: BorderRadius.all(Radius.circular(9)),
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.deepOrange,
-              borderRadius: BorderRadius.all(Radius.circular(9)),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(9)),
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withOpacity(0.6),
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.6),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(9)),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      Colors.transparent,
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.6),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 156,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '¥$balance',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-                Text('现金余额'),
-              ],
-            ),
-          ),
-          Container(
-            height: 36,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              border: Border(
-                  top: BorderSide(
-                      width: 1, color: Colors.white.withOpacity(0.3))),
-            ),
-            child: Center(
-              child: Container(
-                width: 1,
-                height: 36,
-                color: Colors.white.withOpacity(0.3),
-              ),
-            ),
-          ),
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 32,
-          //   child: Row(
-          //     mainAxisSize: MainAxisSize.min,
-          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //     children: [
-          //       InkWell(
-          //         onTap: (){
-          //           Navigator.push(context, SlideRightRoute(page: CashRechargeRecordPage()));
-          //         },
-          //         child: Row(
-          //           children: [
-          //             Transform(
-          //               alignment: Alignment.center,
-          //               transform: Matrix4.rotationY(math.pi),
-          //               child: Icon(Icons.update,),
-          //             ),
-          //             Container(
-          //               margin: const EdgeInsets.only(left: 3),
-          //               child: Text('充值记录'),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       InkWell(
-          //         onTap: (){
-          //           Navigator.push(context, SlideRightRoute(page: CashBalancePage()));
-          //         },
-          //         child: Row(
-          //           children: [
-          //             Icon(Icons.monetization_on_outlined,),
-          //             Container(
-          //               margin: const EdgeInsets.only(left: 3),
-          //               child: Text('收支明细'),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-
   _payment() async {
     if (buttonIndex >= buttons.length) return;
     if (typeIndex >= types.length) return;
-    String? result = await Request.cashPayment(
+    String? result = await Request.membershipPayment(
         id: buttons[buttonIndex].id, toId: types[typeIndex].id);
     if (result == null) return;
     launch(result,
@@ -575,11 +440,6 @@ class _MembershipDredgePage extends State<MembershipDredgePage> {
           title: '温馨提示提醒',
           text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',
         ))).then((value) => _init());
-  }
-
-  _getBalance() async {
-    // balance = await Request.cashBalance();
-    refresh = false;
   }
 
   _getButton() async {
