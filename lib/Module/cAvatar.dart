@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/data/User.dart';
 import 'package:movie_fix/data/Users.dart';
+import 'package:movie_fix/tools/MembershipLevel.dart';
 import 'package:movie_fix/tools/Tools.dart';
 
 import '../AssetsMembership.dart';
@@ -56,35 +57,7 @@ class cAvatar extends StatelessWidget {
       _user = this.user!;
     }
     if (_user.member == false) return Colors.white;
-    switch (_user.level) {
-      case 1:
-      case 2:
-      case 3:
-        return Color(0xffe89e7d);
-      case 4:
-      case 5:
-      case 6:
-        return Color(0xffb7b2d9);
-      case 7:
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-        return Color(0xffeec660);
-      case 12:
-      case 13:
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 19:
-      case 20:
-      case 21:
-        return Color(0xffa497e9);
-      default:
-        return Colors.white;
-    }
+    return MembershipLevel.buildColor(_user.level);
   }
 
   _buildIcon() {

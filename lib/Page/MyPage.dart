@@ -626,7 +626,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       child = Container(
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 6),
         width: MediaQuery.of(context).size.width,
-        height: 54,
+        height: 45,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(9)),
           // color: Colors.white,
@@ -783,7 +783,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     cAvatar(
-                      size: 54,
+                      size: 60,
                     ),
                     Flexible(
                         child: Container(
