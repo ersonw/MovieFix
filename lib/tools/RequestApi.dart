@@ -25,6 +25,7 @@ class RequestApi {
 
   static const videoPlayer = '/api/video/player/{id}';
   static const videoLike = '/api/video/like/{id}';
+  static const videoBuy = '/api/video/buy/{id}';
   static const videoShare = '/api/video/share/{id}';
   static const videoComments = '/api/video/comment/{page}/{id}';
   static const videoCommentDelete = '/api/video/comment/delete/{id}';

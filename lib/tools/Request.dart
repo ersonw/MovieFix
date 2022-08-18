@@ -358,6 +358,15 @@ class Request {
     }
     return false;
   }
+  static Future<bool> videoBuy(int id)async{
+    Loading.show();
+    String? result = await _get(RequestApi.videoBuy.replaceAll('{id}', '$id'), {});
+    // Loading.dismiss();
+    if(result != null && jsonDecode(result)['state'] != null){
+      return true;
+    }
+    return false;
+  }
   static Future<void> videoHeartbeat(int id, int seek)async{
     await _post(RequestApi.videoHeartbeat, {'id': id, 'seek': seek});
   }

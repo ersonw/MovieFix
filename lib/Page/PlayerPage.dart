@@ -9,7 +9,9 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/Module/LeftTabBarView.dart';
 import 'package:movie_fix/Module/cAvatar.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/Page/MembershipDredgePage.dart';
 import 'package:movie_fix/data/User.dart';
+import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:video_player/video_player.dart';
 import '../Module/GeneralInput.dart';
 import '../Module/GeneralVideoList.dart';
@@ -32,6 +34,7 @@ import 'package:wakelock/wakelock.dart';
 import '../tools/TempValue.dart';
 import 'dart:ui';
 import '../Global.dart';
+import 'DiamondRechargePage.dart';
 
 class PlayerPage extends StatefulWidget {
   int id;
@@ -298,7 +301,12 @@ class _PlayerPage extends State<PlayerPage>{
       callback: (int index){
           print(index);
       },
-      footer: showPay ? Container(
+      footer: _buildFooter(),
+    );
+  }
+  _buildFooter(){
+    if(showPay){
+      return Container(
         color: Colors.white.withOpacity(0.2),
         height: 45,
         alignment: Alignment.center,
@@ -330,10 +338,22 @@ class _PlayerPage extends State<PlayerPage>{
                 ],
               ),
             ),
-            player.price > 0 ?
+            if(player.price > 0)
             InkWell(
-              onTap: (){
-                //
+              onTap: ()async{
+                if(await Request.videoBuy(player.id) == true){
+                  showPay = false;
+                  player.pay = true;
+                  VideoPlayerUtils.playerHandle(player.vodPlayUrl!);
+                  if(mounted) setState(() {});
+                  // Navigator.pop(context);
+                  // Navigator.push(context, FadeRoute(page: PlayerPage(widget.id)));
+                }else{
+                  await Navigator.push(
+                      context, SlideRightRoute(page: DiamondRechargePage()));
+                  Navigator.pop(context);
+                  Navigator.push(context, FadeRoute(page: PlayerPage(widget.id)));
+                }
               },
               child: Container(
                 margin: const EdgeInsets.only(right: 30),
@@ -346,10 +366,12 @@ class _PlayerPage extends State<PlayerPage>{
                   child: Text('去支付'),
                 ),
               ),
-            ):
-            InkWell(
-              onTap: (){
-                //
+            ),
+            if(player.price == 0)InkWell(
+              onTap: ()async{
+                await Navigator.push(context, SlideRightRoute(page: MembershipDredgePage()));
+                Navigator.pop(context);
+                Navigator.push(context, FadeRoute(page: PlayerPage(widget.id)));
               },
               child: Container(
                 margin: const EdgeInsets.only(right: 30),
@@ -365,35 +387,37 @@ class _PlayerPage extends State<PlayerPage>{
             ),
           ],
         ),
-      ) : Container(
-          // margin: const EdgeInsets.only(bottom: 24),
-          child: _isFullScreen ? null :(isReply ? GeneralInput(
-        sendBnt: true,
-        hintText: '回复：$replyUser',
-        prefixText: replyUser,
-        callback: (String value){
-          setState(() {
+      );
+    }
+
+     return Container(
+      // margin: const EdgeInsets.only(bottom: 24),
+        child: _isFullScreen ? null :(isReply ? GeneralInput(
+          sendBnt: true,
+          hintText: '回复：$replyUser',
+          prefixText: replyUser,
+          callback: (String value){
+            setState(() {
+              isReply = false;
+            });
+            _comment(value);
+          },
+          cancelCallback: (){
+            replyId = 0;
+            replyUser = '';
             isReply = false;
-          });
-          _comment(value);
-        },
-        cancelCallback: (){
-          replyId = 0;
-          replyUser = '';
-          isReply = false;
-          setState(() {});
-        },
-      ) :
-      GeneralInput(
-        sendBnt: true,
-        hintText: '发表自己的看法~' ,
-        callback: (String value){
-          _comment(value);
-        },
-        cancelCallback: (){
-        },
-      ))),
-    );
+            setState(() {});
+          },
+        ) :
+        GeneralInput(
+          sendBnt: true,
+          hintText: '发表自己的看法~' ,
+          callback: (String value){
+            _comment(value);
+          },
+          cancelCallback: (){
+          },
+        )));
   }
   Future<void> _onRefresh() async {
     setState(() {
