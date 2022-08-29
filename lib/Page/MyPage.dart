@@ -68,6 +68,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     if (result['gain'] != null) gain = result['gain'];
     if (result['carUrl'] != null) carUrl = result['carUrl'];
     if (result['serviceUrl'] != null) serviceUrl = result['serviceUrl'];
+    if (result['records'] != null) records = (result['records'] as List).map((e) => Video.fromJson(e)).toList();
     if (result['appData'] != null)
       appData = AppData.formJson(result['appData']);
     if (mounted) setState(() {});
@@ -99,7 +100,9 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     for (int i = 0; i < records.length; i++) {
       Video record = records[i];
       widgets.add(InkWell(
-        onTap: () {},
+        onTap: () {
+          Global.playerPage(record.id);
+        },
         child: Container(
           margin: const EdgeInsets.all(6),
           // color: Colors.red,
@@ -121,7 +124,9 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 width: 200,
                 child: Text(
                   record.title,
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13,),
+                  maxLines: 1,
+                  softWrap: false,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
                 ),
