@@ -818,6 +818,7 @@ class _PlayerPage extends State<PlayerPage>{
     _swiperData.id < 1 ? Container() : widgets.add(InkWell(
       onTap: (){
         handlerSwiper(_swiperData);
+        Request.videoPlayerPublicityReport(id: _swiperData.id);
       },
           child: Container(
             alignment: Alignment.topRight,

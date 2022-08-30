@@ -54,13 +54,17 @@ class _CategoryPage extends State<CategoryPage>{
     if(mounted) setState(() {});
   }
   _getList()async{
+    // print('${second.id}');
+    // print('${total}');
     if(page > total){
       page--;
+      refresh = false;
       return;
     }
     Map<String,dynamic> map = await Request.videoCategoryList(first: first.id,second: second.id,last: last.id,page: page);
     refresh = false;
     if(map['total'] != null) total = map['total'];
+    if(total < 1) total = 1;
     if(map['list'] != null){
       List<Video> list = (map['list'] as List).map((e) => Video.fromJson(e)).toList();
       if(page == 1){
@@ -93,11 +97,15 @@ class _CategoryPage extends State<CategoryPage>{
       footer: Container(
         margin: const EdgeInsets.only(top: 15,bottom: 15),
         child: Center(
-          child: _list.isEmpty ? Text('正在加载中～') :
-          (page < total ? GeneralRefresh.getLoading(): Text('没有更多了')),
+          child: _buildLoading(),
         ),
       ),
     );
+  }
+  _buildLoading() {
+    if(refresh) return Text('正在加载中～');
+    if(page < total) return GeneralRefresh.getLoading();
+    return Text('没有更多了');
   }
   _onRefresh(bool refresh){
     setState(() {

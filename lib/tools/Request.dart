@@ -622,6 +622,9 @@ class Request {
   static Future<void> videoPublicityReport({int id=0})async{
     await _get(RequestApi.videoPublicityReport.replaceAll('{id}', '$id'), {});
   }
+  static Future<void> videoPlayerPublicityReport({int id=0})async{
+    await _get(RequestApi.videoPlayerPublicityReport.replaceAll('{id}', '$id'), {});
+  }
   static Future<Map<String, dynamic>> gameList()async{
     // Loading.show();
     String? result = await _get(RequestApi.gameList, {});

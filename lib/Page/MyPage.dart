@@ -109,16 +109,45 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                height: 100,
-                width: 200,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(record.picThumb),
-                    fit: BoxFit.fill,
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(record.picThumb),
+                        fit: BoxFit.fill,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(9)),
+                    ),
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(9)),
-                ),
+                  Container(
+                    height: 100,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: Center(child: RichText(
+                      text: TextSpan(
+                        text: '上次观看至 ',
+                          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                        children: [
+                          TextSpan(
+                            text: Global.inSecondsTostring(record.scale),
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ]
+                      ),
+                    ),),
+                  ),
+                  SizedBox(
+                    height: 9,
+                    width: 200,
+                    child: LinearProgressIndicator(color: Colors.red,value: record.scale / record.vodDuration,),
+                  ),
+                ],
               ),
               Container(
                 width: 200,
@@ -729,7 +758,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '现金',
+                  '余额',
                   style: TextStyle(fontWeight: FontWeight.w200),
                 ),
               ],

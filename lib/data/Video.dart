@@ -10,6 +10,7 @@ class Video {
   int plays = 0;
   int likes = 0;
   bool pay = false;
+  int scale = 0;
 
   Video();
 
@@ -22,6 +23,7 @@ class Video {
         price = json["price"],
         plays = json["plays"],
         likes = json["likes"],
+        scale = json["scale"] ?? 0,
         pay = json["pay"];
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +35,7 @@ class Video {
         'price': price,
         'plays': plays,
         'likes': likes,
+        'scale': scale,
         'pay': pay,
       };
 
