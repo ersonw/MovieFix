@@ -1,5 +1,6 @@
 class RequestApi {
   static const test = '/api/test/{text}';
+  static const config = '/api/config';
 
   static const searchMovie = '/api/search/movie/{text}';
   static const searchMovieCancel  = '/api/search/movie/cancel/{id}';

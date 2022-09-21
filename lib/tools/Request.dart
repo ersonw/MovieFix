@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/data/User.dart';
 import '../tools/CustomDialog.dart';
@@ -14,13 +15,14 @@ class Request {
   static init() {
     _dio = Dio(_getOptions());
     configModel.addListener(() {
-      _dio.options.baseUrl = _getDomain();
+      _dio.options.baseUrl =  _getDomain();
     });
     userModel.addListener(() {
       _dio.options.headers['Token'] = userModel.hasToken() ? userModel.user.token : '';
     });
   }
   static _getDomain(){
+    if(kIsWeb==true) return '';
     String domain = configModel.config.mainDomain;
     if(!domain.startsWith("http")){
       domain = 'http://$domain';
@@ -118,6 +120,14 @@ class Request {
     }
   }
 
+  static Future<Map<String, dynamic>> getConfig()async{
+    String? result = await _get(RequestApi.config,{});
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map;
+    }
+    return {};
+  }
   static Future<void> checkDeviceId()async{
     String? result = await _get(RequestApi.checkDeviceId.replaceAll('{deviceId}', Global.deviceId!),{});
     if(result!=null){

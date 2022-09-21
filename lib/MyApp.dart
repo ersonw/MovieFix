@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.black,
         brightness: Brightness.dark,
       ),
-      // home: SplashPage(),
-      home: BottomAppBarState(),
+      home: SplashPage(),
+      // home: BottomAppBarState(),
     );
   }
 }

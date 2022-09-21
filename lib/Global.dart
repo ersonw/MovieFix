@@ -21,8 +21,8 @@ import 'Page/LoginPage.dart';
 import 'Page/PlayerPage.dart';
 import 'tools/CustomRoute.dart';
 import 'tools/Request.dart';
-// import 'tools/WebJS.dart';
-import 'package:openinstall_flutter_plugin/openinstall_flutter_plugin.dart';
+import 'tools/channel.dart'
+     if (dart.library.html)  'tools/channel_html.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -40,7 +40,7 @@ final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 final GeneralModel generalModel = GeneralModel();
 final ConfigModel configModel = ConfigModel();
 final UserModel userModel = UserModel();
-final OpeninstallFlutterPlugin _openinstallFlutterPlugin = OpeninstallFlutterPlugin();
+
 class Global {
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");
   static late PackageInfo packageInfo;
@@ -69,27 +69,25 @@ class Global {
     Request.init();
     if(kIsWeb == false) {
       await requestPhotosPermission();
+      await getConfig();
       deviceId = await getUUID();
       platform = Platform.operatingSystem;
       // print(platform);
-      _openinstallFlutterPlugin.init(wakeupHandler);
-      _openinstallFlutterPlugin.install(installHandler);
       packageInfo = await PackageInfo.fromPlatform();
       // print(packageInfo.buildNumber);
       if(userModel.hasToken() == false){
         Request.checkDeviceId();
       }
-    }else{
-      // var queryParameters = WebJs.getUri();
-      // if(queryParameters != null){
-      //   if(queryParameters['code'] != null) Global.codeInvite = queryParameters['code'];
-      //   if(queryParameters['channel'] != null) Global.channelCode = queryParameters['channel'];
-      // }
     }
-    print('$path');
+    Channel.init();
+    // print('$path');
     MessageUtil.init();
     MinioUtil.init();
     runApp(const MyApp());
+  }
+  static Future<void> getConfig()async{
+    Map<String, dynamic> map = await Request.getConfig();
+
   }
   static Future<void> shareVideo(int id) async {
     await Navigator.push(mainContext, DialogRouter(ShareVideoPage(id)));
@@ -109,82 +107,7 @@ class Global {
       ),
     );
   }
-  static Future<void> installHandler(Map<String, dynamic> data) async {
-    // print(data['channelCode']);
-    // channelCode = '101';
-    // if(null != data['bindData']){
-    //   Map<String, dynamic> map = jsonDecode(data['bindData']);
-    //   if(null != map['code']){
-    //     codeInvite = map['code'];
-    //     // _handlerInvite();
-    //   }
-    //   if(null != map['video']){
-    //     if(int.tryParse(map['video']) != null){
-    //       // playVideo(int.parse(map['video']));
-    //     }
-    //   }
-    // }
-    // if(null != data['channelCode'] && data['channelCode'].toString().isNotEmpty){
-    //   if(configModel.config.firstTime == true){
-    //     await Global.reportOpen(Global.REPORT_OPEN_APP);
-    //   }
-    //   // if(Platform.isIOS &&  configModel.config.channel == false){
-    //   //   Config config = configModel.config;
-    //   //   config.channel = true;
-    //   //   configModel.config = config;
-    //   //   await _init();
-    //   //   await initSock();
-    //   //   _initJPush();
-    //   //   runApp(const MyAdaptingApp());
-    //   // }
-    //   channelCode = data['channelCode'];
-    // }
-    // handlerChannel();
-  }
-  static void handlerChannel() async{
-    // if(channelCode == null || channelCode.isEmpty){
-    //   return;
-    // }
-    // if(channelIs){
-    //   return;
-    // }
-    // if(configModel.config.firstTime == true){
-    //   await Global.reportOpen(Global.REPORT_FORM_CHANNEL);
-    //   Config _config = configModel.config;
-    //   _config.firstTime = false;
-    //   configModel.config = _config;
-    // }
-    // Map<String,dynamic> map = {
-    //   'code': channelCode
-    // };
-    // DioManager().request(NWMethod.POST, NWApi.joinChannel,
-    //     params: {'data': jsonEncode(map)}, success: (data) {
-    //       print("success data = $data");
-    //       if (data != null) {
-    //         map = jsonDecode(data);
-    //         if(map['msg'] != null) showWebColoredToast(map['msg']);
-    //         if(map['verify'] != null) channelIs = (map['verify']);
-    //       }
-    //     }, error: (error) {});
-  }
-  static Future<void> wakeupHandler(Map<String, dynamic> data) async {
-    print(data);
-    // if(null != data['bindData']){
-    //   Map<String, dynamic> map = jsonDecode(data['bindData']);
-    //   if(null != map['code']){
-    //     codeInvite = map['code'];
-    //     _handlerInvite();
-    //   }
-    //   if(null != map['video']){
-    //     if(int.tryParse(map['video']) != null){
-    //       playVideo(int.parse(map['video']));
-    //     }
-    //   }
-    // }
-    // if(null != data['channelCode']){
-    //   channelCode = (data['channelCode']);
-    // }
-  }
+
   static Future<String> getUUID() async {
     String uid = '';
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -241,6 +164,7 @@ class Global {
     // final directory = Theme.of(mainContext).platform == TargetPlatform.android
     //     ? await getExternalStorageDirectory()
     //     : await getApplicationDocumentsDirectory();
+    if(kIsWeb == true)  return null;
     if(Platform.isAndroid){
       final directory=await getExternalStorageDirectory();
       return directory?.path;
@@ -262,7 +186,7 @@ class Global {
     return '$savePath$path';
   }
   static Future<void> showWebColoredToast(String msg) async{
-    print('Toast:$msg');
+    // print('Toast:$msg');
     await Navigator.push(mainContext, DialogRouter(cToast(msg)));
     // Fluttertoast.showToast(
     //   msg: msg,
@@ -278,15 +202,15 @@ class Global {
     var statusPhotos = await Permission.photos.status;
     var statusCamera = await Permission.camera.status;
     var storageStatus = await Permission.storage.status;
-    print("Android photos Status: " + statusPhotos.toString());
+    // print("Android photos Status: " + statusPhotos.toString());
     if(statusPhotos != PermissionStatus.granted){
       statusPhotos = await Permission.photos.request();
     }
-    print("Android camera Status: " + statusCamera.toString());
+    // print("Android camera Status: " + statusCamera.toString());
     if(statusCamera != PermissionStatus.granted){
       statusCamera = await Permission.camera.request();
     }
-    print("Android storage Status: " + storageStatus.toString());
+    // print("Android storage Status: " + storageStatus.toString());
     if(storageStatus != PermissionStatus.granted){
       storageStatus = await Permission.storage.request();
     }
