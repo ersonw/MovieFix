@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Global.dart';
 
@@ -30,6 +31,28 @@ class CustomDialog {
                   onPressed: () {
                     Navigator.of(_context).pop();
                     callback(true);
+                  }),
+
+            ],
+          );
+        });
+  }
+  static Future<void> update(String version, int buildNumber, String oldVersion, int oldBuildNumber, String download)async{
+    await showCupertinoDialog<void>(
+        context: Global.mainContext,
+        builder: (_context) {
+          return CupertinoAlertDialog(
+            title: Text('新版本提醒'),
+            content: Text(
+              '\n.旧版本：'+ oldVersion + ' 版本号：$oldBuildNumber' +
+              '\n.新版本：'+ version + ' 版本号：$buildNumber'
+              ,textAlign: TextAlign.left,),
+            actions: [
+              CupertinoDialogAction(
+                  child: Text('去升级'),
+                  onPressed: () {
+                    // Navigator.of(_context).pop();
+                    launchUrl(Uri.parse(download));
                   }),
 
             ],

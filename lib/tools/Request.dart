@@ -63,6 +63,7 @@ class Request {
         Map<String, dynamic> data = response.data;
         if(data['message'] != null && data['message'] !='') CustomDialog.message(data['message']);
         if(data['code'] == 200 && data['data'] != null){
+          // print(data['data']);
           return Global.decryptCode(data['data']);
         }
       }
@@ -127,6 +128,22 @@ class Request {
       return map;
     }
     return {};
+  }
+  static Future<bool> invitation(String code)async{
+    String? result = await _post(RequestApi.invitation,{ code: code });
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map['state'] == true;
+    }
+    return false;
+  }
+  static Future<bool> channel(String code)async{
+    String? result = await _post(RequestApi.channel,{ code: code });
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map['state'] == true;
+    }
+    return false;
   }
   static Future<void> checkDeviceId()async{
     String? result = await _get(RequestApi.checkDeviceId.replaceAll('{deviceId}', Global.deviceId!),{});

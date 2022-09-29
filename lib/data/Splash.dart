@@ -3,7 +3,7 @@ import 'dart:convert';
 class Splash {
   int id;
   String pic;
-  String url;
+  String? url;
 
   Splash({this.id = 0, this.pic = '', this.url = ''});
 

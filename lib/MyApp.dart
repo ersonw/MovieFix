@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'BottomAppBarState.dart';
+import 'NetWork.dart';
 import 'Page/SplashPage.dart';
 
 class MyApp extends StatelessWidget {
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.black,
         brightness: Brightness.dark,
       ),
-      home: SplashPage(),
+      home: NetWork(),
+      // home: SplashPage(),
       // home: BottomAppBarState(),
     );
   }

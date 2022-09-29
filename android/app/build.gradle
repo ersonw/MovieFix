@@ -39,7 +39,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.telebott.movie_fix"
         manifestPlaceholders = [
-                OPENINSTALL_APPKEY : "z1uhui99",
+                OPENINSTALL_APPKEY : "gnsz6pbx",
                 applicationName: "android.app.Application",
         ]
 //        minSdkVersion flutter.minSdkVersion

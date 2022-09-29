@@ -4,9 +4,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewExample extends StatefulWidget {
   final String url;
-  bool? inline;
+  bool inline;
   bool bar;
-  WebViewExample ({Key? key, required this.url, this.inline, this.bar = true}) : super(key: key);
+  WebViewExample ({Key? key, required this.url, this.inline=false, this.bar = true}) : super(key: key);
 
   @override
   WebViewExampleState createState() => WebViewExampleState();
@@ -30,7 +30,7 @@ class WebViewExampleState extends State<WebViewExample> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         child: WebView(
-          javascriptMode: JavascriptMode.unrestricted,
+          javascriptMode: widget.inline? JavascriptMode.unrestricted: JavascriptMode.disabled,
           initialUrl: widget.url,
         )
       ),

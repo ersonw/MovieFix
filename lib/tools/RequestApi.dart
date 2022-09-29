@@ -1,6 +1,8 @@
 class RequestApi {
   static const test = '/api/test/{text}';
   static const config = '/api/config';
+  static const invitation = '/api/invitation';
+  static const channel = '/api/channel';
 
   static const searchMovie = '/api/search/movie/{text}';
   static const searchMovieCancel  = '/api/search/movie/cancel/{id}';

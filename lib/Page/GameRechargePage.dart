@@ -10,6 +10,7 @@ import 'package:movie_fix/data/PayType.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
+import 'package:movie_fix/tools/channel.dart';
 import 'dart:math' as math;
 
 import 'package:url_launcher/url_launcher.dart';
@@ -463,6 +464,7 @@ class _GameRechargePage extends State<GameRechargePage>{
     if(result == null) return;
     launch(result,enableJavaScript: true,enableDomStorage: true,universalLinksOnly: true);
     // launchUrl(Uri.parse(result),webViewConfiguration: WebViewConfiguration());
+    Channel.reportOpen(Channel.REPORT_CASH_IN_GAME);
     Navigator.push(context, DialogRouter( cMessage(title: '温馨提示提醒',text: '尊敬的用户您好，如有充值不到账的情况，请立即复制订单号联系在线客服处理，感谢您的支持与理解！',))).then((value) => _init());
   }
   _getBalance()async{

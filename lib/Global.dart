@@ -2,16 +2,20 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:device_info/device_info.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:movie_fix/Module/cToast.dart';
+import 'package:movie_fix/tools/CustomDialog.dart';
 import 'package:movie_fix/tools/MinioUtil.dart';
 import 'Page/ShareVideoPage.dart';
+import 'data/Config.dart';
 import 'tools/MessageUtil.dart';
 import 'Model/ConfigModel.dart';
 import 'Model/GeneralModel.dart';
@@ -21,8 +25,7 @@ import 'Page/LoginPage.dart';
 import 'Page/PlayerPage.dart';
 import 'tools/CustomRoute.dart';
 import 'tools/Request.dart';
-import 'tools/channel.dart'
-     if (dart.library.html)  'tools/channel_html.dart';
+import 'tools/channel.dart' if (dart.library.html) 'tools/channel_html.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,6 +45,7 @@ final ConfigModel configModel = ConfigModel();
 final UserModel userModel = UserModel();
 
 class Global {
+
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");
   static late PackageInfo packageInfo;
   static late SharedPreferences _prefs;
@@ -67,43 +71,94 @@ class Global {
     }
     path = await Global.getPhoneLocalPath();
     Request.init();
-    if(kIsWeb == false) {
-      await requestPhotosPermission();
-      await getConfig();
+    if (kIsWeb == false) {
+      // await requestPhotosPermission();
+      // await getConfig();
       deviceId = await getUUID();
       platform = Platform.operatingSystem;
       // print(platform);
       packageInfo = await PackageInfo.fromPlatform();
       // print(packageInfo.buildNumber);
-      if(userModel.hasToken() == false){
+      if (userModel.hasToken() == false) {
         Request.checkDeviceId();
       }
     }
     Channel.init();
-    // print('$path');
-    MessageUtil.init();
     MinioUtil.init();
     runApp(const MyApp());
   }
-  static Future<void> getConfig()async{
-    Map<String, dynamic> map = await Request.getConfig();
 
+  static Future<void> checkUpdate() async {
+    Map<String, dynamic> map = await Request.getConfig();
+    if (map['mainDomain'] != null) {
+      Config config = Config.formJson(map);
+      if (isRelease) {
+        profile.config = config;
+        saveProfile();
+      }
+      if (int.parse(packageInfo.buildNumber) < config.buildNumber) {
+        if (config.download == null || config.download.isEmpty)
+          config.download = 'https://www.baidu.com';
+        CustomDialog.update(
+            config.version,
+            config.buildNumber,
+            profile.config.version,
+            profile.config.buildNumber,
+            config.download);
+      }
+    }
   }
+
+  static Future<bool> getConfig() async {
+    try {
+      Map<String, dynamic> map = {};
+      // if (true) {
+      if (isRelease) {
+        Response response = await Dio().get(
+            'https://github1.oss-cn-hongkong.aliyuncs.com/ios/app-release.config');
+        String? result = response.data.toString();
+        result = decryptCode(result);
+        // print(result);
+        map = jsonDecode(result);
+      } else {
+        map = await Request.getConfig();
+        print(encryptCode(jsonEncode(map)));
+        print(map);
+      }
+
+      if (map['mainDomain'] != null) {
+        Config config = Config.formJson(map);
+        profile.config = config;
+        saveProfile();
+        return true;
+      }
+    } catch (e) {
+      // print(e.toString());
+    }
+    return false;
+  }
+
   static Future<void> shareVideo(int id) async {
     await Navigator.push(mainContext, DialogRouter(ShareVideoPage(id)));
   }
-  static Future<void> loginPage()async{
+
+  static Future<void> loginPage() async {
     await Navigator.push(mainContext, SlideRightRoute(page: const LoginPage()));
   }
-  static Future<void> playerPage(int id)async{
+
+  static Future<void> playerPage(int id) async {
     await Navigator.push(mainContext, SlideRightRoute(page: PlayerPage(id)));
   }
-  static void openWebview(String data, {bool? inline}){
+
+  static void openWebview(String data, {bool inline = false}) {
     Navigator.push(
       mainContext,
       CupertinoPageRoute(
-        title: inline== true ? '':'非官方网址，谨防假冒!',
-        builder: (context) => WebViewExample(url: data, inline: inline,),
+        title: inline == true ? '' : '非官方网址，谨防假冒!',
+        builder: (context) => WebViewExample(
+          url: data,
+          inline: inline,
+        ),
       ),
     );
   }
@@ -123,20 +178,22 @@ class Global {
         print(build.name);
         uid = build.identifierForVendor;
         // uid = await FlutterUdid.udid;
-      }else{
+      } else {
         uid = 'test';
       }
       return uid;
-    } on PlatformException {
-    }
+    } on PlatformException {}
     return uid;
   }
-  static saveProfile() => _prefs.setString("profile", jsonEncode(profile.toJson()));
+
+  static saveProfile() =>
+      _prefs.setString("profile", jsonEncode(profile.toJson()));
+
   // static Future<void> saveProfile()async{
   //   if(initMain == false) await init();
   //   _prefs.setString("profile", profile.toString());
   // }
-  static String encryptCode(String text){
+  static String encryptCode(String text) {
     final key = XYQ.Key.fromUtf8(mykey);
     // final iv = XYQ.IV.fromUtf8(myiv);
     final iv = XYQ.IV.fromSecureRandom(128);
@@ -145,12 +202,13 @@ class Global {
     // return '$mykey#${encrypted.base64}';
     return encrypted.base64;
   }
-  static String decryptCode(String text){
+
+  static String decryptCode(String text) {
     String? ikey;
-    if(text.contains('#')) {
+    if (text.contains('#')) {
       ikey = text.substring(0, text.indexOf('#'));
       // print(ikey);
-      text = text.substring(text.indexOf('#')+1);
+      text = text.substring(text.indexOf('#') + 1);
       // print(text);
     }
     final encrypted = XYQ.Encrypted.fromBase64(text);
@@ -160,32 +218,36 @@ class Global {
     final encrypter = XYQ.Encrypter(XYQ.AES(key, mode: XYQ.AESMode.ecb));
     return encrypter.decrypt(encrypted, iv: iv);
   }
+
   static Future<String?> getPhoneLocalPath() async {
     // final directory = Theme.of(mainContext).platform == TargetPlatform.android
     //     ? await getExternalStorageDirectory()
     //     : await getApplicationDocumentsDirectory();
-    if(kIsWeb == true)  return null;
-    if(Platform.isAndroid){
-      final directory=await getExternalStorageDirectory();
+    if (kIsWeb == true) return null;
+    if (Platform.isAndroid) {
+      final directory = await getExternalStorageDirectory();
       return directory?.path;
-    }else if(Platform.isIOS){
-      final directory=await getApplicationDocumentsDirectory();
+    } else if (Platform.isIOS) {
+      final directory = await getApplicationDocumentsDirectory();
       return directory.path;
     }
     return null;
   }
-  static void exportToDoc(String path) async{
+
+  static void exportToDoc(String path) async {
     File file = File(await getVideoPath(path));
-    if(file.existsSync()){
+    if (file.existsSync()) {
       ImageGallerySaver.saveFile(file.path);
       showWebColoredToast('导出成功!');
     }
   }
-  static Future<String> getVideoPath(String path) async{
+
+  static Future<String> getVideoPath(String path) async {
     String? savePath = await getPhoneLocalPath();
     return '$savePath$path';
   }
-  static Future<void> showWebColoredToast(String msg) async{
+
+  static Future<void> showWebColoredToast(String msg) async {
     // print('Toast:$msg');
     await Navigator.push(mainContext, DialogRouter(cToast(msg)));
     // Fluttertoast.showToast(
@@ -196,6 +258,7 @@ class Global {
     //   timeInSecForIosWeb: 5,
     // );
   }
+
   static Future<bool> requestPhotosPermission() async {
     //获取当前的权限
     // var statusInternet = await Permission.interfaces.status;
@@ -203,50 +266,62 @@ class Global {
     var statusCamera = await Permission.camera.status;
     var storageStatus = await Permission.storage.status;
     // print("Android photos Status: " + statusPhotos.toString());
-    if(statusPhotos != PermissionStatus.granted){
+    if (statusPhotos != PermissionStatus.granted) {
       statusPhotos = await Permission.photos.request();
     }
     // print("Android camera Status: " + statusCamera.toString());
-    if(statusCamera != PermissionStatus.granted){
+    if (statusCamera != PermissionStatus.granted) {
       statusCamera = await Permission.camera.request();
     }
     // print("Android storage Status: " + storageStatus.toString());
-    if(storageStatus != PermissionStatus.granted){
+    if (storageStatus != PermissionStatus.granted) {
       storageStatus = await Permission.storage.request();
     }
-    if (statusPhotos == PermissionStatus.granted && statusCamera == PermissionStatus.granted && storageStatus == PermissionStatus.granted) {
+    if (statusPhotos == PermissionStatus.granted &&
+        statusCamera == PermissionStatus.granted &&
+        storageStatus == PermissionStatus.granted) {
       //已经授权
       return true;
     } else {
       return false;
     }
   }
+
   static Future<String?> capturePng(GlobalKey repaintKey) async {
     try {
       // print('开始保存');
-      RenderRepaintBoundary boundary = repaintKey.currentContext?.findRenderObject()! as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary = repaintKey.currentContext
+          ?.findRenderObject()! as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
-      ByteData byteData = (await image.toByteData(format: ui.ImageByteFormat.png))!;
-      final result = await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+      ByteData byteData =
+          (await image.toByteData(format: ui.ImageByteFormat.png))!;
+      final result =
+          await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
       // print(result);
-      result != null ? Global.showWebColoredToast(Platform.isIOS ? (result['isSuccess'] == true ? '保存成功！': '保存失败！') : '保存成功：${result['filePath']}') : print(result);
+      result != null
+          ? Global.showWebColoredToast(Platform.isIOS
+              ? (result['isSuccess'] == true ? '保存成功！' : '保存失败！')
+              : '保存成功：${result['filePath']}')
+          : print(result);
       return result['filePath'];
     } catch (e) {
       print(e);
     }
     return null;
   }
-  static String getPriceNumber(int number,{bool fixed = true}) {
+
+  static String getPriceNumber(int number, {bool fixed = true}) {
     double price = number / 100;
     // if (fixed) {
     //   price = price / 100;
     // }
-    String result = fixed ? price.toStringAsFixed(2): price.toStringAsFixed(0);
-    if(price < 0) return result;
+    String result = fixed ? price.toStringAsFixed(2) : price.toStringAsFixed(0);
+    if (price < 0) return result;
     return '+$result';
   }
+
   static String getDateTime(int date) {
-    if(date > 9999999999){
+    if (date > 9999999999) {
       date = date ~/ 1000;
     }
     int t = ((DateTime.now().millisecondsSinceEpoch ~/ 1000) - date);
@@ -280,56 +355,66 @@ class Global {
     }
     return str;
   }
+
   static String getDateTimef(int date) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(date);
     DateTime _dateTime = DateTime.now();
-    if(date < _dateTime.millisecondsSinceEpoch) return '已过期';
-    if(dateTime.year > _dateTime.year) return getDateToString(date);
-    if(dateTime.month < _dateTime.month) {
-      if(dateTime.day > _dateTime.day) return '剩余${dateTime.day - _dateTime.day}天';
-      if(dateTime.hour > _dateTime.hour) return '剩余${dateTime.hour - _dateTime.hour}小时';
-      if(dateTime.minute > _dateTime.minute) return '剩余${dateTime.minute - _dateTime.minute}分钟';
+    if (date < _dateTime.millisecondsSinceEpoch) return '已过期';
+    if (dateTime.year > _dateTime.year) return getDateToString(date);
+    if (dateTime.month < _dateTime.month) {
+      if (dateTime.day > _dateTime.day)
+        return '剩余${dateTime.day - _dateTime.day}天';
+      if (dateTime.hour > _dateTime.hour)
+        return '剩余${dateTime.hour - _dateTime.hour}小时';
+      if (dateTime.minute > _dateTime.minute)
+        return '剩余${dateTime.minute - _dateTime.minute}分钟';
     }
     return getDateToString(date);
   }
-  static String getYearsOld(int date) {
 
+  static String getYearsOld(int date) {
     String str = '';
-    if (date> 0) {
-      int t = DateTime.now().year - DateTime.fromMillisecondsSinceEpoch(date).year;
+    if (date > 0) {
+      int t =
+          DateTime.now().year - DateTime.fromMillisecondsSinceEpoch(date).year;
       str = '$t岁';
     } else {
       str = '0岁';
     }
     return str;
   }
+
   static String inSecondsTostring(int seconds) {
-    var d = Duration(seconds:seconds);
+    var d = Duration(seconds: seconds);
     List<String> parts = d.toString().split('.');
     return parts[0];
   }
-  static String getTimeToString(int t){
+
+  static String getTimeToString(int t) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(t);
     return '${dateTime.year}-${dateTime.month}-${dateTime.day} ${dateTime.hour}:${dateTime.minute}';
   }
-  static String getDateToString(int t){
+
+  static String getDateToString(int t) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(t);
     return '${dateTime.year}-${dateTime.month}-${dateTime.day}';
   }
-  static String getShortDateToString(int t){
+
+  static String getShortDateToString(int t) {
     DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(t);
     return '${dateTime.month}-${dateTime.day}';
   }
-  static String getNumbersToChinese(int n){
-    if(n < 999){
+
+  static String getNumbersToChinese(int n) {
+    if (n < 999) {
       return '$n';
-    }else{
-      double d= n / 1000;
-      if(d < 999){
+    } else {
+      double d = n / 1000;
+      if (d < 999) {
         return '${d.toStringAsFixed(2)}K';
-      }else{
-          d= d / 1000;
-          return '${d.toStringAsFixed(2)}M';
+      } else {
+        d = d / 1000;
+        return '${d.toStringAsFixed(2)}M';
       }
       // double d= n / 10000;
       // if(d < 9999){
@@ -340,25 +425,26 @@ class Global {
       // }
     }
   }
-  static Future<Map<String, String>> getQueryString(String url)async{
+
+  static Future<Map<String, String>> getQueryString(String url) async {
     Map<String, String> map = <String, String>{};
-    if(url.contains('?')){
+    if (url.contains('?')) {
       List<String> urls = url.split('?');
-      if(urls.length > 1){
+      if (urls.length > 1) {
         url = urls[1];
-        if(url.contains('&')){
+        if (url.contains('&')) {
           urls = url.split('&');
-          for (int i =0;i< urls.length; i++){
-            if(urls[i].contains('=')){
+          for (int i = 0; i < urls.length; i++) {
+            if (urls[i].contains('=')) {
               List<String> temp = url.split('=');
-              if(temp.length>1){
+              if (temp.length > 1) {
                 map[temp[0]] = temp[1];
               }
             }
           }
-        }else{
+        } else {
           List<String> temp = url.split('=');
-          if(temp.length>1){
+          if (temp.length > 1) {
             map[temp[0]] = temp[1];
           }
         }
@@ -366,7 +452,9 @@ class Global {
     }
     return map;
   }
-  static Size boundingTextSize(String text, TextStyle style, {int maxLines = 2 ^ 31, double maxWidth = double.infinity}) {
+
+  static Size boundingTextSize(String text, TextStyle style,
+      {int maxLines = 2 ^ 31, double maxWidth = double.infinity}) {
     if (text.isEmpty) {
       return Size.zero;
     }
@@ -377,12 +465,14 @@ class Global {
       ..layout(maxWidth: maxWidth);
     return textPainter.size;
   }
+
   static String generateMd5(String data) {
     var content = Utf8Encoder().convert(data);
     var digest = md5.convert(content);
     // 这里其实就是 digest.toString()
     return hex.encode(digest.bytes);
   }
+
   static Future<double> loadApplicationCache() async {
     /// 获取文件夹
     Directory directory = await getApplicationDocumentsDirectory();
@@ -391,7 +481,9 @@ class Global {
     double value = await getTotalSizeOfFilesInDir(directory);
     return value;
   }
-  static Future<double> getTotalSizeOfFilesInDir(final FileSystemEntity file) async {
+
+  static Future<double> getTotalSizeOfFilesInDir(
+      final FileSystemEntity file) async {
     if (file is File) {
       int length = await file.length();
       return double.parse(length.toString());
@@ -407,6 +499,7 @@ class Global {
     }
     return 0;
   }
+
   static String formatSize(double? value) {
     if (null == value) {
       return '0';
@@ -420,11 +513,13 @@ class Global {
     String size = value.toStringAsFixed(2);
     return size + unitArr[index];
   }
+
   static Future<void> clearApplicationCache() async {
     Directory directory = await getApplicationDocumentsDirectory();
     //删除缓存目录
     await deleteDirectory(directory);
   }
+
   static Future<void> deleteDirectory(FileSystemEntity file) async {
     if (file is Directory) {
       final List<FileSystemEntity> children = file.listSync();
@@ -435,15 +530,16 @@ class Global {
     await file.delete();
   }
 }
-class DialogRouter extends PageRouteBuilder{
 
+class DialogRouter extends PageRouteBuilder {
   final Widget page;
 
   DialogRouter(this.page)
       : super(
-    opaque: false,
-    // barrierColor: Colors.black54,
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) => child,
-  );
+          opaque: false,
+          // barrierColor: Colors.black54,
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              child,
+        );
 }

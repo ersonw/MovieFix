@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/tools/channel.dart';
 import '../AssetsBackground.dart';
 import '../tools/CustomDialog.dart';
 import '../tools/CustomRoute.dart';
@@ -446,6 +447,7 @@ class _RegisterPage extends State<RegisterPage> {
       return;
     }
     if(await Request.userRegister(passwordEditingController.text, codeId!, codeEditingController.text) == true){
+      Channel.reportOpen(Channel.REPORT_PHONE_REGISTER);
       Navigator.pop(context);
       CustomDialog.message('恭喜您，注册成功!');
     }
