@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
-import 'package:movie_fix/tools/channel.dart';
+import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
 import '../AssetsBackground.dart';
 import '../Page/RegisterPage.dart';
 import '../tools/CustomDialog.dart';

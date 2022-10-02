@@ -6,7 +6,7 @@ import 'package:movie_fix/Page/ManageCardPage.dart';
 import 'package:movie_fix/data/BankCard.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
-import 'package:movie_fix/tools/channel.dart';
+import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
 import 'dart:math' as math;
 import '../Global.dart';
 import 'GameCashOutRecordPage.dart';

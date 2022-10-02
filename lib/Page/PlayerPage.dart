@@ -114,23 +114,25 @@ class _PlayerPage extends State<PlayerPage>{
       });
       return;
     }
-    Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
-    setState(() {
-      refresh = false;
-    });
-    // print(map);
-    if(map['total'] != null) commentTotal = map['total'];
-    if(map['list'] != null){
-      List<Comment> list = (map['list'] as List).map((e) => Comment.formJson(e)).toList();
-      // print(list);
+    try {
+      Map<String, dynamic> map = await Request.videoComments(widget.id, page: commentPage);
       setState(() {
-        if(commentPage > 1){
-          _comments.addAll(list);
-        }else{
-          _comments = list;
-        }
+        refresh = false;
       });
-    }
+      // print(map);
+      if(map['total'] != null) commentTotal = map['total'];
+      if(map['list'] != null){
+        List<Comment> list = (map['list'] as List).map((e) => Comment.formJson(e)).toList();
+        // print(list);
+        setState(() {
+          if(commentPage > 1){
+            _comments.addAll(list);
+          }else{
+            _comments = list;
+          }
+        });
+      }
+    }catch(e){}
   }
   _init()async{
     Player _player = player;
@@ -148,67 +150,69 @@ class _PlayerPage extends State<PlayerPage>{
     });
   }
   getPlayer() async {
-    Map<String, dynamic> map = await Request.videoPlayer(widget.id);
-    if (map['error'] != null) {
-      if (map['error'] == 'login') {
-        Global.loginPage().then((value) => getPlayer());
+    try {
+      Map<String, dynamic> map = await Request.videoPlayer(widget.id);
+      if (map['error'] != null) {
+        if (map['error'] == 'login') {
+          Global.loginPage().then((value) => getPlayer());
+        }
+        return;
       }
-      return;
-    }
-    if (map['player'] != null) {
-      // print(map['player']);
-      setState(() {
-        player = Player.formJson(map['player']);
-      });
-      // if(kIsWeb == true){
+      if (map['player'] != null) {
+        // print(map['player']);
+        setState(() {
+          player = Player.formJson(map['player']);
+        });
+        // if(kIsWeb == true){
         // _videoPlayerController = VideoPlayerController.network(player.vodPlayUrl);
         // return;
-      // }
-      VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
-      VideoPlayerUtils.unLock();
-      // 播放新视频，初始化监听
-      VideoPlayerUtils.initializedListener(
-          key: this,
-          listener: (initialize, widget) async{
-            if (initialize) {
-              // 初始化成功后，更新UI
-              _top = VideoPlayerTop(
-                title: player.title,
-              );
-              _lockIcon = LockIcon(
-                lockCallback: () {
-                  _top!.opacityCallback(!TempValue.isLocked);
-                  _bottom!.opacityCallback(!TempValue.isLocked);
-                },
-              );
-              _bottom = VideoPlayerBottom();
-              _playerUI = widget;
-              _timer.cancel();
-              await _init();
-              if (!mounted) return;
-              setState(() {});
-            }
-          });
-      VideoPlayerUtils.statusListener(key: this, listener: (VideoPlayerState state){
-        // if (state == VideoPlayerState.playing) {
-        //   _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
-        //     if (state == VideoPlayerState.playing) {
-        //       _heartbeat();
-        //     }else{
-        //       timer.cancel();
-        //     }
-        //   });
-        // }else{
-        //   _timer.cancel();
         // }
-      });
-      VideoPlayerUtils.positionListener(key: this, listener: (int second){
-        if(player.pay == false && second > player.trial && VideoPlayerUtils.state == VideoPlayerState.playing){
-          VideoPlayerUtils.lock();
-          _showPay();
-        }
-      });
-    }
+        VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
+        VideoPlayerUtils.unLock();
+        // 播放新视频，初始化监听
+        VideoPlayerUtils.initializedListener(
+            key: this,
+            listener: (initialize, widget) async{
+              if (initialize) {
+                // 初始化成功后，更新UI
+                _top = VideoPlayerTop(
+                  title: player.title,
+                );
+                _lockIcon = LockIcon(
+                  lockCallback: () {
+                    _top!.opacityCallback(!TempValue.isLocked);
+                    _bottom!.opacityCallback(!TempValue.isLocked);
+                  },
+                );
+                _bottom = VideoPlayerBottom();
+                _playerUI = widget;
+                _timer.cancel();
+                await _init();
+                if (!mounted) return;
+                setState(() {});
+              }
+            });
+        VideoPlayerUtils.statusListener(key: this, listener: (VideoPlayerState state){
+          // if (state == VideoPlayerState.playing) {
+          //   _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+          //     if (state == VideoPlayerState.playing) {
+          //       _heartbeat();
+          //     }else{
+          //       timer.cancel();
+          //     }
+          //   });
+          // }else{
+          //   _timer.cancel();
+          // }
+        });
+        VideoPlayerUtils.positionListener(key: this, listener: (int second){
+          if(player.pay == false && second > player.trial && VideoPlayerUtils.state == VideoPlayerState.playing){
+            VideoPlayerUtils.lock();
+            _showPay();
+          }
+        });
+      }
+    }catch(e){}
   }
   getVideos()async{
     Map<String,dynamic> map = await Request.videoAnytime();

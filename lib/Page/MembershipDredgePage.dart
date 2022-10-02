@@ -9,7 +9,7 @@ import 'package:movie_fix/data/MembershipButton.dart';
 import 'package:movie_fix/data/PayType.dart';
 import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
-import 'package:movie_fix/tools/channel.dart';
+import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../AssetsIcon.dart';

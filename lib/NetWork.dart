@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:movie_fix/tools/MessageUtil.dart';
-import 'package:movie_fix/tools/channel.dart';
+import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
 
 import 'AssetsImage.dart';
 import 'Global.dart';

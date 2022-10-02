@@ -22,7 +22,7 @@ class Request {
     });
   }
   static _getDomain(){
-    if(kIsWeb==true) return '';
+    if(kIsWeb==true && Global.isRelease) return '';
     String domain = configModel.config.mainDomain;
     if(!domain.startsWith("http")){
       domain = 'http://$domain';
@@ -41,7 +41,7 @@ class Request {
       responseType: ResponseType.json,
       receiveDataWhenStatusError: false,
       connectTimeout: 30000,
-      receiveTimeout: 3000,
+      receiveTimeout: 30000,
     );
   }
 

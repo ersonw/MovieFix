@@ -9,6 +9,7 @@ import 'Page/GamePage.dart';
 import 'Page/IndexPage.dart';
 
 import 'Global.dart';
+import 'Page/MainUrlPage.dart';
 import 'Page/MyPage.dart';
 import 'Page/ShortVideoPage.dart';
 
@@ -32,7 +33,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
     _eachView.add(const IndexPage());
     _eachView.add(const ShortVideoPage());
     _eachView.add(const GamePage());
-    _eachView.add(const Undeveloped());
+    _eachView.add(const MainUrlPage());
     _eachView.add(MyPage());
   }
   Future<void> _popUps(BuildContext context)async {
