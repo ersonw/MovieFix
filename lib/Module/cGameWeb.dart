@@ -51,24 +51,24 @@ class _cGameWeb extends State<cGameWeb>{
           ),
           Positioned(
             left: _offset.dx,
-              top: _offset.dy,
-              child: Draggable(
-                child: buildBox(),
-                childWhenDragging: Container(),
-                feedback: buildBox(),
-                onDraggableCanceled: (Velocity velocity, Offset offset) => setState(() {
-                  _offset = Offset(offset.dx,offset.dy);
-                }),
-                onDragEnd: (value) => setState(() {
-                  move = false;
-                }),
-                // onDragStarted: ()=> setState(() {
-                //   move = false;
-                // }),
-                // onDragUpdate: (value) => setState(() {
-                //   move = false;
-                // }),
-              ),
+            top: _offset.dy,
+            child: Draggable(
+              child: buildBox(),
+              childWhenDragging: Container(),
+              feedback: buildBox(),
+              onDraggableCanceled: (Velocity velocity, Offset offset) => setState(() {
+                _offset = Offset(offset.dx,offset.dy);
+              }),
+              onDragEnd: (value) => setState(() {
+                move = false;
+              }),
+              // onDragStarted: ()=> setState(() {
+              //   move = false;
+              // }),
+              // onDragUpdate: (value) => setState(() {
+              //   move = false;
+              // }),
+            ),
           ),
         ],
       ),
@@ -103,7 +103,7 @@ class _cGameWeb extends State<cGameWeb>{
               height: 150,
               decoration: BoxDecoration(
                 // color: Colors.black.withOpacity(0.3),
-                borderRadius: BorderRadius.all(Radius.circular(90))
+                  borderRadius: BorderRadius.all(Radius.circular(90))
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -78,11 +78,12 @@ class _GamePage extends State<GamePage>{
     if(mounted) setState(() {});
   }
   _enterGame({int id=0})async{
-    Channel.reportOpen(Channel.REPORT_PLAYER_GAME);
+
     Loading.show();
     String? result = await Request.gameEnter(id: id);
     // print(result);
     if(result != null){
+      Channel.reportOpen(Channel.REPORT_PLAYER_GAME);
       // Loading.show();
       Navigator.push(context, FadeRoute(page: cGameWeb(result))).then((value) {
         _getRecords();
