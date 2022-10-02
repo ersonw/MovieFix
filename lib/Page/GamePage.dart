@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie_fix/AssetsIcon.dart';
@@ -78,7 +79,10 @@ class _GamePage extends State<GamePage>{
     if(mounted) setState(() {});
   }
   _enterGame({int id=0})async{
-
+    if(kIsWeb==true) {
+      Global.showWebColoredToast('游戏仅支持在Android或者iOS上游玩哟！');
+      return;
+    }
     Loading.show();
     String? result = await Request.gameEnter(id: id);
     // print(result);

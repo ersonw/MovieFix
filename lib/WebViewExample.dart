@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewExample extends StatefulWidget {
@@ -18,7 +19,9 @@ class WebViewExampleState extends State<WebViewExample> {
     // print(widget.url);
     super.initState();
     // Enable virtual display.
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    if(kIsWeb==false){
+      if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    }
   }
 
   @override
