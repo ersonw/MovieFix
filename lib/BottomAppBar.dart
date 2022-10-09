@@ -120,26 +120,23 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   Widget build(BuildContext context) {
     _init(context);
     return Scaffold(
-      body: IndexedStack(
-        children: _eachView,
-        index: _index,
+      body: _eachView[_index],
+      floatingActionButton: FloatingActionButton(
+        ///响应事件,push 生成新的页面，即点击中间的按钮跳转的页面
+        onPressed: () {
+          // setState(() {
+          //   _index = 2;
+          // });
+        },
+        backgroundColor: Colors.black.withOpacity(0.6),
+        // focusColor: Colors.black,
+        // foregroundColor: Colors.black,
+        // hoverColor: Colors.black,
+
+        ///长按
+        // tooltip: "狗哥最帅",
+        child: _build(),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   ///响应事件,push 生成新的页面，即点击中间的按钮跳转的页面
-      //   onPressed: () {
-      //     // setState(() {
-      //     //   _index = 2;
-      //     // });
-      //   },
-      //   backgroundColor: Colors.black.withOpacity(0.6),
-      //   // focusColor: Colors.black,
-      //   // foregroundColor: Colors.black,
-      //   // hoverColor: Colors.black,
-      //
-      //   ///长按
-      //   // tooltip: "狗哥最帅",
-      //   child: _build(),
-      // ),
       bottomNavigationBar: BottomAppBar(
         // color: const Color(0xff201e2b),
         color: Colors.black.withOpacity(0.3),
@@ -159,15 +156,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      (_index != 0)?
                       Image.asset(
-                        (_index != 0)?AssetsIcon.indexIcon: AssetsIcon.indexActiveIcon,
+                        AssetsIcon.indexIcon,
                         width: 35,
-                      ),
-                        Text("首页",
-                            style: TextStyle(
-                                color: _index == 0
-                                    ? Colors.white
-                                    : Colors.white.withOpacity(0.6))),
+                      ): Container(width:35,height:35),
+                      Text("首页",
+                          style: TextStyle(
+                              color: _index == 0
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -186,15 +184,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      (_index != 1)?
                       Image.asset(
-                        (_index != 1)?AssetsIcon.videoIcon: AssetsIcon.videoActiveIcon,
+                        AssetsIcon.videoIcon,
                         width: 35,
-                      ),
-                        Text("短视频",
-                            style: TextStyle(
-                                color: _index == 1
-                                    ? Colors.white
-                                    : Colors.white.withOpacity(0.6))),
+                      ): Container(width:35,height:35),
+                      Text("短视频",
+                          style: TextStyle(
+                              color: _index == 1
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -214,15 +213,16 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      (_index != 2)?
                       Image.asset(
-                        (_index != 2)?AssetsIcon.gameIcon: AssetsIcon.gameActiveIcon,
+                        AssetsIcon.gameIcon,
                         width: 35,
-                      ),
-                        Text("游戏",
-                            style: TextStyle(
-                                color: _index == 2
-                                    ? Colors.white
-                                    : Colors.white.withOpacity(0.6))),
+                      ): Container(width:35,height:35),
+                      Text("游戏",
+                          style: TextStyle(
+                              color: _index == 2
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.6))),
                     ],
                   ),
                 ),
@@ -241,10 +241,11 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      (_index != 3)?
                       Image.asset(
-                        (_index != 3)?AssetsIcon.likeIcon: AssetsIcon.likeActiveIcon,
+                        AssetsIcon.likeIcon,
                         width: 35,
-                      ),
+                      ): Container(width:35,height:35),
                       Text("推荐",
                           style: TextStyle(
                               color: _index == 3
@@ -269,10 +270,11 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      (_index != 4)?
                       Image.asset(
-                        (_index != 4)?AssetsIcon.myIcon: AssetsIcon.myActiveIcon,
+                        AssetsIcon.myIcon,
                         width: 35,
-                      ),
+                      ): Container(width:35,height:35),
                       Text("我的",
                           style: TextStyle(
                               color: _index == 4
@@ -304,7 +306,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
       ),
 
       ///将FloatActionButton 与 BottomAppBar 融合到一起
-      // floatingActionButtonLocation: _buildFloat(),
+      floatingActionButtonLocation: _buildFloat(),
     );
   }
 

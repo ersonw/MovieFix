@@ -6,6 +6,7 @@ import 'package:movie_fix/tools/MessageUtil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../AssetsImage.dart';
 import '../BottomAppBarState.dart' if (dart.library.html)  '../BottomAppBarStateWeb.dart';
+// import '../BottomAppBarState.dart' if (dart.library.html)  '../BottomAppBarStateWeb.dart';
 import '../Global.dart';
 
 class SplashPage extends StatefulWidget {

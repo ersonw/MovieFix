@@ -52,7 +52,6 @@ class _NetWork extends State<NetWork> {
         });
       }
       if (success) {
-        MessageUtil.init();
         if (mounted) {
           setState(() {
             _currentState = SUCCESS;

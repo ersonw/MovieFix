@@ -34,6 +34,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   User user = userModel.user;
   int coin = 0;
   int diamond = 0;
+  int count = 0;
   double cash = 0.0;
   double gain = 0.0;
 
@@ -63,6 +64,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       userModel.user = user;
     }
     if (result['diamond'] != null) diamond = result['diamond'];
+    if (result['count'] != null) diamond = result['count'];
     if (result['coin'] != null) coin = result['coin'];
     if (result['cash'] != null) cash = result['cash'];
     if (result['gain'] != null) gain = result['gain'];
@@ -113,8 +115,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 alignment: Alignment.bottomCenter,
                 children: [
                   Container(
-                    height: 100,
-                    width: 200,
+                    height: Global.getContextSize(d: 5),
+                    width: Global.getContextSize(d: 2.5),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: NetworkImage(record.picThumb),
@@ -124,8 +126,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   Container(
-                    height: 100,
-                    width: 200,
+                    height: Global.getContextSize(d: 5),
+                    width: Global.getContextSize(d: 2.5),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.3),
                     ),
@@ -144,13 +146,13 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   ),
                   SizedBox(
                     height: 9,
-                    width: 200,
+                    width: Global.getContextSize(d: 2.5),
                     child: LinearProgressIndicator(color: Colors.red,value: record.scale / record.vodDuration,),
                   ),
                 ],
               ),
               Container(
-                width: 200,
+                width: Global.getContextSize(d: 2.5),
                 child: Text(
                   record.title,
                   style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13,),
@@ -494,7 +496,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(
                       color: Color(0xff6325b8),
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic)),
+                      // fontStyle: FontStyle.italic,
+                  )),
             ),
             InkWell(
               child: Row(
@@ -541,7 +544,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(
                       color: Color(0xff5844c5),
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic)),
+                      // fontStyle: FontStyle.italic,
+                  )),
             ),
             InkWell(
               child: Row(
@@ -588,7 +592,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(
                       color: Color(0xffa16c17),
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic)),
+                      // fontStyle: FontStyle.italic,
+                  )),
             ),
             InkWell(
               child: Row(
@@ -635,7 +640,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(
                       color: Color(0xff45458d),
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic)),
+                      // fontStyle: FontStyle.italic,
+                  )),
             ),
             InkWell(
               child: Row(
@@ -660,7 +666,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       child = Container(
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 6),
         width: MediaQuery.of(context).size.width,
-        height: 45,
+        height: 54,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(9)),
           // color: Colors.white,
@@ -682,7 +688,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(
                       color: Color(0xff7f3b1b),
                       fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic)),
+                      // fontStyle: FontStyle.italic,
+                  )),
             ),
             InkWell(
               child: Row(
@@ -722,11 +729,11 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 Text(
                   '$coin',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
                 ),
                 Text(
                   '金币',
-                  style: TextStyle(fontWeight: FontWeight.w200),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
                 ),
               ],
             ),
@@ -741,11 +748,30 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 Text(
                   '$diamond',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
                 ),
                 Text(
                   '钻石',
-                  style: TextStyle(fontWeight: FontWeight.w200),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                      context, SlideRightRoute(page: DiamondRechargePage()))
+                  .then((value) => _init());
+            },
+            child: Column(
+              children: [
+                Text(
+                  '$count',
+                  style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
+                ),
+                Text(
+                  '下线',
+                  style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
                 ),
               ],
             ),
@@ -755,11 +781,11 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
               children: [
                 Text(
                   '$cash',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
                 ),
                 Text(
                   '余额',
-                  style: TextStyle(fontWeight: FontWeight.w200),
+                  style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
                 ),
               ],
             ),
@@ -817,12 +843,12 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     cAvatar(
-                      size: 60,
+                      size: Global.getContextSize(d: 5) ?? 60,
                     ),
                     Flexible(
                         child: Container(
                       margin: const EdgeInsets.only(top: 15, left: 3),
-                      child: Text('${user.nickname}'),
+                      child: Text('${user.nickname}',style: TextStyle(fontSize: Global.getContextSize(d: 19)),),
                     )),
                   ],
                 ),
@@ -834,7 +860,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   },
                   child: Row(
                     children: [
-                      Text('个人资料'),
+                      Text('个人资料',style: TextStyle(fontSize: Global.getContextSize(d: 27)),),
                       Icon(Icons.chevron_right),
                     ],
                   ),

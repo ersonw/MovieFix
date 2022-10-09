@@ -254,14 +254,14 @@ class _GamePage extends State<GamePage>{
       widgets.add(InkWell(
         onTap: () {},
         child: Container(
-          margin: const EdgeInsets.all(6),
+          margin: const EdgeInsets.only(top: 6,bottom: 6,left: 3),
           // color: Colors.red,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                height: 180,
-                width: 270,
+                height: Global.getContextSize(d: 3.4),
+                width: Global.getContextSize(d: 2.2),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(record.image),
@@ -271,7 +271,7 @@ class _GamePage extends State<GamePage>{
                 ),
               ),
               Container(
-                width: 270,
+                width: Global.getContextSize(d: 2.1),
                 height: 45,
                 // color: Colors.red,
                 // alignment: Alignment.center,
@@ -286,7 +286,7 @@ class _GamePage extends State<GamePage>{
                         _enterGame(id: record.id);
                       },
                       child: Container(
-                        margin: const EdgeInsets.only(right: 15),
+                        // margin: const EdgeInsets.only(right: 15),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.all(Radius.circular(15)),

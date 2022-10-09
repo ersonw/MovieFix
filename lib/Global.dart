@@ -70,7 +70,6 @@ class Global {
       profile = Profile.fromJson(jsonDecode(_profile));
     }
     path = await Global.getPhoneLocalPath();
-    Request.init();
     if (kIsWeb == false) {
       // await requestPhotosPermission();
       // await getConfig();
@@ -79,9 +78,7 @@ class Global {
       // print(platform);
       packageInfo = await PackageInfo.fromPlatform();
       // print(packageInfo.buildNumber);
-      if (userModel.hasToken() == false) {
-        Request.checkDeviceId();
-      }
+
     }
     Channel.init();
     MinioUtil.init();
@@ -93,8 +90,14 @@ class Global {
     if (map['mainDomain'] != null) {
       Config config = Config.formJson(map);
       if (isRelease) {
-        profile.config = config;
-        saveProfile();
+        // profile.config = config;
+        // saveProfile();
+        configModel.config = config;
+        Request.init();
+        if (userModel.hasToken() == false) {
+          Request.checkDeviceId();
+        }
+        MessageUtil.init();
       }
       if (int.parse(packageInfo.buildNumber) < config.buildNumber) {
         if (config.download == null || config.download.isEmpty)
@@ -110,17 +113,19 @@ class Global {
   }
 
   static Future<bool> getConfig() async {
+
     try {
       Map<String, dynamic> map = {};
       // if (true) {
       if (isRelease) {
         Response response = await Dio().get(
-            'https://github1.oss-cn-hongkong.aliyuncs.com/ios/app-release.config');
+            'http://58.223.168.40:9000/config/app-release.config');
         String? result = response.data.toString();
         result = decryptCode(result);
         // print(result);
         map = jsonDecode(result);
       } else {
+        Request.init();
         map = await Request.getConfig();
         print(encryptCode(jsonEncode(map)));
         print(map);
@@ -128,22 +133,30 @@ class Global {
 
       if (map['mainDomain'] != null) {
         Config config = Config.formJson(map);
-        profile.config = config;
-        saveProfile();
+        // profile.config = config;
+        // saveProfile();
+        configModel.config = config;
+        Request.init();
+        MessageUtil.init();
         return true;
       }
     } catch (e) {
-      // print(e.toString());
+      print(e.toString());
     }
     return false;
   }
-
+  static double? getContextSize({double d = 1}) {
+    if(initMain){
+      return MediaQuery.of(mainContext).size.width / d;
+    }
+    return null;
+  }
   static Future<void> shareVideo(int id) async {
     await Navigator.push(mainContext, DialogRouter(ShareVideoPage(id)));
   }
 
   static Future<void> loginPage() async {
-    await Navigator.push(mainContext, SlideRightRoute(page: const LoginPage()));
+    if(initMain) await Navigator.push(mainContext, SlideRightRoute(page: const LoginPage()));
   }
 
   static Future<void> playerPage(int id) async {

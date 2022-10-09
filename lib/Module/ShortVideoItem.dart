@@ -157,7 +157,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                           context, SlideRightRoute(page: ShortVideoUserProfilePage(widget.video.userId)));
                     }
                   },
-                  child:  cAvatar(user: _user,size: 42,),
+                  child:  cAvatar(user: _user,size: Global.getContextSize(d: 6.7) ?? 60,),
                 ),
               ],
             ),
@@ -185,7 +185,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                           return ScaleTransition(child: child,scale: anim);
                         },
                         duration: Duration(milliseconds: 500),
-                        child: Icon(widget.video.like ? Icons.favorite:Icons.favorite_outlined, size: 36, color: widget.video.like ? Colors.red:Colors.white,),
+                        child: Icon(widget.video.like ? Icons.favorite:Icons.favorite_outlined, size: Global.getContextSize(d: 8), color: widget.video.like ? Colors.red:Colors.white,),
                       ),
                       Text(Global.getNumbersToChinese(widget.video.likes)),
                     ],
@@ -206,7 +206,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.textsms_sharp, size: 36,),
+                      Icon(Icons.textsms_sharp, size: Global.getContextSize(d: 8),),
                       Text(Global.getNumbersToChinese(widget.video.comments)),
                     ],
                   ),
@@ -232,7 +232,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
                             Transform(
                               alignment: Alignment.center,
                               transform: Matrix4.rotationY(math.pi),
-                              child: Icon(Icons.reply_outlined, size: 45,),
+                              child: Icon(Icons.reply_outlined, size: Global.getContextSize(d: 8),),
                             ),
                             Text(Global.getNumbersToChinese(widget.video.forwards)),
                           ],
@@ -295,14 +295,14 @@ class ShortVideoItemState extends State<ShortVideoItem> {
             child: Container(
               margin: const EdgeInsets.only(left: 15),
               width: MediaQuery.of(context).size.width / 1.2,
-              child: Text('@${widget.video.nickname}',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18),softWrap: false,overflow: TextOverflow.ellipsis,),
+              child: Text('@${widget.video.nickname}',style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500,fontSize: Global.getContextSize(d: 21)),softWrap: false,overflow: TextOverflow.ellipsis,),
             ),
           ),
           const Padding(padding: EdgeInsets.only(bottom: 6)),
           Container(
             // margin: const EdgeInsets.only(left: 12),
             // width: MediaQuery.of(context).size.width / 1.3,
-            child: cRichText(widget.video.title ?? '',maxWidth: MediaQuery.of(context).size.width / 1.3,left: true,style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 15,fontWeight: FontWeight.w300),),
+            child: cRichText(widget.video.title ?? '',maxWidth: MediaQuery.of(context).size.width / 1.3,left: true,style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: Global.getContextSize(d: 24),fontWeight: FontWeight.w200),),
           ),
           const Padding(padding: EdgeInsets.only(bottom: 18)),
         ],
