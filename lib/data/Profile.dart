@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'ButtonConfig.dart';
 import 'Config.dart';
 import 'User.dart';
 
@@ -7,6 +8,7 @@ import 'User.dart';
 class Profile {
   Profile();
   List<String> words = [];
+  ButtonConfig buttonConfig = ButtonConfig();
   Config config = Config();
   User user = User();
   Profile.fromJson(Map<String, dynamic> json):

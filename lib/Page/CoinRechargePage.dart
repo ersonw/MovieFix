@@ -22,7 +22,7 @@ class CoinRechargePage extends StatefulWidget{
 }
 class _CoinRechargePage extends State<CoinRechargePage>{
   int balance = 0;
-  List<Button> buttons = [];
+  List<Button> buttons = buttonModel.coin;
   List<PayType> types = [];
   int buttonIndex = 0;
   int typeIndex = 0;
@@ -476,9 +476,16 @@ class _CoinRechargePage extends State<CoinRechargePage>{
     }
   }
   _getButtons()async{
-    Map<String,dynamic> result = await Request.coinButtons();
-    if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
-    _getButton();
+
+    if(buttons.isEmpty) {
+      Map<String,dynamic> result = await Request.coinButtons();
+      if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
+    }
+    if(buttons.isNotEmpty){
+      refresh = false;
+      buttonModel.coin = buttons;
+      _getButton();
+    }
     if(mounted) setState(() {});
   }
 }

@@ -14,7 +14,9 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:movie_fix/Module/cToast.dart';
 import 'package:movie_fix/tools/CustomDialog.dart';
 import 'package:movie_fix/tools/MinioUtil.dart';
+import 'Model/ButtonModel.dart';
 import 'Page/ShareVideoPage.dart';
+import 'TableChangeNotifier.dart';
 import 'data/Config.dart';
 import 'tools/MessageUtil.dart';
 import 'Model/ConfigModel.dart';
@@ -43,7 +45,8 @@ final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 final GeneralModel generalModel = GeneralModel();
 final ConfigModel configModel = ConfigModel();
 final UserModel userModel = UserModel();
-
+final ButtonModel buttonModel = ButtonModel();
+final TableChangeNotifier tableChangeNotifier = TableChangeNotifier();
 class Global {
 
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");

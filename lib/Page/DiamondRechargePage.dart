@@ -26,7 +26,7 @@ class DiamondRechargePage extends StatefulWidget{
 }
 class _DiamondRechargePage extends State<DiamondRechargePage>{
   int balance = 0;
-  List<Button> buttons = [];
+  List<Button> buttons = buttonModel.diamond;
   List<PayType> types = [];
   int buttonIndex = 0;
   int typeIndex = 0;
@@ -235,7 +235,97 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
       ),
     );
   }
+  _buildButtonsFake(){
+    List<Widget> list = [];
+    for(int i = 0; i < 8; i++){
+      list.add(Stack(
+        alignment: Alignment.topRight,
+        children: [
+          Container(
+            // color: Colors.red,
+            width: MediaQuery.of(context).size.width / 3.2,
+            height: MediaQuery.of(context).size.width / 3.2,
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3.2 -10,
+                  height: MediaQuery.of(context).size.width / 3.2 -10,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  // alignment: Alignment.center,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(child: Text('${i+1}00',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),)),
+                          Image.asset(AssetsIcon.diamond,),
+                        ],
+                      ),
+                      RichText(text: TextSpan(
+                          text: '售价 ',
+                          style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                          children: [
+                            TextSpan(
+                                text: '${i+1}00',
+                                style: TextStyle(color: Colors.deepOrange,fontSize: 18,)
+                            ),
+                            TextSpan(
+                              text: '元 ',
+                              style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                            ),
+                          ]
+                      )),
+                    ],
+                  ),
+                ),
+                if(buttonIndex == i) Container(
+                  width: MediaQuery.of(context).size.width / 3.2 -10,
+                  height: MediaQuery.of(context).size.width / 3.2 -10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    color: Colors.orange.withOpacity(0.15),
+                    border: Border.all(color: Colors.deepOrangeAccent),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // if(button.less) Image.asset(AssetsIcon.less),
+        ],
+      ));
+    }
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.all(9),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 9),
+            child: Text('充值金额',style: TextStyle(fontWeight: FontWeight.bold),),
+          ),
+          Wrap(
+            // spacing: 3,
+            runSpacing: 3,
+            children: list,
+          ),
+        ],
+      ),
+    );
+  }
   _buildButtons(){
+    // if(buttons.isEmpty) return _buildButtonsFake();
     List<Widget> list = [];
     for(int i = 0; i < buttons.length; i++){
       Button button = buttons[i];
@@ -474,15 +564,20 @@ class _DiamondRechargePage extends State<DiamondRechargePage>{
   _getButton()async{
     if(buttons.isNotEmpty && buttons.length > buttonIndex){
       Map<String,dynamic> result = await Request.diamondButton(id: buttons[buttonIndex].id);
-      refresh = false;
       if(result['list'] != null) types = (result['list'] as List).map((e) => PayType.fromJson(e)).toList();
       if(mounted) setState(() {});
     }
   }
   _getButtons()async{
-    Map<String,dynamic> result = await Request.diamondButtons();
-    if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
-    _getButton();
+    if(buttons.isEmpty) {
+      Map<String,dynamic> result = await Request.diamondButtons();
+      if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
+    }
+    if(buttons.isNotEmpty){
+      refresh = false;
+      buttonModel.diamond = buttons;
+      _getButton();
+    }
     if(mounted) setState(() {});
   }
 

@@ -27,7 +27,7 @@ class GameRechargePage extends StatefulWidget{
 }
 class _GameRechargePage extends State<GameRechargePage>{
   double balance = 0.00;
-  List<Button> buttons = [];
+  List<Button> buttons = buttonModel.game;
   List<PayType> types = [];
   int buttonIndex = 0;
   int typeIndex = 0;
@@ -478,10 +478,15 @@ class _GameRechargePage extends State<GameRechargePage>{
     }
   }
   _getButtons()async{
-    Map<String,dynamic> result = await Request.gameButtons();
-    refresh = false;
-    if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
-    _getButton();
+    if(buttons.isEmpty) {
+      Map<String,dynamic> result = await Request.gameButtons();
+      if(result['list'] != null) buttons = (result['list'] as List).map((e) => Button.formJson(e)).toList();
+    }
+    if(buttons.isNotEmpty){
+      refresh = false;
+      buttonModel.game = buttons;
+      _getButton();
+    }
     if(mounted) setState(() {});
   }
 

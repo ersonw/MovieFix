@@ -1226,7 +1226,7 @@ class Request {
     // Loading.show();
     String url = RequestApi.membershipInfo;
     String? result = await _get(url, {});
-    print(result);
+    // print(result);
     if(result != null){
       return jsonDecode(result);
     }

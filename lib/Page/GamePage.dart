@@ -392,7 +392,10 @@ class _GamePage extends State<GamePage>{
               onTap: (){
                 // Request.gameTest().then((value) => _getBalance());
                 // Loading.show();
-                Navigator.push(context, SlideRightRoute(page: GameRechargePage()));
+                Navigator.push(context, SlideRightRoute(page: GameRechargePage())).then((value) {
+                  _getBalance();
+                  _getAnnouncements();
+                });
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,
@@ -414,7 +417,10 @@ class _GamePage extends State<GamePage>{
             ),
             InkWell(
               onTap: (){
-                Navigator.push(context, SlideRightRoute(page: GameCashOutPage()));
+                Navigator.push(context, SlideRightRoute(page: GameCashOutPage())).then((value) {
+                  _getBalance();
+                  _getAnnouncements();
+                });
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,

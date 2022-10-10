@@ -10,6 +10,7 @@ class Config {
   // String mainDomain = "118.31.44.104";
   String mainDomain = "api2.telebott.com";
   String? channelDomain;
+  String? serviceDomain;
   List<Splash> splashList = [];
   String version = '';
   int buildNumber = 0;
@@ -19,6 +20,7 @@ class Config {
       mainUrl = json['mainUrl'],
       mainDomain = json['mainDomain'],
         channelDomain = json['channelDomain'],
+        serviceDomain = json['serviceDomain'],
   version = json['version'],
   buildNumber = json['buildNumber'],
         download = json['download'],
@@ -27,6 +29,7 @@ class Config {
     'mainUrl': mainUrl,
     'mainDomain': mainDomain,
     'channelDomain': channelDomain,
+    'serviceDomain': serviceDomain,
     'splashList': splashList,
     'version': version,
     'buildNumber': buildNumber,

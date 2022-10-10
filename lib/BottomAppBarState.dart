@@ -35,23 +35,11 @@ class _BottomAppBarState extends State<BottomAppBarState> {
     _eachView.add(const GamePage());
     _eachView.add(const MainUrlPage());
     _eachView.add(MyPage());
-  }
-
-  Future<void> _popUps(BuildContext context) async {
-    // Map<String, dynamic> parm = { };
-    // String? result = (await DioManager().requestAsync(
-    //     NWMethod.GET, NWApi.getPopUpsDialog, {"data": jsonEncode(parm)}));
-    // if (result != null) {
-    //   // print(result);
-    //   Map<String, dynamic> map = jsonDecode(result);
-    //   if(map != null){
-    //     if(map['image'] != null && map['url'] != null){
-    //       Navigator.push(context, DialogRouter(PopUpsDialog(map['image'], url: map['url'])));
-    //     }else if(map['image'] != null){
-    //       Navigator.push(context, DialogRouter(PopUpsDialog(map['image'])));
-    //     }
-    //   }
-    // }
+    tableChangeNotifier.addListener(() {
+      // if(mounted) setState(() {
+      //   _index = tableChangeNotifier.index;
+      // });
+    });
   }
 
   _init(BuildContext context) {
@@ -82,40 +70,12 @@ class _BottomAppBarState extends State<BottomAppBarState> {
     Global.checkUpdate();
     Global.initMain = true;
   }
-
-  Widget? _build() {
-    String w = '';
-    switch (_index) {
-      case 0:
-        w = (AssetsIcon.indexActiveIcon);
-        break;
-      case 1:
-        w =  (AssetsIcon.videoActiveIcon);
-        break;
-      case 2:
-        w =  (AssetsIcon.gameActiveIcon);
-        break;
-      case 3:
-        w =  (AssetsIcon.likeActiveIcon);
-        break;
-      case 4:
-        w =  (AssetsIcon.myActiveIcon);
-        break;
-      default:
-        return Container();
-    }
-    return Container(
-      width: 27,
-      height: 27,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(w),
-          fit: BoxFit.fitWidth,
-        ),
-      ),
-    );
+  _indexChanged(int index) {
+    setState(() {
+      _index = index;
+    });
+    tableChangeNotifier.index = index;
   }
-
   @override
   Widget build(BuildContext context) {
     _init(context);
@@ -172,9 +132,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _index = 0;
-                  });
+                  _indexChanged(0);
                 }),
             GestureDetector(
                 child: Container(
@@ -199,9 +157,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _index = 1;
-                  });
+                  _indexChanged(1);
                 }),
             // const Padding(padding: EdgeInsets.only(left: 10)),
             GestureDetector(
@@ -227,9 +183,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _index = 2;
-                  });
+                  _indexChanged(2);
                 }),
             GestureDetector(
                 child: Container(
@@ -254,9 +208,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                   ),
                 ),
                 onTap: () {
-                  setState(() {
-                    _index = 3;
-                  });
+                  _indexChanged(3);
                 }),
 
             GestureDetector(
@@ -286,15 +238,11 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     // Request.checkDeviceId().then((value) => setState(() {
                     //   _index = 4;
                     // }));
-                    setState(() {
-                      _index = 4;
-                    });
+                    _indexChanged(4);
                   } else {
                     Global.loginPage().then((v) {
                       if (userModel.hasToken()) {
-                        setState(() {
-                          _index = 4;
-                        });
+                        _indexChanged(4);
                       }
                     });
                   }
@@ -306,31 +254,5 @@ class _BottomAppBarState extends State<BottomAppBarState> {
       ///将FloatActionButton 与 BottomAppBar 融合到一起
       // floatingActionButtonLocation: _buildFloat(),
     );
-  }
-
-  _buildFloat() {
-    switch (_index) {
-      case 0:
-        return FloatingActionButtonLocation.startDocked;
-      case 1:
-        return FloatingButtonCustomLocation(
-            FloatingActionButtonLocation.startDocked,
-            // offsetY: Platform.isIOS ? 15 :  -10,
-            offsetY: 0,
-            offsetX: MediaQuery.of(context).size.width / 5
-        );
-      case 2:
-        return FloatingActionButtonLocation.centerDocked;
-      case 3:
-        return FloatingButtonCustomLocation(
-            FloatingActionButtonLocation.endDocked,
-            offsetY: 0,
-            offsetX: - MediaQuery.of(context).size.width / 5
-        );
-      case 4:
-        return FloatingActionButtonLocation.endDocked;
-      default:
-        return FloatingActionButtonLocation.centerDocked;
-    }
   }
 }

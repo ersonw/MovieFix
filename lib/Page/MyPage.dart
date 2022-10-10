@@ -47,6 +47,10 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _init();
+    userModel.addListener(() {
+      // _getInfo();
+      if(mounted) setState(() {});
+    });
     super.initState();
   }
 
@@ -759,9 +763,9 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(
-                      context, SlideRightRoute(page: DiamondRechargePage()))
-                  .then((value) => _init());
+              // Navigator.push(
+              //         context, SlideRightRoute(page: DiamondRechargePage()))
+              //     .then((value) => _init());
             },
             child: Column(
               children: [

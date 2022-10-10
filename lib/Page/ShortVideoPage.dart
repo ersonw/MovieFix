@@ -14,6 +14,7 @@ import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/VideoEditor.dart';
 import 'package:video_player/video_player.dart';
 
+import '../Global.dart';
 import 'ShortVideoMyProfilePage.dart';
 
 class ShortVideoPage extends StatefulWidget {
@@ -52,6 +53,10 @@ class _ShortVideoPage extends State<ShortVideoPage>
         TabController(length: 2, vsync: this, initialIndex: initialIndex ?? 1);
     controller.addListener(handleTabChange);
     _init();
+    tableChangeNotifier.addListener(() {
+      if(mounted) setState(() {
+      });
+    });
   }
 
   _init() {
@@ -164,7 +169,7 @@ class _ShortVideoPage extends State<ShortVideoPage>
       backgroundColor: const Color(0xff181921),
       body: Stack(
         children: [
-          TabBarView(
+          if(tableChangeNotifier.index == 1) TabBarView(
             controller: controller,
             children: [
               buildTableViewItemWidget(forwards, '关注'),
