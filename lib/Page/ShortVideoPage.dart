@@ -18,7 +18,8 @@ import '../Global.dart';
 import 'ShortVideoMyProfilePage.dart';
 
 class ShortVideoPage extends StatefulWidget {
-  const ShortVideoPage({Key? key}) : super(key: key);
+  bool update;
+  ShortVideoPage({Key? key, this.update = false}) : super(key: key);
 
   @override
   _ShortVideoPage createState() => _ShortVideoPage();
@@ -54,14 +55,17 @@ class _ShortVideoPage extends State<ShortVideoPage>
     controller.addListener(handleTabChange);
     _init();
     tableChangeNotifier.addListener(() {
-      if(mounted) setState(() {
-      });
+      if(tableChangeNotifier.index == 1) {
+        if(forwards.isEmpty && userModel.hasToken()) _getForwards();
+        if(_list.isEmpty) _getList();
+        if(mounted) setState(() {});
+      };
     });
   }
 
   _init() {
     _getList();
-    _getForwards();
+    if(userModel.hasToken())_getForwards();
   }
 
   _getForwards() async {

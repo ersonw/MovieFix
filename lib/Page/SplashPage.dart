@@ -52,7 +52,7 @@ class SplashScreenState extends State<SplashPage> {
         });
   }
   _getPic(){
-    if(_list.isEmpty) return AssetsImage.SplashBKImages;
+    if(_list.isEmpty) return AssetImage('assets/images/SplashBKImages.jpg');
     if(sIndex > (_list.length-1)) return NetworkImage(_list[_list.length-1].pic);
     return NetworkImage(_list[sIndex].pic);
   }

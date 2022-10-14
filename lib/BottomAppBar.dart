@@ -30,10 +30,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   @override
   void initState() {
     super.initState();
-    _eachView.add(const IndexPage());
-    _eachView.add(const ShortVideoPage());
-    _eachView.add(const GamePage());
-    _eachView.add(const MainUrlPage());
+    // _eachView.add(const IndexPage());
+    // _eachView.add(const ShortVideoPage());
+    // _eachView.add(const GamePage());
+    // _eachView.add(const MainUrlPage());
     _eachView.add(MyPage());
   }
 

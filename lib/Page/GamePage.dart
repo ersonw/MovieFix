@@ -20,7 +20,8 @@ import 'GameCashOutPage.dart';
 import 'GameRechargePage.dart';
 
 class GamePage extends StatefulWidget{
-  const GamePage({Key? key}) : super(key: key);
+  bool update;
+  GamePage({Key? key, this.update = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -38,6 +39,9 @@ class _GamePage extends State<GamePage>{
   void initState() {
     _init();
     super.initState();
+    tableChangeNotifier.addListener(() {
+      if(tableChangeNotifier.index == 2 && widget.update) _init();
+    });
   }
   _init(){
     refresh = true;

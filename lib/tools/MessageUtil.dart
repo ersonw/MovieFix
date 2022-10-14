@@ -8,6 +8,7 @@ import '../data/User.dart';
 import '../Global.dart';
 import 'CustomDialog.dart';
 class MessageUtil {
+  static bool pause = false;
   static User user = User();
   static Config config = Config();
   static late WebSocketChannel channel;
@@ -43,21 +44,23 @@ class MessageUtil {
     channel = WebSocketChannel.connect(Uri.parse(uri));
     channel.stream.listen(onData,onError: onError,onDone: onDone,cancelOnError: false);
   }
-  static reconnect(){
-    if(_timer != null) _timer!.cancel();
-    _timer = Timer.periodic(Duration(seconds: 6),(Timer timer) {
+  static dpPause(){
+  //
+  }
+  static reconnect() async{
+    if(pause == false && userModel.hasToken() == true) {
+      await Future.delayed(const Duration(seconds: 6),(){
       if(channel.closeCode == null ||
           channel.closeCode == CLOSE_CODE ||
           channel.closeCode == NOT_LOGIN_CODE) {
-        // print(channel.closeCode);
-        timer.cancel();
         rest();
       }
     });
+    }
   }
   static void onError(error)async{
     // print(error);
-    reconnect();
+    await reconnect();
   }
   static void onData(d)async{
     // print(d);
@@ -75,6 +78,7 @@ class MessageUtil {
     print(channel.closeReason);
     switch(channel.closeCode) {
       case NOT_LOGIN_CODE:
+        userModel.setToken('');
         Global.loginPage().then((value) {
           if(userModel.hasToken()){
             rest();
@@ -82,6 +86,7 @@ class MessageUtil {
         });
         break;
       case OTHER_LOGIN_CODE:
+        userModel.setToken('');
         CustomDialog.message('您的账号已登陆其他设备，强制推出！',).then((value){
           Global.loginPage().then((value) {
             if(userModel.hasToken()){

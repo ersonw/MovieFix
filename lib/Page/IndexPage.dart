@@ -29,26 +29,53 @@ import '../Global.dart';
 import '../data/SwiperData.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({Key? key}) : super(key: key);
+  bool update;
+  IndexPage({Key? key, this.update = false}) : super(key: key);
 
   @override
   _IndexPage createState() => _IndexPage();
 
 }
-class _IndexPage extends State<IndexPage>{
+class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
   static const int INDEX_PAGE = 0;
   static const int MEMBERSHIP_VIDEO = 1;
   static const int DIAMOND_VIDEO = 2;
   static const int RANK_VIDEO = 3;
+  final _tabKey = const ValueKey('tabIndex');
+  late TabController controller;
 
   List<SwiperData> _swipers = [];
   List<Concentration> _list = [];
   bool refresh = true;
+  int? tabIndex = 0;
   @override
   void initState() {
     _getList();
     _getPublicity();
+    // print('initState');
+    tabIndex =
+        PageStorage.of(context)?.readState(context, identifier: _tabKey);
+    controller = TabController(
+        length: 5,
+        vsync: this,
+        initialIndex: tabIndex ?? 0);
+    controller.addListener(handleTabChange);
+    tableChangeNotifier.addListener(() {
+      if(tableChangeNotifier.index == 0 && widget.update) {
+        _getList();
+        _getPublicity();
+      }
+    });
     super.initState();
+  }
+  void handleTabChange() {
+    writeState(controller.index);
+  }
+  void writeState(int index){
+    controller.index = index;
+    PageStorage.of(context)
+        ?.writeState(context, controller.index, identifier: _tabKey);
+    handlerCallback(index);
   }
   Future<void> _onRefresh() async {
     refresh = true;
@@ -89,6 +116,7 @@ class _IndexPage extends State<IndexPage>{
   @override
   Widget build(BuildContext context) {
     return cTabBarView(
+      controller: controller,
       header: Container(
         margin: const EdgeInsets.only(top:60),
         child: Row(
@@ -170,10 +198,10 @@ class _IndexPage extends State<IndexPage>{
       margin: const EdgeInsets.only(left: 10),
       child: Text('钻石'),
     ));
-    // list.add(Container(
-    //   margin: const EdgeInsets.only(left: 10),
-    //   child: Text('精品'),
-    // ));
+    list.add(Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: Text('精品'),
+    ));
     list.add(Container(
       margin: const EdgeInsets.only(left: 10),
       child: Text('热门榜单'),
@@ -186,17 +214,106 @@ class _IndexPage extends State<IndexPage>{
     list.add(const MembershipVideo());
     list.add(const DiamondVideo());
     list.add(const RankVideo());
+    list.add(const RankVideo());
     return list;
+  }
+  _buildHeader(){
+    return Container(
+      margin: const EdgeInsets.only(top: 9,bottom: 15),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          InkWell(
+            onTap: ()=>writeState(2),
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  height: 54,
+                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AssetsIcon.zuanshiIcon),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Text('钻石专享'),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: ()=>writeState(3),
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  height: 54,
+                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AssetsIcon.jingPinIcon),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Text('精品专区'),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: ()=>writeState(1),
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  height: 54,
+                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AssetsIcon.vipIcon),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Text('VIP专区'),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: ()=>writeState(4),
+            child: Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  height: 54,
+                  margin: const EdgeInsets.only(bottom: 6),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(AssetsIcon.remenIcon),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Text('热门榜单'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
   _buildIndexList(){
     List<Widget> widgets = [];
     widgets.add(refresh ? GeneralRefresh.getLoading() : Container());
     widgets.add(const Padding(padding: EdgeInsets.only(top: 10)));
     if(_swipers.isNotEmpty) {
-      widgets.add(cSwiper(_swipers,callback: (SwiperData data){
+      widgets.add(cSwiper(_swipers,height: 150,callback: (SwiperData data){
         Request.videoPublicityReport(id: data.id);
       },));
     }
+    widgets.add(_buildHeader());
     if(_list.isNotEmpty){
       for(int i = 0; i < _list.length; i++){
         widgets.add(_buildIndexListItem(i));
@@ -244,15 +361,15 @@ class _IndexPage extends State<IndexPage>{
               _concentration(concentration.id,concentration.name);
             },
             child: Container(
-              width: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2.2,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.12),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Container(
                 margin: const EdgeInsets.only(top:9,bottom: 9),
-                child: Text('查看更多'),
+                child: Text('查看更多',style:  TextStyle(fontSize: 12),),
               ),
             ),
           ),
@@ -261,9 +378,9 @@ class _IndexPage extends State<IndexPage>{
               _getVideo(index);
             },
             child: Container(
-              width: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2.2,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withOpacity(0.12),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Row(
@@ -273,7 +390,7 @@ class _IndexPage extends State<IndexPage>{
                   const Padding(padding: EdgeInsets.only(left:3),),
                   Container(
                     margin: const EdgeInsets.only(top:9,bottom: 9),
-                    child: Text('换一换'),
+                    child: Text('换一换',style:  TextStyle(fontSize: 12),),
                   ),
                 ],
               ),

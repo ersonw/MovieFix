@@ -24,21 +24,25 @@ class BottomAppBarState extends StatefulWidget {
 class _BottomAppBarState extends State<BottomAppBarState> {
   final List<Widget> _eachView = [];
   int _index = 0;
+  bool _update = false;
 
   // SystemMessage systemMessage = SystemMessage();
 
   @override
   void initState() {
     super.initState();
-    _eachView.add(const IndexPage());
-    _eachView.add(const ShortVideoPage());
-    _eachView.add(const GamePage());
-    _eachView.add(const MainUrlPage());
-    _eachView.add(MyPage());
+    _eachView.add(IndexPage(update: _index == 0,));
+    _eachView.add(ShortVideoPage(update: _index == 1,));
+    _eachView.add(GamePage(update: _index == 2,));
+    _eachView.add(MainUrlPage(update: _index == 3,));
+    _eachView.add(MyPage(update: _index == 4,));
     tableChangeNotifier.addListener(() {
-      // if(mounted) setState(() {
-      //   _index = tableChangeNotifier.index;
-      // });
+      // print(tableChangeNotifier.index);
+      if(mounted && tableChangeNotifier.index != _index) {
+        setState(() {
+          _index = tableChangeNotifier.index;
+        });
+      }
     });
   }
 
@@ -71,6 +75,12 @@ class _BottomAppBarState extends State<BottomAppBarState> {
     Global.initMain = true;
   }
   _indexChanged(int index) {
+    setState(() {
+      _index = index;
+    });
+    tableChangeNotifier.index = index;
+  }
+  _doubleChanged(int index) {
     setState(() {
       _index = index;
     });
@@ -196,10 +206,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        (_index != 3)?AssetsIcon.likeIcon: AssetsIcon.likeActiveIcon,
+                        (_index != 3)?AssetsIcon.talkIcon: AssetsIcon.talkActiveIcon,
                         width: 35,
                       ),
-                      Text("推荐",
+                      Text("裸聊1v1",
                           style: TextStyle(
                               color: _index == 3
                                   ? Colors.white

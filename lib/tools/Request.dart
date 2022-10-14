@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_fix/Page/LoginPage.dart';
 import 'package:movie_fix/data/User.dart';
 import '../tools/CustomDialog.dart';
 import '../tools/RequestApi.dart';
 import '../Global.dart';
+import 'CustomRoute.dart';
 import 'Loading.dart';
 import 'MessageUtil.dart';
 import 'MinioUtil.dart';
@@ -61,15 +63,28 @@ class Request {
       if(response.statusCode == 200 && response.data != null){
         // print(response.data);
         Map<String, dynamic> data = response.data;
-        if(data['message'] != null && data['message'] !='') CustomDialog.message(data['message']);
+        if(data['message'] != null && data['message'] !='') {
+          CustomDialog.message(data['message']);
+          print(path);
+        }
         if(data['code'] == 200 && data['data'] != null){
           // print(data['data']);
           return Global.decryptCode(data['data']);
+        }else if(data['code'] == 201){
+          print(path);
+          userModel.setToken('');
+          if(Global.initMain) await Navigator.push(Global.mainContext, SlideRightRoute(page: const LoginPage()));
+          // print(userModel.hasToken());
+          if(userModel.hasToken() == false){
+            tableChangeNotifier.index = 0;
+          }
         }
       }
     } on DioError catch(e) {
       Loading.dismiss();
       print(e.message);
+      print('${e.requestOptions.baseUrl}${e.requestOptions.path}');
+      print(e.requestOptions.data ?? e.requestOptions.queryParameters);
       // print(e);
       // if(e.response == null) {
       //   CustomDialog.message(e.message);
@@ -104,6 +119,14 @@ class Request {
         if(data['message'] != null && data['message'] !='') CustomDialog.message(data['message']);
         if(data['code'] == 200 && data['data'] != null){
           return Global.decryptCode(data['data']);
+        }else if(data['code'] == 201){
+          print(path);
+          userModel.setToken('');
+          if(Global.initMain) await Navigator.push(Global.mainContext, SlideRightRoute(page: const LoginPage()));
+          // print(userModel.hasToken());
+          if(userModel.hasToken() == false){
+            tableChangeNotifier.index = 0;
+          }
         }
       }
     } on DioError catch(e) {
@@ -179,6 +202,12 @@ class Request {
     }
     return false;
   }
+  static Future<bool> userLogout()async{
+    Loading.show();
+    await _get(RequestApi.userLogout, {});
+    // MessageUtil.reconnect();
+    return true;
+  }
   static Future<String?> userLoginSms(String phone)async{
     Loading.show();
     String? result = await _get(RequestApi.userLoginSms.replaceAll('{phone}', phone),{});
@@ -205,6 +234,7 @@ class Request {
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);
+        MessageUtil.pause = false;
         MessageUtil.reconnect();
         return true;
       }

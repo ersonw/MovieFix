@@ -77,42 +77,43 @@ class PairVideoList extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            height: ((MediaQuery.of(context).size.height) / 7) / 5,
-                            // width: MediaQuery.of(context).size.width / 6,
-                            margin: const EdgeInsets.only(bottom: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius: const BorderRadius.all(Radius.circular(5)),
-                            ),
-                            child: Container(
+                      Container(
+                        height: ((MediaQuery.of(context).size.height) / 7) / 5,
+                        // width: MediaQuery.of(context).size.width / 6,
+                        // margin: const EdgeInsets.only(bottom: 3),
+                        decoration: BoxDecoration(
+                          // color: Colors.black.withOpacity(0.1),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.05),
+                              Colors.black.withOpacity(0.15),
+                              Colors.black.withOpacity(0.9),
+                            ]
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
                               margin: const EdgeInsets.only(left: 3,right: 3),
                               child: Row(
                                 // mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Image.asset(AssetsIcon.playIcon),
-                                  Text(' ${Global.getNumbersToChinese(video.plays)}播放')
+                                  Text(' ${Global.getNumbersToChinese(video.plays)}播放',style: TextStyle(fontSize: 12),)
                                 ],
                               ),
                             ),
-                          ),
-                          Container(
-                            height: ((MediaQuery.of(context).size.height) / 7) / 5,
-                            margin: const EdgeInsets.only(bottom: 3),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.3),
-                              borderRadius: const BorderRadius.all(Radius.circular(5)),
-                            ),
-                            child: Container(
+                            Container(
                               margin: const EdgeInsets.only(top: 3,bottom: 3,left: 6,right: 6),
-                              child: Text(Global.inSecondsTostring(video.vodDuration)),
+                              child: Text(Global.inSecondsTostring(video.vodDuration),style: TextStyle(fontSize: 12),),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+
                     ],
                   ),
                 ),

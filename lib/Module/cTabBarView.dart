@@ -49,6 +49,8 @@ class _cTabBarView extends State<cTabBarView>
           vsync: this,
           initialIndex: initialIndex ?? 0);
       controller.addListener(handleTabChange);
+    }else{
+      controller = widget.controller!;
     }
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent){

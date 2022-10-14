@@ -29,10 +29,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   @override
   void initState() {
     super.initState();
-    _eachView.add(const IndexPage());
-    _eachView.add(const ShortVideoPage());
-    _eachView.add(const GamePage());
-    _eachView.add(const Undeveloped());
+    // _eachView.add(const IndexPage());
+    // _eachView.add(const ShortVideoPage());
+    // _eachView.add(const GamePage());
+    // _eachView.add(const Undeveloped());
     _eachView.add(MyPage());
   }
   Future<void> _popUps(BuildContext context)async {

@@ -438,6 +438,30 @@ class _EditProfilePage extends State<EditProfilePage>{
                   ),
                 ),
               ),
+              InkWell(
+                onTap: (){
+                  Request.userLogout().then((value) => Navigator.pop(context));
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.red,
+                        Colors.deepOrange,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Container(
+                    margin: const EdgeInsets.all(12),
+                    child: Text('注销登录'),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

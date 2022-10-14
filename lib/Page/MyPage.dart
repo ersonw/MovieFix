@@ -24,6 +24,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'CoinRechargePage.dart';
 
 class MyPage extends StatefulWidget {
+  bool update;
+  MyPage({Key? key, this.update = false}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _MyPage();
@@ -46,10 +49,14 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _init();
+    if(tableChangeNotifier.index == 4) _init();
     userModel.addListener(() {
-      // _getInfo();
+      print('User update successfully');
+      if(userModel.hasToken()) _init();
       if(mounted) setState(() {});
+    });
+    tableChangeNotifier.addListener(() {
+      if(tableChangeNotifier.index == 4 && widget.update) _init();
     });
     super.initState();
   }
@@ -66,6 +73,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       // user.level = 113;
       // user.member = true;
       userModel.user = user;
+    }else{
+      // Global.loginPage();
     }
     if (result['diamond'] != null) diamond = result['diamond'];
     if (result['count'] != null) diamond = result['count'];

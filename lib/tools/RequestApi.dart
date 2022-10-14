@@ -13,6 +13,7 @@ class RequestApi {
   static const checkDeviceId = '/api/device/check/{deviceId}';
 
   static const userLogin  = '/api/user/login';
+  static const userLogout  = '/api/user/logout';
   static const userLoginPhone  = '/api/user/login/phone';
   static const userLoginSms  = '/api/user/login/sms/{phone}';
   static const userProfile = '/api/user/profile/{id}';

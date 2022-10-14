@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
 import 'package:movie_fix/Module/cTabBarView.dart';
+import 'package:movie_fix/tools/MessageUtil.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
 import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
 import '../AssetsBackground.dart';
@@ -39,6 +40,7 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    MessageUtil.pause = true;
     super.initState();
     usernameEditingController.addListener(() {
       if(usernameEditingController.text.isNotEmpty){
