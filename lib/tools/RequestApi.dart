@@ -28,6 +28,8 @@ class RequestApi {
   static const userRegisterSms = '/api/user/register/sms/{phone}';
 
   static const videoPlayer = '/api/video/player/{id}';
+  static const videoClass = '/api/video/class';
+  static const videoClassList = '/api/video/classList/{id}/{page}';
   static const videoLike = '/api/video/like/{id}';
   static const videoBuy = '/api/video/buy/{id}';
   static const videoShare = '/api/video/share/{id}';
@@ -51,6 +53,7 @@ class RequestApi {
 
   static const shortVideoHeartbeat = '/api/shortVideo/heartbeat';
   static const shortVideoUpload = '/api/shortVideo/upload';
+  static const shortVideoUploadConfig = '/api/shortVideo/uploadConfig';
   static const shortVideoFollow = '/api/shortVideo/follow/{id}';
   static const shortVideoUnfollow = '/api/shortVideo/unfollow/{id}';
   static const shortVideoComments = '/api/shortVideo/comments/{id}/{page}';

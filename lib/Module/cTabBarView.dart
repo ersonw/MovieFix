@@ -49,8 +49,6 @@ class _cTabBarView extends State<cTabBarView>
           vsync: this,
           initialIndex: initialIndex ?? 0);
       controller.addListener(handleTabChange);
-    }else{
-      controller = widget.controller!;
     }
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
@@ -61,7 +59,7 @@ class _cTabBarView extends State<cTabBarView>
 
   void handleTabChange() {
     setState(() {
-      initialIndex = controller.index;
+      initialIndex =  controller.index;
     });
     PageStorage.of(context)
         ?.writeState(context, controller.index, identifier: _tabKey);
@@ -95,15 +93,15 @@ class _cTabBarView extends State<cTabBarView>
         return [
           SliverList(
               delegate: SliverChildListDelegate([
-              (widget.header == null)?Container():widget.header!,
+                widget.header ?? Container(),
                 widget.tabs.isEmpty
                     ? Container()
                     : TabBar(
-                  controller: controller,
+                  controller: widget.controller?? controller,
                   isScrollable: true,
-                  // padding: const EdgeInsets.only(left: 10),
+                  // padding: const EdgeInsets.only(right: 10),
                   // indicatorPadding: const EdgeInsets.only(left: 10),
-                  labelPadding: const EdgeInsets.only(left: 10),
+                  // labelPadding: const EdgeInsets.only(left: 10),
                   // labelStyle: const TextStyle(fontSize: 18),
                   // unselectedLabelStyle: const TextStyle(fontSize: 15),
                   labelStyle: const TextStyle(
@@ -116,7 +114,8 @@ class _cTabBarView extends State<cTabBarView>
                       borderSide: BorderSide(
                         width: 3,
                         color: Colors.deepOrangeAccent,
-                      )),
+                      ),
+                  ),
                   tabs: widget.tabs,
                 ),
               ]),
@@ -124,7 +123,7 @@ class _cTabBarView extends State<cTabBarView>
         ];
       },
       body: widget.children == null?Container():TabBarView(
-        controller: controller,
+        controller: widget.controller?? controller,
         children: widget.children,
       ),
       // body: Container(),
@@ -172,11 +171,11 @@ class _cTabBarView extends State<cTabBarView>
             margin: const EdgeInsets.only(top: 10),
             alignment: Alignment.topLeft,
             child: TabBar(
-              controller: controller,
+              controller: widget.controller?? controller,
               isScrollable: true,
               // padding: const EdgeInsets.only(left: 10),
               // indicatorPadding: const EdgeInsets.only(left: 10),
-              labelPadding: const EdgeInsets.only(left: 10),
+              // labelPadding: const EdgeInsets.only(right: 10),
               // labelStyle: const TextStyle(fontSize: 18),
               // unselectedLabelStyle: const TextStyle(fontSize: 15),
               labelStyle:
@@ -196,7 +195,7 @@ class _cTabBarView extends State<cTabBarView>
         if (widget.children.isNotEmpty)
           Expanded(
               child: TabBarView(
-            controller: controller,
+            controller: widget.controller?? controller,
             children: widget.children,
           )),
         widget.footer ?? Container(),

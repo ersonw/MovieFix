@@ -115,6 +115,7 @@ flutter:
       - assets/membership/
       - assets/files/
       - assets/icons/
+      - assets/game/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

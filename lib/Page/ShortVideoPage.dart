@@ -226,10 +226,12 @@ class _ShortVideoPage extends State<ShortVideoPage>
     );
   }
 
-  _handlerDropdown(int id) {
+  _handlerDropdown(int id)async {
     switch (id) {
       case 0:
-        _pickVideo();
+        if(await Request.shortVideoUploadConfig() == true){
+          _pickVideo();
+        }
         break;
       case 1:
         break;

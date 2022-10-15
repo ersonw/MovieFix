@@ -50,6 +50,7 @@ class _RankVideo extends State<RankVideo>{
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
+      title: '热门榜单',
       refresh: refresh,
       onRefresh: (bool value){
         refresh = value;
@@ -57,27 +58,51 @@ class _RankVideo extends State<RankVideo>{
         if(!mounted) return;
         setState(() {});
       },
-      header: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          firsts.isEmpty ? Container() : cDropDownButton(firsts, callback: (Word word){
-            first = word;
-            setState(() {
-              refresh = true;
-            });
-            _getList();
-          },),
-          seconds.isEmpty ? Container() : cDropDownButton(seconds, callback: (Word word){
-            second = word;
-            setState(() {
-              refresh = true;
-            });
-            _getList();
-          },),
-        ],
-      ),
-      children: buildSortVideoList(_list),
+      // header: Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //   children: [
+      //     firsts.isEmpty ? Container() : cDropDownButton(firsts, callback: (Word word){
+      //       first = word;
+      //       setState(() {
+      //         refresh = true;
+      //       });
+      //       _getList();
+      //     },),
+      //     seconds.isEmpty ? Container() : cDropDownButton(seconds, callback: (Word word){
+      //       second = word;
+      //       setState(() {
+      //         refresh = true;
+      //       });
+      //       _getList();
+      //     },),
+      //   ],
+      // ),
+      children: _build(),
     );
+  }
+  _build(){
+    List<Widget> widgets =  [];
+    widgets.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        firsts.isEmpty ? Container() : cDropDownButton(firsts, callback: (Word word){
+          first = word;
+          setState(() {
+            refresh = true;
+          });
+          _getList();
+        },),
+        seconds.isEmpty ? Container() : cDropDownButton(seconds, callback: (Word word){
+          second = word;
+          setState(() {
+            refresh = true;
+          });
+          _getList();
+        },),
+      ],
+    ));
+    widgets.addAll(buildSortVideoList(_list));
+    return widgets;
   }
   @override
   void dispose() {

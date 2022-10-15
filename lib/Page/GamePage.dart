@@ -182,6 +182,7 @@ class _GamePage extends State<GamePage>{
     List<Widget> list =[];
     for (int i = 0; i < games.length; i++) {
       Game game = games[i];
+      // print(game.image);
       list.add(
         Container(
           height: 100,
@@ -209,6 +210,7 @@ class _GamePage extends State<GamePage>{
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         image: DecorationImage(
                           image: NetworkImage(game.image),
+                          // image: AssetImage('assets${game.image}'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -269,6 +271,7 @@ class _GamePage extends State<GamePage>{
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(record.image),
+                    // image: AssetImage('assets${record.image}'),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(15)),

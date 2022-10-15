@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_fix/Page/LoginPage.dart';
+import 'package:movie_fix/data/OssConfig.dart';
 import 'package:movie_fix/data/User.dart';
 import '../tools/CustomDialog.dart';
 import '../tools/RequestApi.dart';
@@ -146,6 +147,22 @@ class Request {
 
   static Future<Map<String, dynamic>> getConfig()async{
     String? result = await _get(RequestApi.config,{});
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map;
+    }
+    return {};
+  }
+  static Future<Map<String, dynamic>> videoClass()async{
+    String? result = await _get(RequestApi.videoClass,{});
+    if(result!=null){
+      Map<String, dynamic> map = jsonDecode(result);
+      return map;
+    }
+    return {};
+  }
+  static Future<Map<String, dynamic>> videoClassList({int id=0, int page=1})async{
+    String? result = await _get(RequestApi.videoClassList.replaceAll('{id}', '$id').replaceAll('{page}', '$page'),{});
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
       return map;
@@ -475,6 +492,19 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<bool> shortVideoUploadConfig()async{
+    Loading.show();
+    String? result = await _get(RequestApi.shortVideoUploadConfig, {});
+    if(result != null){
+      print(result);
+      Map<String, dynamic> map = jsonDecode(result);
+      OssConfig config = OssConfig.fromJson(map);
+      MinioUtil.config = config;
+      MinioUtil.init();
+      return true;
+    }
+    return false;
   }
   static Future<bool> shortVideoUpload(String filePath, String imagePath,
       {int duration=0, String text=''})async{

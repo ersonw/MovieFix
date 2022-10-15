@@ -29,6 +29,10 @@ class SplashScreenState extends State<SplashPage> {
     _init();
   }
   _init() async {
+    if(_list.isEmpty){
+      _timer = Timer(const Duration(milliseconds:100),() => _next());
+      return;
+    }
     _countDown();
   }
   _countDown()async{

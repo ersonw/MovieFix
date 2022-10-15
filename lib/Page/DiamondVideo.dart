@@ -49,6 +49,7 @@ class _DiamondVideo extends State<DiamondVideo> {
   @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
+      title: '钻石专区',
       children: _buildList(),
       footer: _list.isEmpty ? Container() : Container(
         margin: const EdgeInsets.all(30),

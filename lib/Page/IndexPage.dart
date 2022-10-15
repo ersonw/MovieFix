@@ -27,6 +27,7 @@ import '../tools/CustomRoute.dart';
 
 import '../Global.dart';
 import '../data/SwiperData.dart';
+import 'VideoClassPage.dart';
 
 class IndexPage extends StatefulWidget {
   bool update;
@@ -36,7 +37,7 @@ class IndexPage extends StatefulWidget {
   _IndexPage createState() => _IndexPage();
 
 }
-class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
+class _IndexPage extends State<IndexPage>with TickerProviderStateMixin {
   static const int INDEX_PAGE = 0;
   static const int MEMBERSHIP_VIDEO = 1;
   static const int DIAMOND_VIDEO = 2;
@@ -46,6 +47,8 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
 
   List<SwiperData> _swipers = [];
   List<Concentration> _list = [];
+  List<Word> _classs = [];
+  List<Widget> _headers = [];
   bool refresh = true;
   int? tabIndex = 0;
   @override
@@ -56,17 +59,36 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
     tabIndex =
         PageStorage.of(context)?.readState(context, identifier: _tabKey);
     controller = TabController(
-        length: 5,
+        length: 1,
         vsync: this,
         initialIndex: tabIndex ?? 0);
     controller.addListener(handleTabChange);
     tableChangeNotifier.addListener(() {
       if(tableChangeNotifier.index == 0 && widget.update) {
+        _init();
         _getList();
         _getPublicity();
       }
     });
+    // Future.delayed(const Duration(seconds: 3), () => _init());
+    _init();
     super.initState();
+  }
+  _init()async{
+    Map<String, dynamic> map = await Request.videoClass();
+    if(map['class'] == null){
+      return;
+    }
+    _classs = (map['class'] as List).map((e) => Word.fromJson(e)).toList();
+    controller.removeListener(handleTabChange);
+    controller.dispose();
+    controller = TabController(
+        length: _classs.length+1,
+        vsync: this,
+        initialIndex: tabIndex ?? 0);
+    controller.addListener(handleTabChange);
+
+    if(mounted) setState(() {});
   }
   void handleTabChange() {
     writeState(controller.index);
@@ -75,7 +97,7 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
     controller.index = index;
     PageStorage.of(context)
         ?.writeState(context, controller.index, identifier: _tabKey);
-    handlerCallback(index);
+    // handlerCallback(index);
   }
   Future<void> _onRefresh() async {
     refresh = true;
@@ -166,6 +188,7 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
         ),
       ),
       tabs: _buildTabBar(),
+      // tabs: [],
       children: _buildTabView(),
       callback: handlerCallback,
     );
@@ -186,35 +209,23 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
   }
   List<Widget> _buildTabBar(){
     List<Widget> list = [];
-    list.add(Container(
-      margin: const EdgeInsets.only(left: 10),
+    list.add(Center(
+      // margin: const EdgeInsets.only(left: 10),
       child: Text('首页'),
     ));
-    list.add(Container(
-      margin: const EdgeInsets.only(left: 10),
-      child: Text('会员'),
-    ));
-    list.add(Container(
-      margin: const EdgeInsets.only(left: 10),
-      child: Text('钻石'),
-    ));
-    list.add(Container(
-      margin: const EdgeInsets.only(left: 10),
-      child: Text('精品'),
-    ));
-    list.add(Container(
-      margin: const EdgeInsets.only(left: 10),
-      child: Text('热门榜单'),
-    ));
+    for(int i = 0; i < _classs.length; i++) {
+      list.add(Container(
+        child: Text(_classs[i].words),
+      ));
+    }
     return list;
   }
   _buildTabView(){
     List<Widget> list = [];
     list.add(_buildIndexList());
-    list.add(const MembershipVideo());
-    list.add(const DiamondVideo());
-    list.add(const RankVideo());
-    list.add(const RankVideo());
+    for(int i = 0; i < _classs.length; i++) {
+      list.add(VideoClassPage(_classs[i].id));
+    }
     return list;
   }
   _buildHeader(){
@@ -225,7 +236,9 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            onTap: ()=>writeState(2),
+            onTap: (){
+              Navigator.push(context, SlideRightRoute(page: DiamondVideo())).then((value) => _getList());
+            },
             child: Column(
               children: [
                 Container(
@@ -244,7 +257,9 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
             ),
           ),
           InkWell(
-            onTap: ()=>writeState(3),
+            onTap: (){
+              Navigator.push(context, SlideRightRoute(page: MembershipVideo())).then((value) => _getList());
+            },
             child: Column(
               children: [
                 Container(
@@ -263,7 +278,9 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
             ),
           ),
           InkWell(
-            onTap: ()=>writeState(1),
+            onTap: (){
+              Navigator.push(context, SlideRightRoute(page: MembershipVideo())).then((value) => _getList());
+            },
             child: Column(
               children: [
                 Container(
@@ -282,7 +299,9 @@ class _IndexPage extends State<IndexPage>with SingleTickerProviderStateMixin {
             ),
           ),
           InkWell(
-            onTap: ()=>writeState(4),
+            onTap: (){
+              Navigator.push(context, SlideRightRoute(page: RankVideo())).then((value) => _getList());
+            },
             child: Column(
               children: [
                 Container(
