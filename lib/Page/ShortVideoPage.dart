@@ -28,6 +28,7 @@ class ShortVideoPage extends StatefulWidget {
 class _ShortVideoPage extends State<ShortVideoPage>
     with SingleTickerProviderStateMixin {
   final _tabKey = const ValueKey('tabShortVideo');
+  final PageController _pageController = PageController();
   late TabController controller;
   int? initialIndex;
   List<ShortVideo> forwards = [];
@@ -36,6 +37,7 @@ class _ShortVideoPage extends State<ShortVideoPage>
   int lPage = 1;
   int fTotal = 1;
   int lTotal = 1;
+  int pageIndex = 0;
 
   final ImagePicker _picker = ImagePicker();
   List<Word> barLeft = [];
@@ -61,6 +63,13 @@ class _ShortVideoPage extends State<ShortVideoPage>
         if(mounted) setState(() {});
       };
     });
+    // _pageController.addListener(() {
+    //   print(_pageController.page);
+    //   // print()
+    // });
+    // Future.delayed(const Duration(seconds: 5), () {
+    //   _pageController.jumpToPage(1);
+    // });
   }
 
   _init() {
@@ -141,13 +150,14 @@ class _ShortVideoPage extends State<ShortVideoPage>
       }
     }
     return PageView.builder(
-
+      controller: _pageController,
         /// pageview中 子条目的个数
         itemCount: list.length,
         // dragStartBehavior: DragStartBehavior.down,
         // allowImplicitScrolling: true,
         onPageChanged: (int? index) {
           if (index == null) return;
+          pageIndex = index;
           if (list.length - index < 2) {
             if (initialIndex == 0) {
               fPage++;
@@ -163,7 +173,9 @@ class _ShortVideoPage extends State<ShortVideoPage>
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
           ShortVideo video = list[index];
-          return ShortVideoItem(value, video);
+          return ShortVideoItem(value, video, callback: (){
+            if(list.length-1 > pageIndex) _pageController.jumpToPage(pageIndex+1);
+          });
         });
   }
 
@@ -188,9 +200,17 @@ class _ShortVideoPage extends State<ShortVideoPage>
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildDropdown(barLeft, callback: (Word word) {
-                  _handlerDropdown(word.id);
-                }),
+                // _buildDropdown(barLeft, callback: (Word word) {
+                //   _handlerDropdown(word.id);
+                // }),
+                InkWell(
+                  onTap: () async {
+                    if(await Request.shortVideoUploadConfig() == true){
+                      _pickVideo();
+                    }
+                  },
+                  child: Icon(Icons.add_circle_outline),
+                ),
                 TabBar(
                   controller: controller,
                   isScrollable: true,
@@ -216,7 +236,11 @@ class _ShortVideoPage extends State<ShortVideoPage>
                   ],
                 ),
                 InkWell(
-                  child: Icon(Icons.search),
+                  onTap: (){
+                    if(userModel.hasToken() == true) Navigator.push(context, SlideRightRoute(page:  ShortVideoMyProfilePage(layout: true,)));
+                  },
+                  // child: Icon(Icons.search),
+                  child: Icon(Icons.account_circle_outlined),
                 ),
               ],
             ),

@@ -209,8 +209,8 @@ class _GamePage extends State<GamePage>{
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         image: DecorationImage(
-                          image: NetworkImage(game.image),
-                          // image: AssetImage('assets${game.image}'),
+                          // image: NetworkImage(game.image),
+                          image: AssetImage('assets${game.image}'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -270,8 +270,8 @@ class _GamePage extends State<GamePage>{
                 width: Global.getContextSize(d: 2.2),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(record.image),
-                    // image: AssetImage('assets${record.image}'),
+                    // image: NetworkImage(record.image),
+                    image: AssetImage('assets${record.image}'),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(15)),

@@ -36,6 +36,7 @@ class _GameCashOutPage extends State<GameCashOutPage>{
     Map<String, dynamic> result = await Request.gameCashOutBalance();
     if(result['balance'] != null) balance = result['balance'];
     if(result['wBalance'] != null) wBalance = result['wBalance'];
+    // if(result['wWater'] != null) wBalance = result['wWater'];
     if(result['freezeBalance'] != null) freezeBalance = result['freezeBalance'];
     if(mounted) setState(() {});
   }
@@ -99,30 +100,30 @@ class _GameCashOutPage extends State<GameCashOutPage>{
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 15,left: 15,bottom: 9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                          text: '扣除手续费以及汇率：',
-                          children: [
-                            TextSpan(
-                              text: '$_fee',
-                              // text: '${(double.parse(amount)-((double.parse(amount) * rate)+fee)).toStringAsFixed(0)}',
-                              style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24),
-                            ),
-                            TextSpan(
-                              text: ' 元'
-                            ),
-                          ]
-                        ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   margin: const EdgeInsets.only(top: 15,left: 15,bottom: 9),
+              //   child: Column(
+              //     mainAxisSize: MainAxisSize.min,
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       RichText(
+              //           text: TextSpan(
+              //             text: '扣除手续费以及汇率：',
+              //             children: [
+              //               TextSpan(
+              //                 text: '$_fee',
+              //                 // text: '${(double.parse(amount)-((double.parse(amount) * rate)+fee)).toStringAsFixed(0)}',
+              //                 style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.bold,fontSize: 24),
+              //               ),
+              //               TextSpan(
+              //                 text: ' 元'
+              //               ),
+              //             ]
+              //           ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.only(top: 15,left: 15,bottom: 9),
                 child: Column(
@@ -275,37 +276,37 @@ class _GameCashOutPage extends State<GameCashOutPage>{
               ),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 6,left: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '单笔手续费:  ',
-                  children: [
-                    TextSpan(
-                      text: '$fee',
-                      style: TextStyle(color: Colors.green.withOpacity(0.6)),
-                    ),
-                    TextSpan(text: ' 元'),
-                  ]
-              ),
-            ),
-          ),
-          Flexible(child: Container(
-            margin: const EdgeInsets.only(top: 6,bottom: 15,left: 15),
-            child: RichText(
-              text: TextSpan(
-                  text: '单笔汇率:  ',
-                  children: [
-                    TextSpan(
-                      text: '${(rate * 100).toStringAsFixed(0)}',
-                      style: TextStyle(color: Colors.green.withOpacity(0.6)),
-                    ),
-                    TextSpan(text: ' %'),
-                    TextSpan(text: ' (汇率大于0元视为1元，即1.01元视为2元)',style: TextStyle(color: Colors.white.withOpacity(0.6))),
-                  ]
-              ),
-            ),
-          )),
+          // Container(
+          //   margin: const EdgeInsets.only(top: 6,bottom: 6,left: 15),
+          //   child: RichText(
+          //     text: TextSpan(
+          //         text: '单笔手续费:  ',
+          //         children: [
+          //           TextSpan(
+          //             text: '$fee',
+          //             style: TextStyle(color: Colors.green.withOpacity(0.6)),
+          //           ),
+          //           TextSpan(text: ' 元'),
+          //         ]
+          //     ),
+          //   ),
+          // ),
+          // Flexible(child: Container(
+          //   margin: const EdgeInsets.only(top: 6,bottom: 15,left: 15),
+          //   child: RichText(
+          //     text: TextSpan(
+          //         text: '单笔汇率:  ',
+          //         children: [
+          //           TextSpan(
+          //             text: '${(rate * 100).toStringAsFixed(0)}',
+          //             style: TextStyle(color: Colors.green.withOpacity(0.6)),
+          //           ),
+          //           TextSpan(text: ' %'),
+          //           TextSpan(text: ' (汇率大于0元视为1元，即1.01元视为2元)',style: TextStyle(color: Colors.white.withOpacity(0.6))),
+          //         ]
+          //     ),
+          //   ),
+          // )),
         ],
       ),
     );
@@ -366,6 +367,68 @@ class _GameCashOutPage extends State<GameCashOutPage>{
               ),
             ),
           ),
+          // Container(
+          //   // margin: const EdgeInsets.only(left: 30),
+          //   width: MediaQuery.of(context).size.width,
+          //   height: 156,
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     // crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //         children: [
+          //           Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text('¥$balance',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
+          //               Container(
+          //                 margin: const EdgeInsets.only(left: 9),
+          //                 child: Text('可用余额'),
+          //               ),
+          //             ],
+          //           ),
+          //           Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text('¥$wWater',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+          //               Container(
+          //                 margin: const EdgeInsets.only(left: 9),
+          //                 child: Text('剩余流水'),
+          //               ),
+          //             ],
+          //           ),
+          //         ],
+          //       ),
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //         children: [
+          //           Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text('¥$wBalance',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+          //               Container(
+          //                 margin: const EdgeInsets.only(left: 9),
+          //                 child: Text('总提现'),
+          //               ),
+          //             ],
+          //           ),
+          //           Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text('¥$freezeBalance',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.white.withOpacity(0.6)),),
+          //               Container(
+          //                 margin: const EdgeInsets.only(left: 9),
+          //                 child: Text('处理中',style: TextStyle(color: Colors.white.withOpacity(0.6)),),
+          //               ),
+          //             ],
+          //           ),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Container(
             // margin: const EdgeInsets.only(left: 30),
             width: MediaQuery.of(context).size.width,

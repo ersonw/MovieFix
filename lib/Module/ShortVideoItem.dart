@@ -27,8 +27,9 @@ import 'cRichText.dart';
 class ShortVideoItem extends StatefulWidget {
   String tabValue;
   ShortVideo video;
+  Function()? callback;
 
-  ShortVideoItem(this.tabValue, this.video);
+  ShortVideoItem(this.tabValue, this.video, {this.callback});
 
   @override
   State<StatefulWidget> createState() {
@@ -58,26 +59,42 @@ class ShortVideoItemState extends State<ShortVideoItem> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), callback);
+    // _timer = Timer.periodic(const Duration(seconds: 1), callback);
+    // _init();
+    _getInfo();
     Wakelock.enable();
     videoPlayerController = VideoPlayerController.network(widget.video.playUrl);
     videoPlayerController.addListener(() {
       progress = videoPlayerController.value.position.inMilliseconds /
           videoPlayerController.value.duration.inMilliseconds;
-      if (mounted) setState(() {});
+      // print('${videoPlayerController.value.position.inMilliseconds} == ${videoPlayerController.value.duration.inMilliseconds}');
+      if(videoPlayerController.value.duration.inMilliseconds > 0 &&
+          progress == 1) {
+        if(widget.callback != null) widget.callback!();
+      }
+      // if (mounted) setState(() {});
     });
+    // videoPlayerController.initialize().then((_) {
+    //   ///视频初始完成后
+    //   initialized = true;
+    //   // videoPlayerController.setLooping(true);
+    //
+    //   ///调用播放
+    //   // videoPlayerController.play();
+    //   // if(mounted) setState(() {});
+    // });
     videoPlayFuture = videoPlayerController.initialize().then((_) {
       ///视频初始完成后
       initialized = true;
-      videoPlayerController.setLooping(true);
+      // videoPlayerController.setLooping(true);
 
       ///调用播放
       videoPlayerController.play();
-      setState(() {});
+      // if(mounted) setState(() {});
     });
   }
   _getInfo()async{
-    Map<String, dynamic> result = await Request.userMyProfile();
+    Map<String, dynamic> result = await Request.userProfile(id: widget.video.userId);
     if(result['user'] != null) {
       _user = User.formJson(result['user']);
       // _user?.level = 20;
@@ -342,21 +359,29 @@ class ShortVideoItemState extends State<ShortVideoItem> {
         videoPlayerController.play();
       }
 
-      setState(() {});
+      if(mounted) setState(() {});
     } else {
       ///未初始化
       videoPlayerController.initialize().then((_) {
         videoPlayerController.play();
-        setState(() {});
+        if(mounted) setState(() {});
       });
     }
   }
   ///播放视频
+  Future<void> _future()async{
+    // if(!initialized){
+    //   await _init();
+    // }
+  }
   buildVideoWidget() {
     return FutureBuilder(
       future: videoPlayFuture,
+      // future: _future().then((_) => videoPlayerController.play()),
+      // future: Future.delayed(const Duration(milliseconds: 300),_future).then((_) => {}),
       initialData: () {
         // print("initialData");
+        // _init();
       },
       builder: (BuildContext contex, value) {
         // print(value.connectionState);
@@ -465,7 +490,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
   void dispose() {
     alive = false;
     super.dispose();
-    _timer.cancel();
+    // _timer.cancel();
     Wakelock.disable();
     videoPlayerController.dispose();
   }

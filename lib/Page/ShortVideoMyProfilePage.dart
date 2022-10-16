@@ -60,8 +60,14 @@ class _ShortVideoMyProfilePage extends State<ShortVideoMyProfilePage>
     Map<String, dynamic> result = await Request.userMyProfileVideo(page: page);
     if (result['total'] != null) total = result['total'];
     if (result['list'] != null) {
+      // List<Map<String, dynamic>> resultList = [];
+      // for(int i = 0; i < (result['list'] as List).length; i++) {
+      //   if((result['list'] as List)[i] != null) {
+      //     resultList.add((result['list'] as List)[i]);
+      //   }
+      // }
       List<ShortVideo> list =
-          (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
+      (result['list'] as List).map((e) => ShortVideo.fromJson(e)).toList();
       if (page > 1) {
         videos.addAll(list);
       } else {

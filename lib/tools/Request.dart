@@ -497,7 +497,7 @@ class Request {
     Loading.show();
     String? result = await _get(RequestApi.shortVideoUploadConfig, {});
     if(result != null){
-      print(result);
+      // print(result);
       Map<String, dynamic> map = jsonDecode(result);
       OssConfig config = OssConfig.fromJson(map);
       MinioUtil.config = config;
