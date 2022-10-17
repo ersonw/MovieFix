@@ -72,8 +72,9 @@ class Global {
     if (_profile != null) {
       profile = Profile.fromJson(jsonDecode(_profile));
     }
-    path = await Global.getPhoneLocalPath();
     if (kIsWeb == false) {
+      path = await Global.getPhoneLocalPath();
+      print(path);
       // await requestPhotosPermission();
       // await getConfig();
       deviceId = await getUUID();
@@ -191,7 +192,7 @@ class Global {
       } else if (Platform.isIOS) {
         var build = await deviceInfoPlugin.iosInfo;
         // List<String> name = [build.];
-        print(build.name);
+        // print(build.name);
         uid = build.identifierForVendor;
         // uid = await FlutterUdid.udid;
       } else {

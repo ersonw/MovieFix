@@ -40,7 +40,7 @@ android {
         applicationId "com.telebott.movie_fix"
         manifestPlaceholders = [
                 OPENINSTALL_APPKEY : "gnsz6pbx",
-                applicationName: "android.app.Application",
+//                applicationName: "android.app.Application",
         ]
 //        minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
@@ -58,7 +58,7 @@ android {
             storePassword 'movies123'
             keyAlias 'key'
             keyPassword 'movies123'
-        }
+         }
     }
     buildTypes {
         release {
@@ -69,7 +69,10 @@ android {
     }
 
 }
-
+dependencies {
+    implementation ('com.squareup.okhttp3:okhttp:4.2.0')
+    implementation 'com.alibaba:fastjson:1.2.37'
+}
 flutter {
     source '../..'
 }

@@ -15,7 +15,13 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+        maven { url 'https://www.jitpack.io' }
+        flatDir {
+            dirs 'libs'
+        }
     }
+
 }
 
 rootProject.buildDir = '../build'

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">春潮视频</string>
+    <string moduleConfig="true" name="updateUrl">https://github1.oss-cn-hongkong.aliyuncs.com/flutter/android</string>
+    <!--    <string moduleConfig="true" name="CodePushServerUrl">http://172.21.72.18:3000/</string>-->
+</resources>
