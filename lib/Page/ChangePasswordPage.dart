@@ -30,6 +30,15 @@ class _ChangePasswordPage extends State<ChangePasswordPage>{
     }
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(userModel.user.phone == null || userModel.user.phone == ''){
+      Navigator.pop(context);
+      // Future.delayed(const Duration(milliseconds: 300), () => Navigator.pop(context));
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return GeneralRefresh(
       title: '重置密码',

@@ -78,10 +78,10 @@ class _ShortVideoPage extends State<ShortVideoPage>
   }
 
   _getForwards() async {
-    // if(fPage > fTotal){
-    //   fPage--;
-    //   return;
-    // }
+    if(fPage > fTotal){
+      fPage--;
+      return;
+    }
     Map<String, dynamic> result = await Request.shortVideoFriend(page: fPage);
     // print(result);
     if (result['total'] != null) fTotal = result['total'];
@@ -98,10 +98,10 @@ class _ShortVideoPage extends State<ShortVideoPage>
   }
 
   _getList() async {
-    // if(lPage > lTotal){
-    //   lPage--;
-    //   return;
-    // }
+    if(lPage > lTotal){
+      lPage--;
+      return;
+    }
     Map<String, dynamic> result =
         await Request.shortVideoConcentration(page: lPage);
     // print(lPage);

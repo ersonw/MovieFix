@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movie_fix/Global.dart';
 import 'package:movie_fix/Module/GeneralRefresh.dart';
+import 'package:movie_fix/Module/cBindPhone.dart';
 import 'package:movie_fix/Module/cChange.dart';
 import 'package:movie_fix/Module/cChangePhone.dart';
 import 'package:movie_fix/Page/AvatarPage.dart';
@@ -26,7 +27,7 @@ class _EditProfilePage extends State<EditProfilePage>{
   String? avatar = userModel.user.avatar;
   String nickname = '';
   String username = '';
-  String phone = '';
+  String? phone;
   String email = '';
   String text = '';
   @override
@@ -225,7 +226,7 @@ class _EditProfilePage extends State<EditProfilePage>{
               InkWell(
                 onTap: (){
                   Navigator.push(
-                      context, SlideRightRoute(page: cChangePhone(phone))).then((value) => _init());
+                      context, SlideRightRoute(page: phone==null? cBindPhone(): cChangePhone(phone!))).then((value) => _init());
                 },
                 child: Container(
                   margin: const EdgeInsets.only(top: 15,bottom: 9),
@@ -250,7 +251,7 @@ class _EditProfilePage extends State<EditProfilePage>{
                                     style: TextStyle(color: Colors.white.withOpacity(0.6)),
                                   ),
                                   TextSpan(
-                                    text: phone,
+                                    text: phone ?? '未绑定手机号',
                                     style: TextStyle(color: Colors.white),
                                     onEnter: (PointerEnterEvent e){
                                       //

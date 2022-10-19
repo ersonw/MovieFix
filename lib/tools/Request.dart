@@ -43,8 +43,8 @@ class Request {
       // contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
       receiveDataWhenStatusError: false,
-      connectTimeout: 30000,
-      receiveTimeout: 30000,
+      connectTimeout: 300000,
+      receiveTimeout: 300000,
     );
   }
 
@@ -58,7 +58,7 @@ class Request {
         },
         responseType: ResponseType.json,
         receiveDataWhenStatusError: false,
-        receiveTimeout: 30000,
+        receiveTimeout: 300000,
       ));
       Loading.dismiss();
       if(response.statusCode == 200 && response.data != null){
@@ -66,26 +66,27 @@ class Request {
         Map<String, dynamic> data = response.data;
         if(data['message'] != null && data['message'] !='') {
           CustomDialog.message(data['message']);
-          print(path);
+          // print(path);
         }
         if(data['code'] == 200 && data['data'] != null){
           // print(data['data']);
           return Global.decryptCode(data['data']);
         }else if(data['code'] == 201){
-          print(path);
           userModel.setToken('');
           if(Global.initMain) await Navigator.push(Global.mainContext, SlideRightRoute(page: const LoginPage()));
           // print(userModel.hasToken());
           if(userModel.hasToken() == false){
             tableChangeNotifier.index = 0;
           }
+        }else{
+          // throw '$path   ${data['code']}';
         }
       }
     } on DioError catch(e) {
       Loading.dismiss();
       print(e.message);
-      print('${e.requestOptions.baseUrl}${e.requestOptions.path}');
-      print(e.requestOptions.data ?? e.requestOptions.queryParameters);
+      // print('${e.requestOptions.baseUrl}${e.requestOptions.path}');
+      // print(e.requestOptions.data ?? e.requestOptions.queryParameters);
       // print(e);
       // if(e.response == null) {
       //   CustomDialog.message(e.message);
@@ -111,7 +112,7 @@ class Request {
         },
         responseType: ResponseType.json,
         receiveDataWhenStatusError: false,
-        receiveTimeout: 30000,
+        receiveTimeout: 300000,
       ));
       Loading.dismiss();
       if(response.statusCode == 200 && response.data != null){
@@ -121,7 +122,7 @@ class Request {
         if(data['code'] == 200 && data['data'] != null){
           return Global.decryptCode(data['data']);
         }else if(data['code'] == 201){
-          print(path);
+          // print(path);
           userModel.setToken('');
           if(Global.initMain) await Navigator.push(Global.mainContext, SlideRightRoute(page: const LoginPage()));
           // print(userModel.hasToken());
@@ -133,6 +134,8 @@ class Request {
     } on DioError catch(e) {
       Loading.dismiss();
       print(e.message);
+      // print('${e.requestOptions.baseUrl}${e.requestOptions.path}');
+      // print(e.requestOptions.data ?? e.requestOptions.queryParameters);
       // if(e.response == null) {
       //   CustomDialog.message(e.message);
       // } else if(e.response.statusCode == 105){
@@ -187,9 +190,10 @@ class Request {
   }
   static Future<void> checkDeviceId()async{
     String? result = await _get(RequestApi.checkDeviceId.replaceAll('{deviceId}', Global.deviceId!),{});
+    print(result);
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
-      // print(map);
+      // print(Global.deviceId);
       if(map['token'] != null) {
         // userModel.setToken(map['token']);
         userModel.user = User.formJson(map);
@@ -1055,6 +1059,29 @@ class Request {
       return jsonDecode(result)['id'];
     }
     return null;
+  }
+  static Future<String?> myProfileBindPhoneSms(String phone)async{
+    // Loading.show();
+    String url = RequestApi.myProfileBindPhoneSms;
+    // if(text.isNotEmpty) url = '$url/$text';
+    String? result = await _post(url, { 'phone': phone});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result)['id'];
+    }
+    return null;
+  }
+  static Future<Map<String, dynamic>> myProfileBindPhone({String codeId='',String code='', String phone = '', int force = 0})async{
+    // Loading.show();
+    String url = RequestApi.myProfileBindPhone;
+    // if(text.isNotEmpty) url = '$url/$text';
+    Map<String, dynamic> data = {'codeId': codeId, 'code': code, 'phone': phone, 'toId': force};
+    String? result = await _post(url, data);
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return {};
   }
   static Future<String?> myProfileEditRestPasswordVerify({String codeId='',String code=''})async{
     Loading.show();

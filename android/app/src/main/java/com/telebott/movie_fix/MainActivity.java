@@ -1,5 +1,7 @@
 package com.telebott.movie_fix;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileUtils;
@@ -18,10 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.flutter.FlutterInjector;
 import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.view.FlutterMain;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -48,6 +53,24 @@ public class MainActivity extends FlutterActivity {
             }
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+//        System.out.println("onStart");
+    }
+
+    @Override
+    public SharedPreferences getPreferences(int mode) {
+        return super.getPreferences(mode);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        System.out.println("onSaveInstanceState");
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,44 +79,67 @@ public class MainActivity extends FlutterActivity {
             StrictMode.setThreadPolicy(policy);
         }
         getCPUABI();
-        threadCheck();
-    }
-    private void threadCheck(){
+//        url = BuildConfig.DEBUG ? this.getResources().getString(R.string.updateUrlDebug) : this.getResources().getString(R.string.updateUrl);
         url = this.getResources().getString(R.string.updateUrl);
+//        if (!BuildConfig.DEBUG){
+            new Thread(() -> {
+                JSONObject object = JSONObject.parseObject(sendGet(url+"/version", new HashMap<>()));
+                updateCheck(object,getApplicationContext());
+            }).start();
+//        }
+//        MyApplication.pool.execute(() -> {
+//            threadCheck(getApplicationContext());
+//        });
+    }
+    public static void threadCheck(Context context){
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        getCPUABI();
+        url = context.getResources().getString(R.string.updateUrl);
 //        System.out.println(CPUABI);
 //        System.out.println(url);
         new Thread(() -> {
 //            cachedImage = asyncImageLoader.loadDrawable(imageUrl, position);
 //            imageView.setImageDrawable(cachedImage);
+//            System.out.println(url+"/version");
             JSONObject object = JSONObject.parseObject(sendGet(url+"/version", new HashMap<>()));
-//            System.out.println(object.get("libapp"));
-            updateCheck(object);
+//            System.out.println(object);
+            updateCheck(object, context);
         }).start();
     }
-    private void updateCheck(JSONObject object){
-        JSONObject json = readFileJson(new File(this.getApplicationContext().getFilesDir(),"/version/version").getAbsolutePath());
+    public static  void updateCheck(JSONObject object, Context context){
+        JSONObject json = readFileJson(new File(context.getApplicationContext().getExternalFilesDir(""),"/version/version").getAbsolutePath());
+//        System.out.println(json);
         if (json != null){
             for (String k : object.keySet()) {
-                if (object.get(k) != json.get(k)){
+                if (k.startsWith("/lib/"+CPUABI) &&
+                        !object.getString(k).equals(json.getString(k))){
                     MyApplication.pool.execute(() -> {
-                        downloadFile(url+object.getString(k), new File(this.getApplicationContext().getFilesDir(),"/version/"+object.getString(k)).getAbsolutePath());
+                        downloadFile(url+k, new File(context.getApplicationContext().getExternalFilesDir(""),"/version/"+k).getAbsolutePath());
                     });
                 }
             }
         }else {
             for (String k : object.keySet()) {
-//                new Thread(() -> {
-//                    downloadFile(url+object.getString(k), new File(this.getApplicationContext().getFilesDir(),"/version/"+object.getString(k)).getAbsolutePath());
-//                }).start();
-                MyApplication.pool.execute(() -> {
-                    downloadFile(url+object.getString(k), new File(this.getApplicationContext().getFilesDir(),"/version/"+object.getString(k)).getAbsolutePath());
-                });
-//            System.out.printf("key:%s === value:%s\n", k, object.get(k));
+                if (k.startsWith("/lib/"+CPUABI)){
+                    MyApplication.pool.execute(() -> {
+                        downloadFile(url+k, new File(context.getApplicationContext().getExternalFilesDir(""),"/version/"+k).getAbsolutePath());
+                    });
+                }
             }
+
         }
-        downloadFile(url+"/version", new File(this.getApplicationContext().getFilesDir(),"/version/version").getAbsolutePath());
+        downloadFile(url+"/version", new File(context.getApplicationContext().getExternalFilesDir(""),"/version/version").getAbsolutePath());
     }
-    public void downloadFile(String url, String savePath) {
+    public static  void downloadFile(String url, String savePath) {
+        File file = new File(savePath);
+        if (!file.getParentFile().exists()){
+            file.getParentFile().mkdirs();
+        }else if (file.exists()){
+            file.delete();
+        }
         final long startTime = System.currentTimeMillis();
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -116,10 +162,6 @@ public class MainActivity extends FlutterActivity {
 //                if(!FileUtils.(savePath)){
 //                    FileUtils.makeDirectory(savePath);
 //                }
-                File file = new File(savePath);
-                if (!file.getParentFile().exists()){
-                    file.getParentFile().mkdirs();
-                }
                 try {
                     is = response.body().byteStream();
                     long total = response.body().contentLength();
@@ -145,6 +187,7 @@ public class MainActivity extends FlutterActivity {
                             fos.close();
                     } catch (IOException e) {
                     }
+//                    System.out.println("download success: "+url);
                 }
             }
         });
@@ -165,14 +208,10 @@ public class MainActivity extends FlutterActivity {
 
 
             //新建一个json对象，用它对数据进行操作
-            return new JSONObject(Boolean.parseBoolean(stringBuilder.toString()));
+            return JSONObject.parseObject(stringBuilder.toString());
 
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | JSONException e) {
+//            e.printStackTrace();
         }
         return null;
     }

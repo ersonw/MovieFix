@@ -15,6 +15,7 @@ import 'package:movie_fix/data/AppData.dart';
 import 'package:movie_fix/data/ShortVideo.dart';
 import 'package:movie_fix/data/User.dart';
 import 'package:movie_fix/data/Video.dart';
+import 'package:movie_fix/tools/CustomDialog.dart';
 import 'package:movie_fix/tools/CustomRoute.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/RoundUnderlineTabIndicator.dart';
@@ -90,7 +91,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   _openUrl(String url) {
-    LaunchMode mode = LaunchMode.externalNonBrowserApplication;
+    print(url);
+    LaunchMode mode = LaunchMode.platformDefault;
     // if(url.startsWith('http') == false) mode = LaunchMode.inAppWebView;
     launchUrl(Uri.parse(url), mode: mode);
     // launch(url,enableDomStorage: true,enableJavaScript: true,universalLinksOnly: true,);
@@ -128,7 +130,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                 alignment: Alignment.bottomCenter,
                 children: [
                   Container(
-                    height: Global.getContextSize(d: 5),
+                    height: Global.getContextSize(d: 4.5),
                     width: Global.getContextSize(d: 2.5),
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -139,7 +141,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   Container(
-                    height: Global.getContextSize(d: 5),
+                    height: Global.getContextSize(d: 4.5),
                     width: Global.getContextSize(d: 2.5),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.3),
@@ -237,10 +239,11 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.buyCoin)
         InkWell(
-          onTap: () {
-            Navigator.push(context, SlideRightRoute(page: CoinRechargePage()))
-                .then((value) => _init());
-          },
+          // onTap: () {
+          //   Navigator.push(context, SlideRightRoute(page: CoinRechargePage()))
+          //       .then((value) => _init());
+          // },
+          onTap: () => CustomDialog.message('暂未开放！'),
           child: Container(
             margin: const EdgeInsets.only(top: 9, bottom: 9),
             width: MediaQuery.of(context).size.width,
@@ -264,10 +267,11 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
         ),
       if (appData.money)
         InkWell(
-            onTap: () {
-              Navigator.push(context, SlideRightRoute(page: CashRechargePage()))
-                  .then((value) => _init());
-            },
+            // onTap: () {
+            //   Navigator.push(context, SlideRightRoute(page: CashRechargePage()))
+            //       .then((value) => _init());
+            // },
+            onTap: () => CustomDialog.message('暂未开放！'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -293,7 +297,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.collect)
         InkWell(
-            onTap: () {},
+            onTap: () => CustomDialog.message('暂未开放！'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -316,7 +320,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.download)
         InkWell(
-            onTap: () {},
+            onTap: () => CustomDialog.message('暂未开放！'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -362,7 +366,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.myVideo)
         InkWell(
-            onTap: () {},
+            onTap: () => CustomDialog.message('暂未开放！'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -783,7 +787,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '下线',
+                  '下级',
                   style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
                 ),
               ],
@@ -797,7 +801,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
                   style: TextStyle(fontSize: Global.getContextSize(d: 23),fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '余额',
+                  '收益',
                   style: TextStyle(fontSize: Global.getContextSize(d: 30),fontWeight: FontWeight.w200),
                 ),
               ],

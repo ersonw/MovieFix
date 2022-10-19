@@ -171,7 +171,7 @@ public final class KCApplicationInfoLoader {
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             clearTextPermitted = NetworkSecurityPolicy.getInstance().isCleartextTrafficPermitted();
         }
-
+        System.out.println("load success："+path);
         return new FlutterApplicationInfo(
                 path,
                 getString(appInfo.metaData, PUBLIC_VM_SNAPSHOT_DATA_KEY),

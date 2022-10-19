@@ -61,6 +61,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
     super.initState();
     // _timer = Timer.periodic(const Duration(seconds: 1), callback);
     // _init();
+    // print(widget.video.playUrl);
     _getInfo();
     Wakelock.enable();
     videoPlayerController = VideoPlayerController.network(widget.video.playUrl);
@@ -74,15 +75,11 @@ class ShortVideoItemState extends State<ShortVideoItem> {
       }
       // if (mounted) setState(() {});
     });
-    // videoPlayerController.initialize().then((_) {
-    //   ///视频初始完成后
-    //   initialized = true;
-    //   // videoPlayerController.setLooping(true);
-    //
-    //   ///调用播放
-    //   // videoPlayerController.play();
-    //   // if(mounted) setState(() {});
-    // });
+    tableChangeNotifier.addListener(() {
+      if(tableChangeNotifier.index != 1) {
+        if(initialized && mounted) videoPlayerController.pause();
+      };
+    });
     videoPlayFuture = videoPlayerController.initialize().then((_) {
       ///视频初始完成后
       initialized = true;

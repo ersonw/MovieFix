@@ -57,4 +57,6 @@ class AssetsIcon {
   static const String wodexiazai = ('assets/icons/wodexiazai.png');
   static const String xiaoxi = ('assets/icons/xiaoxi.png');
   static const String zaixiankefu = ('assets/icons/zaixiankefu.png');
+  static const String bkBnt = ('assets/icons/bkBnt.png');
+  static const String close = ('assets/icons/close.png');
 }

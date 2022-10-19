@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:movie_fix/Module/cBindPhoneMessage.dart';
 import 'package:movie_fix/Module/cToast.dart';
 import 'package:movie_fix/tools/CustomDialog.dart';
 import 'package:movie_fix/tools/MinioUtil.dart';
@@ -74,7 +75,7 @@ class Global {
     }
     if (kIsWeb == false) {
       path = await Global.getPhoneLocalPath();
-      print(path);
+      // print(path);
       // await requestPhotosPermission();
       // await getConfig();
       deviceId = await getUUID();
@@ -94,15 +95,17 @@ class Global {
     if (map['mainDomain'] != null) {
       Config config = Config.formJson(map);
       if (isRelease) {
-        // profile.config = config;
-        // saveProfile();
         configModel.config = config;
-        Request.init();
-        if (userModel.hasToken() == false) {
-          Request.checkDeviceId();
-        }
-        MessageUtil.init();
       }
+      // print(userModel.hasToken());
+      if (userModel.hasToken() == false) {
+        // print(userModel.hasToken());
+        await Request.checkDeviceId();
+      }
+      // print(userModel.user);
+      Request.init();
+      MessageUtil.init();
+      if(userModel.user.phone == null) await Global.bindPhone();
       if (int.parse(packageInfo.buildNumber) < config.buildNumber) {
         if (config.download == null || config.download.isEmpty)
           config.download = 'https://www.baidu.com';
@@ -129,8 +132,10 @@ class Global {
         // print(result);
         map = jsonDecode(result);
       } else {
+        configModel.config = Config();
         Request.init();
-        map = await Request.getConfig();
+        map = jsonDecode(jsonEncode(Config()));
+        // map = await Request.getConfig();
         print(encryptCode(jsonEncode(map)));
         print(map);
       }
@@ -157,6 +162,9 @@ class Global {
   }
   static Future<void> shareVideo(int id) async {
     await Navigator.push(mainContext, DialogRouter(ShareVideoPage(id)));
+  }
+  static Future<void> bindPhone() async {
+    await Navigator.push(mainContext, DialogRouter(cBindPhoneMessage()));
   }
 
   static Future<void> loginPage() async {

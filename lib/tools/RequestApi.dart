@@ -98,6 +98,8 @@ class RequestApi {
   static const myProfileEditAvatar = '/api/myProfile/edit/avatar';
   static const myProfileEditPhoneSms = '/api/myProfile/edit/phone/sms/{phone}';
   static const myProfileEditRestPasswordSms = '/api/myProfile/edit/restPassword/sms';
+  static const myProfileBindPhoneSms = '/api/myProfile/bindPhone/sms';
+  static const myProfileBindPhone = '/api/myProfile/bindPhone';
   static const myProfileEditRestPassword = '/api/myProfile/edit/restPassword';
   static const myProfileEditRestPasswordVerify = '/api/myProfile/edit/restPassword/verify';
   static const myProfileEditChangePasswordVerify = '/api/myProfile/edit/changePassword/verify';

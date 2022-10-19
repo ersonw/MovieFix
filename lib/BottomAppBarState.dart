@@ -44,33 +44,12 @@ class _BottomAppBarState extends State<BottomAppBarState> {
         });
       }
     });
+    Future.delayed(const Duration(milliseconds: 300), ()=>_init());
   }
 
-  _init(BuildContext context) {
+  _init() {
     Global.mainContext = context;
     if (Global.initMain) return;
-    // Global.checkVersion();
-    // // Global.handlerChannel();
-    // Timer(const Duration(milliseconds: 100), () {
-    //   if (Global.profile.config.bootLock &&
-    //       Global.profile.config.bootLockPasswd != null &&
-    //       Global.profile.config.bootLockPasswd != '') {
-    //     Navigator.of(context, rootNavigator: true).push<void>(
-    //       CupertinoPageRoute(
-    //         // fullscreenDialog: true,
-    //         builder: (context) => LockScreenCustom(LockScreenCustom.lock),
-    //       ),
-    //     );
-    //   }
-    // });
-    // Timer(const Duration(milliseconds: 50), () {
-    //   _popUps(context).then((v) {
-    //     if(messagesChangeNotifier.messages.systemMessage.isNotEmpty){
-    //       Navigator.push(context, DialogRouter(SystemNotificationDialog(systemMessage)));
-    //       // showDialog(context: context, builder: (BuildContext _context) => SystemNotificationDialog(systemMessage));
-    //     }
-    //   });
-    // });
     Global.checkUpdate();
     Global.initMain = true;
   }
@@ -88,7 +67,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
   }
   @override
   Widget build(BuildContext context) {
-    _init(context);
+    // _init(context);
     return Scaffold(
       body: IndexedStack(
         children: _eachView,
@@ -248,6 +227,7 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     // Request.checkDeviceId().then((value) => setState(() {
                     //   _index = 4;
                     // }));
+                    userModel.setToken(userModel.user.token);
                     _indexChanged(4);
                   } else {
                     Global.loginPage().then((v) {

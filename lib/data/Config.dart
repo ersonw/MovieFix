@@ -5,10 +5,10 @@ import 'Splash.dart';
 class Config {
   // String mainDomain = "192.168.254.142:8017";
   // String mainDomain = "172.21.68.12:8017";
-  String mainUrl = "https://www.baidu.com";
   String download = "";
-  // String mainDomain = "118.31.44.104";
-  String mainDomain = "api2.telebott.com";
+  String mainUrl = "https://www.baidu.com";
+  String mainDomain = "118.31.44.104";
+  // String mainDomain = "api2.telebott.com";
   String? channelDomain;
   String? serviceDomain;
   List<Splash> splashList = [];
