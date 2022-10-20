@@ -40,7 +40,8 @@ class _VideoClassPage extends State<VideoClassPage> {
       }else{
         _list.addAll(list);
       }
-    }else if(page ==1) {
+    }
+    else if(page ==1) {
       _list = [];
     }
     if(!mounted) return;

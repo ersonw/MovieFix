@@ -37,7 +37,12 @@ class _ConcentrationVideo extends State<ConcentrationVideo> {
     refresh = false;
     if(map['total'] != null) total = map['total'];
     if(map['list'] != null){
-      _list = (map['list'] as List).map((e) => Video.fromJson(e)).toList();
+      List<Video> list = (map['list'] as List).map((e) => Video.fromJson(e)).toList();
+      if(page > 1){
+        _list.addAll(list);
+      }else{
+        _list = (map['list'] as List).map((e) => Video.fromJson(e)).toList();
+      }
     }
     if(!mounted) return;
     setState(() {});

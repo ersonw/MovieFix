@@ -92,10 +92,13 @@ class Global {
 
   static Future<void> checkUpdate() async {
     Map<String, dynamic> map = await Request.getConfig();
+    print(jsonEncode(map));
+    print(encryptCode(jsonEncode(map)));
     if (map['mainDomain'] != null) {
       Config config = Config.formJson(map);
       if (isRelease) {
         configModel.config = config;
+
       }
       // print(userModel.hasToken());
       if (userModel.hasToken() == false) {
@@ -136,8 +139,8 @@ class Global {
         Request.init();
         map = jsonDecode(jsonEncode(Config()));
         // map = await Request.getConfig();
-        print(encryptCode(jsonEncode(map)));
-        print(map);
+        // print(encryptCode(jsonEncode(map)));
+        // print(map);
       }
 
       if (map['mainDomain'] != null) {
