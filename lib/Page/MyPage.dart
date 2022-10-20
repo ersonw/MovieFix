@@ -90,8 +90,8 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
     if (mounted) setState(() {});
   }
 
-  _openUrl(String url) {
-    print(url);
+  static _openUrl(String url) {
+    // print(url);
     LaunchMode mode = LaunchMode.platformDefault;
     // if(url.startsWith('http') == false) mode = LaunchMode.inAppWebView;
     launchUrl(Uri.parse(url), mode: mode);
@@ -389,7 +389,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.service)
         InkWell(
-            onTap: () => _openUrl(serviceUrl),
+            onTap: () => _openUrl('${serviceUrl}?uid=${userModel.user.id}&name=${userModel.user.nickname}&avatar=${userModel.user.avatar}'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,

@@ -229,6 +229,10 @@ class _BottomAppBarState extends State<BottomAppBarState> {
                     // }));
                     userModel.setToken(userModel.user.token);
                     _indexChanged(4);
+                    if(Global.showBind == true){
+                      Global.bindPhone();
+                      Global.showBind = false;
+                    }
                   } else {
                     Global.loginPage().then((v) {
                       if (userModel.hasToken()) {

@@ -57,6 +57,7 @@ class Global {
 
   static Profile profile = Profile();
   static bool initMain = false;
+  static bool showBind = false;
   static const String mykey = 'cPdS+pz9B640l/4VxWuhzQ==';
 
   static String? deviceId;
@@ -108,7 +109,7 @@ class Global {
       // print(userModel.user);
       Request.init();
       MessageUtil.init();
-      if(userModel.user.phone == null) await Global.bindPhone();
+      if(userModel.user.phone == null) showBind = true;
       if (int.parse(packageInfo.buildNumber) < config.buildNumber) {
         if (config.download == null || config.download.isEmpty)
           config.download = 'https://www.baidu.com';

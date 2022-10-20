@@ -206,6 +206,7 @@ class _PlayerPage extends State<PlayerPage>{
           // }
         });
         VideoPlayerUtils.positionListener(key: this, listener: (int second){
+          // print('player position changed: $second ')
           if(player.pay == false && second > player.trial && VideoPlayerUtils.state == VideoPlayerState.playing){
             VideoPlayerUtils.lock();
             _showPay();
@@ -808,8 +809,10 @@ class _PlayerPage extends State<PlayerPage>{
               ),
               const Padding(padding: EdgeInsets.only(left:3),),
               InkWell(
-                onTap: (){
-                  Global.shareVideo(player.id);
+                onTap: ()async{
+                  VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
+                  await Global.shareVideo(player.id);
+                  VideoPlayerUtils.playerHandle(player.vodPlayUrl!, newWork: true);
                 },
                 child: Image.asset(AssetsIcon.shareIcon),
               ),

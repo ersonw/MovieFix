@@ -14,10 +14,12 @@ import 'package:movie_fix/tools/Loading.dart';
 import 'package:movie_fix/tools/Request.dart';
 import 'package:movie_fix/tools/YYMarquee.dart';
 import 'package:movie_fix/tools/channel.dart' if (dart.library.html)  'package:movie_fix/tools/channel_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Global.dart';
 import 'GameCashOutPage.dart';
 import 'GameRechargePage.dart';
+import 'MyPage.dart';
 
 class GamePage extends StatefulWidget{
   bool update;
@@ -34,6 +36,7 @@ class _GamePage extends State<GamePage>{
   List<Game> games = [];
   List<Game> records = [];
   double balance = 0;
+  String service = '';
   bool refresh = true;
   @override
   void initState() {
@@ -50,6 +53,12 @@ class _GamePage extends State<GamePage>{
     _getPublicity();
     _getGames();
     _getRecords();
+    _getService();
+  }
+  _getService()async{
+    refresh = false;
+    service = await Request.getService();
+    if(mounted) setState(() {});
   }
   _getGames() async{
     Map<String, dynamic> result = await Request.gameList();
@@ -470,7 +479,11 @@ class _GamePage extends State<GamePage>{
               ),
             ),
             InkWell(
-              onTap: (){},
+              onTap: (){
+                LaunchMode mode = LaunchMode.platformDefault;
+                // if(url.startsWith('http') == false) mode = LaunchMode.inAppWebView;
+                launchUrl(Uri.parse('${service}?uid=${userModel.user.id}&name=${userModel.user.nickname}&avatar=${userModel.user.avatar}'), mode: mode);
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,
                 height: MediaQuery.of(context).size.width / 5,

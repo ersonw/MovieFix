@@ -691,6 +691,14 @@ class Request {
     }
     return 0.00;
   }
+  static Future<String> getService()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.getService, {});
+    if(result != null && jsonDecode(result)['service'] != null){
+      return jsonDecode(result)['service'];
+    }
+    return '';
+  }
   static Future<Map<String, dynamic>> gamePublicity()async{
     // Loading.show();
     String? result = await _get(RequestApi.gamePublicity, {});
