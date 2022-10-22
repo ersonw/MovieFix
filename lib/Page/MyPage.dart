@@ -23,6 +23,7 @@ import 'package:movie_fix/tools/Tools.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'CoinRechargePage.dart';
+import 'SubordinatePage.dart';
 
 class MyPage extends StatefulWidget {
   bool update;
@@ -776,9 +777,9 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
           ),
           InkWell(
             onTap: () {
-              // Navigator.push(
-              //         context, SlideRightRoute(page: DiamondRechargePage()))
-              //     .then((value) => _init());
+              Navigator.push(
+                      context, SlideRightRoute(page: SubordinatePage()))
+                  .then((value) => _init());
             },
             child: Column(
               children: [

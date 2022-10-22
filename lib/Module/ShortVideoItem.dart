@@ -89,6 +89,7 @@ class ShortVideoItemState extends State<ShortVideoItem> {
       videoPlayerController.play();
       // if(mounted) setState(() {});
     });
+    // print(widget.video);
   }
   _getInfo()async{
     Map<String, dynamic> result = await Request.userProfile(id: widget.video.userId);

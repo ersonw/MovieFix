@@ -190,7 +190,7 @@ class Request {
   }
   static Future<void> checkDeviceId()async{
     String? result = await _get(RequestApi.checkDeviceId.replaceAll('{deviceId}', Global.deviceId!),{});
-    print(result);
+    // print(result);
     if(result!=null){
       Map<String, dynamic> map = jsonDecode(result);
       // print(Global.deviceId);
@@ -939,6 +939,24 @@ class Request {
       return jsonDecode(result);
     }
     return Map<String, dynamic>();
+  }
+  static Future<Map<String, dynamic>> userShareConfig()async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userShareConfig, {});
+    // print(result);
+    if(result != null){
+      return jsonDecode(result);
+    }
+    return {};
+  }
+  static Future<bool> userShareReceive({String version='v1'})async{
+    // Loading.show();
+    String? result = await _get(RequestApi.userShareReceive+version, {});
+    // print(result);
+    if(result != null && jsonDecode(result)['state'] != null){
+      return jsonDecode(result)['state'];
+    }
+    return false;
   }
   static Future<Map<String, dynamic>> userMyProfileVideoLike({int page=0})async{
     // Loading.show();

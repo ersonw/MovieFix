@@ -26,6 +26,8 @@ class RequestApi {
   static const userMyProfileVideo = '/api/user/my/profile/video/{page}';
   static const userRegister = '/api/user/register';
   static const userRegisterSms = '/api/user/register/sms/{phone}';
+  static const userShareConfig = '/api/user/share/config';
+  static const userShareReceive = '/api/user/share/receive/';
 
   static const videoPlayer = '/api/video/player/{id}';
   static const videoClass = '/api/video/class';

@@ -59,4 +59,14 @@ class AssetsIcon {
   static const String zaixiankefu = ('assets/icons/zaixiankefu.png');
   static const String bkBnt = ('assets/icons/bkBnt.png');
   static const String close = ('assets/icons/close.png');
+
+  static const String bkTransparent = ('assets/icons/bkTransparent.png');
+  static const String crownBlue = ('assets/icons/crownBlue.png');
+  static const String crownViolet = ('assets/icons/crownViolet.png');
+  static const String crownYellow = ('assets/icons/crownYellow.png');
+  static const String receiveBlueBnt = ('assets/icons/receiveBlueBnt.png');
+  static const String receiveGreyBnt = ('assets/icons/receiveGreyBnt.png');
+  static const String receiveVioletBnt = ('assets/icons/receiveVioletBnt.png');
+  static const String receiveYellowBnt = ('assets/icons/receiveYellowBnt.png');
+  static const String shareFrind = ('assets/icons/shareFrind.png');
 }
