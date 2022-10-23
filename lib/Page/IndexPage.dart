@@ -65,13 +65,15 @@ class _IndexPage extends State<IndexPage>with TickerProviderStateMixin {
     controller.addListener(handleTabChange);
     tableChangeNotifier.addListener(() {
       if(tableChangeNotifier.index == 0 && widget.update) {
-        _init();
-        _getList();
-        _getPublicity();
+        // _init();
+        // _getList();
+        // _getPublicity();
       }
     });
     // Future.delayed(const Duration(seconds: 3), () => _init());
     _init();
+    _getList();
+    _getPublicity();
     super.initState();
   }
   _init()async{

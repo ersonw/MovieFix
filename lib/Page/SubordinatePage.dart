@@ -30,17 +30,19 @@ class _SubordinatePage extends State<SubordinatePage>{
   String? v3s;
   _init()async{
     Map<String, dynamic> map = await Request.userShareConfig();
+    // print(map);
     if(map['shareUrl'] != null) shareUrl = map['shareUrl'];
     if(map['count'] != null) count = map['count'];
     if(map['v1'] != null) v1 = map['v1'];
     if(map['v2'] != null) v2 = map['v2'];
-    if(map['v3'] != null) v1 = map['v3'];
+    if(map['v3'] != null) v3 = map['v3'];
     if(map['v1f'] != null) v1f = map['v1f'];
     if(map['v2f'] != null) v2f = map['v2f'];
     if(map['v3f'] != null) v3f = map['v3f'];
     if(map['v1s'] != null) v1s = map['v1s'];
     if(map['v2s'] != null) v2s = map['v2s'];
     if(map['v3s'] != null) v3s = map['v3s'];
+    if(mounted) setState(() {});
   }
   _receive(String version) async{
     if(await Request.userShareReceive(version: version) == true) _init();

@@ -79,7 +79,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
       // Global.loginPage();
     }
     if (result['diamond'] != null) diamond = result['diamond'];
-    if (result['count'] != null) diamond = result['count'];
+    if (result['count'] != null) count = result['count'];
     if (result['coin'] != null) coin = result['coin'];
     if (result['cash'] != null) cash = result['cash'];
     if (result['gain'] != null) gain = result['gain'];

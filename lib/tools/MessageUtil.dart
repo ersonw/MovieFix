@@ -56,6 +56,8 @@ class MessageUtil {
         rest();
       }
     });
+    }else{
+      await Future.delayed(const Duration(seconds: 6), () => reconnect());
     }
   }
   static void onError(error)async{
