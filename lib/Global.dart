@@ -117,8 +117,8 @@ class Global {
         CustomDialog.update(
             config.version,
             config.buildNumber,
-            profile.config.version,
-            profile.config.buildNumber,
+            packageInfo.version,
+            int.parse(packageInfo.buildNumber),
             config.download);
       }
     }
