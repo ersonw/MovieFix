@@ -482,7 +482,8 @@ class _GamePage extends State<GamePage>{
               onTap: (){
                 LaunchMode mode = LaunchMode.platformDefault;
                 // if(url.startsWith('http') == false) mode = LaunchMode.inAppWebView;
-                launchUrl(Uri.parse('${service}?uid=${userModel.user.id}&name=${userModel.user.nickname}&avatar=${userModel.user.avatar}'), mode: mode);
+                // launchUrl(Uri.parse('${service}?uid=${userModel.user.id}&name=${userModel.user.nickname}&avatar=${userModel.user.avatar}'), mode: mode);
+                launchUrl(Uri.parse('${service}&visiter_id=${userModel.user.id}&visiter_name=${userModel.user.nickname}&avatar=${userModel.user.avatar}&groupid=0'), mode: mode);
               },
               child: Container(
                 width: MediaQuery.of(context).size.width / 5,

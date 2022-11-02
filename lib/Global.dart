@@ -110,7 +110,8 @@ class Global {
       Request.init();
       MessageUtil.init();
       if(userModel.user.phone == null) showBind = true;
-      if (int.parse(packageInfo.buildNumber) < config.buildNumber) {
+      // print(config.buildNumber > int.parse(packageInfo.buildNumber));
+      if (config.buildNumber > int.parse(packageInfo.buildNumber)) {
         if (config.download == null || config.download.isEmpty)
           config.download = 'https://www.baidu.com';
         CustomDialog.update(

@@ -272,7 +272,12 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             //   Navigator.push(context, SlideRightRoute(page: CashRechargePage()))
             //       .then((value) => _init());
             // },
-            onTap: () => CustomDialog.message('暂未开放！'),
+            onTap: () {
+              Navigator.push(
+                  context, SlideRightRoute(page: SubordinatePage()))
+                  .then((value) => _init());
+            },
+            // onTap: () => CustomDialog.message('暂未开放！'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -390,7 +395,7 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             )),
       if (appData.service)
         InkWell(
-            onTap: () => _openUrl('${serviceUrl}?uid=${userModel.user.id}&name=${userModel.user.nickname}&avatar=${userModel.user.avatar}'),
+            onTap: () => _openUrl('${serviceUrl}&visiter_id=${userModel.user.id}&visiter_name=${userModel.user.nickname}&avatar=${userModel.user.avatar}&groupid=0'),
             child: Container(
               margin: const EdgeInsets.only(top: 9, bottom: 9),
               width: MediaQuery.of(context).size.width,
@@ -425,27 +430,34 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
   }
 
   _buildGain() {
-    return Container(
-      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 6),
-      width: MediaQuery.of(context).size.width,
-      height: 54,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(9)),
-        color: Colors.white.withOpacity(0.1),
-      ),
-      // alignment: Alignment.centerRight,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context, SlideRightRoute(page: SubordinatePage()))
+            .then((value) => _init());
+      },
       child: Container(
-        margin: const EdgeInsets.only(left: 15, right: 15),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('我的收益', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(
-              '$gain元',
-              style: TextStyle(color: Colors.white.withOpacity(0.6)),
-            ),
-          ],
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 6),
+        width: MediaQuery.of(context).size.width,
+        height: 54,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(9)),
+          color: Colors.white.withOpacity(0.1),
+        ),
+        // alignment: Alignment.centerRight,
+        child: Container(
+          margin: const EdgeInsets.only(left: 15, right: 15),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('我的收益', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                '$gain元',
+                style: TextStyle(color: Colors.white.withOpacity(0.6)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -795,6 +807,11 @@ class _MyPage extends State<MyPage> with SingleTickerProviderStateMixin {
             ),
           ),
           InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, SlideRightRoute(page: SubordinatePage()))
+                  .then((value) => _init());
+            },
             child: Column(
               children: [
                 Text(

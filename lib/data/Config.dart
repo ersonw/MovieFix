@@ -7,8 +7,8 @@ class Config {
   // String mainDomain = "172.21.68.12:8017";
   String download = "";
   String mainUrl = "https://www.baidu.com";
-  // String mainDomain = "118.31.44.104";
-  String mainDomain = "api2.telebott.com";
+  String mainDomain = "118.31.44.104";
+  // String mainDomain = "api2.telebott.com";
   String? channelDomain;
   String? serviceDomain;
   List<Splash> splashList = [];
