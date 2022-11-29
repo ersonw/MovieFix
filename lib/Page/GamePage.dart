@@ -266,6 +266,7 @@ class _GamePage extends State<GamePage>{
     List<Widget> widgets = [];
     for (int i = 0; i < records.length; i++) {
       Game record = records[i];
+      // print(record.image);
       widgets.add(InkWell(
         onTap: () {},
         child: Container(
